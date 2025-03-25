@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Slide Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+VN:wght@100..400&family=Sofadi+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body style="font-family: 'Sofadi One', serif;" class="m-0 bg-[#002140] flex justify-center items-center min-h-[100vh]">
+    <div class="slide-container flex flex-row w-[90%] max-w-[1200px] bg-[#002140] shadow-2xl shadow-black relative overflow-hidden p-2">
+        <div class="yellow-curve absolute top-0 left-0 w-[150px] h-[150px] bg-[#ffff00] rounded-br-full"></div>
+        
+
+        <div class="content-left flex-1 p-[40px] text-white text-center place-content-center">
+            <h1 class="text-4xl text-[#ffff00] mb-[20px] uppercase">Scan Here!</h1>
+            <div class="subtitle text-2xl">
+                Start your beautiful journey as an instructor with <span class="text-[#ffff00] font-bold">Taste'n Talk.</span>
+                <span class="">BE THE MAKER!</span>
+            </div>
+        </div>
+        <div class="content-right flex-1 flex justify-center items-center relative">
+            
+            <div style="background: linear-gradient(to right, #ff6b6b, #ff8787);" class="decorative-shape absolute right-[-50px] top-[50%] -translate-[50%] w-[200px] h-[300px] rotate-45 opacity-[0.5] hidden sm:block"></div>
+            <div class="phone-mockup w-[300px] h-[600px] bg-white rounded-[30px] flex flex-col items-center shadow-[0 10px 30px rgba(0,0,0,0.1)] relative overflow-hidden">
+                <div style="background: linear-gradient(to right, #ff6b6b, #ff8787);" class="phone-header w-full h-[60px] flex justify-center items-center"></div>
+                <div class="qr-container flex-grow flex justify-center items-center p-[20px]">
+                    <div class="qr-code w-[250px] h-[250px] bg-[#f0f0f0] border-2 border-solid border-[#ddd]"></div>
+                </div>
+                <button style="background: linear-gradient(to right, #ff6b6b, #ff8787);" class="scan-button w-[200px] p-[15px] text-white border-none rounded-[25px] font-bold cursor-pointer mb-[20px] transition-all transform ease-linear duration-[0.4s] hover:transform hover:scale-[1.1]">SCAN</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
