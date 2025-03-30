@@ -1,1 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste'n Talk with Grocery Shopping</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+        }
 
+        .sidebar {
+            width: 250px;
+            height: calc(100vh - 100px);
+            position: fixed;
+            top: 100px;
+            left: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .main-container {
+            margin-left: 250px;
+            margin-top: 100px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            min-height: calc(100vh - 100px);
+            overflow-y: visible;
+        }
+
+        /* New Shopping Section Styles */
+        .shopping-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Header with logo and search */
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .shop-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .shop-logo img {
+            height: 50px;
+        }
+
+        .shop-logo-text {
+            margin-left: 10px;
+            color: #333;
+        }
+
+        .shop-logo-text h2 {
+            font-weight: bold;
+            color: #4CAF50;
+            font-size: 24px;
+        }
+
+        .shop-logo-text p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .shop-contact {
+            display: flex;
+            align-items: center;
+            color: #555;
+        }
+
+        .shop-search {
+            position: relative;
+            width: 300px;
+        }
+
+        .shop-search input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+        }
+
+        .shop-search button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+        }
+
+        .shop-cart {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #4CAF50;
+            color: white;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Navigation */
+        .shop-nav {
+            display: flex;
+            background: #4CAF50;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .shop-nav-item {
+            padding: 12px 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .shop-nav-item:hover, .shop-nav-item.active {
+            background: #388E3C;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            width: 50%;
+            padding: 40px;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 50%;
+            height: 100%;
+            background-image: url('/api/placeholder/600/400');
+            background-size: contain;
+            background-position: bottom right;
+            background-repeat: no-repeat;
+        }
+
+        .order-btn {
+            background: #FF5722;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .order-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: #333;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            font-weight: bold;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .discount-value {
+            font-size: 24px;
+        }
+
+        /* Feature Section */
+        .feature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            gap: 20px;
+        }
+
+        .feature-card {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .feature-desc {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Categories Section */
+        .category-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .section-title:after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: #4CAF50;
+            margin: 10px auto;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-image {
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .category-name {
+            padding: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Products Section */
+        .products-section {
+            margin-bottom: 40px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #FF5722;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .product-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-category {
+            color: #4CAF50;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .product-stars {
+            color: #FFD700;
+            margin-right: 5px;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-price {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .product-price .original {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .add-cart-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-cart-btn:hover {
+            background: #388E3C;
+        }
+
+        /* Brands Section */
+        .brands-section {
+            margin-bottom: 40px;
+        }
+
+        .brands-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .brands-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .brand-logo {
+            max-width: 120px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .brand-logo:hover {
+            opacity: 1;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 5%;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                margin-top: 100px;
+            }
+
+            .main-container {
+                margin-left: 0;
+                width: 100%;
+                margin-top: 20px;
+                height: auto;
+            }
+
+            .shop-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .shop-search {
+                width: 100%;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
+
+            .feature-section {
+                flex-direction: column;
+            }
+
+            .hero-content {
+                width: 100%;
+                padding: 20px;
+            }
+
+            .hero-image {
+                display: none;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .category-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#f5f5f5] min-h-screen">
+
+    <div class="bg-[#f5f5f5]">
+
+        <!-- Keep the original header -->
+        <header class="w-[100%] flex items-center justify-between p-3 bg-[#f8f9fa] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10">
+
+            <div class="flex items-center space-x-4">
+                <div class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]">
+                    <img src="tntLogo.png" alt="Logo" class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer">
+                    <span class="drop-shadow-2xl shadow-[#002140e3]">Taste'n Talk</span>
+                </div>
+            </div>
+            <div class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"><img src="map.png" alt="Location"></div>
+
+            <div class="relative w-[30%] max-w-[400px]">
+                <input type="text" style="padding: 10px 40px 10px 20px;" class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic" placeholder="Search">
+
+                <button class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%] " >
+                    <i class="fas fa-search text-[#f8f9fa]"></i>
+                </button>   
+            </div>
+
+            <div class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#f8f9fa] rounded-[25px] px-2 shadow-md shadow-[#002140e3]">
+                <button class="text-2xl flex items-center justify-center">
+                    <span class="text-base">Create</span>➕
+                </button>
+            </div>
+
+            <div class="flex items-center justify-between header-icons w-[25%] md:w-[25%] sm:w-[100%]">
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">🛒</button>
+                </div>
+                
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">🔖</button>
+                </div>
+                
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">❤️</button>
+                </div>
+    
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">🔔</button>
+                </div>
+    
+                <div class="text-3xl">
+                    <!-- Highlighted account icon -->
+                    <button class="account-icon">
+                        <i class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+    
+        <!-- Keep the original sidebar -->
+        <aside class="sidebar glass-effect">
+            <nav class="flex flex-col text-xl font-bold gap-5 text-[#f8f9fa]">
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="home.png" class="w-[35px]"> <span>Home</span></a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="cart.png" class="w-[35px]"> <span>Shopping</span> </a>
+                <!-- Added new Recipe Coaching Classes link -->
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4 bg-[#002140]"> <i class="fas fa-graduation-cap w-[35px] text-center"></i> <span>Courses</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="blog.png" class="w-[35px]"> <span>Blog/Articles</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="inbox.png" class="w-[35px]"> <span>Inbox</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="community.png" class="w-[35px]"><span>Community</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="chatbot.png" class="w-[35px]"><span>ChatBot</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="tiffin.png" class="w-[35px]"> <span>Tiffin</span> </a>
+            </nav>
+        </aside>
+
+        <div class="main-container">
+            <!-- New Shopping Section -->
+            <div class="shopping-container">
+                <!-- BigShopMart Header -->
+                <div class="shop-header">
+                    <div class="shop-logo">
+                        <img src="/api/placeholder/80/80" alt="BigShopMart Logo">
+                        <div class="shop-logo-text">
+                            <h2>BigShopMart</h2>
+                            <p>Family Grocery</p>
+                        </div>
+                    </div>
+                    
+                    <div class="shop-contact">
+                        <i class="fas fa-phone-alt mr-2"></i>
+                        <span>525-254-263</span>
+                        <span class="ml-2 text-xs">Free Cart Support</span>
+                    </div>
+                    
+                    <div class="shop-search">
+                        <input type="text" placeholder="Search for Products...">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+                    
+                    <div class="shop-cart">
+                        <div class="cart-icon">
+                            <i class="fas fa-shopping-cart text-2xl"></i>
+                            <span class="cart-count">3</span>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-500">TOTAL PRICE</div>
+                            <div class="font-bold">$0.00</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- BigShopMart Navigation -->
+                <div class="shop-nav">
+                    <div class="shop-nav-item active">
+                        <i class="fas fa-th-large mr-1"></i> ALL CATEGORIES
+                    </div>
+                    <div class="shop-nav-item">
+                        <i class="fas fa-home mr-1"></i> HOME
+                    </div>
+                    <div class="shop-nav-item">
+                        <i class="fas fa-store mr-1"></i> SHOP
+                    </div>
+                    <div class="shop-nav-item">
+                        <i class="fas fa-drumstick-bite mr-1"></i> MEATS & SEAFOOD
+                    </div>
+                    <div class="shop-nav-item">
+                        <i class="fas fa-carrot mr-1"></i> VEGETABLE & DAIRY
+                    </div>
+                    <div class="shop-nav-item">
+                        <i class="fas fa-tag mr-1"></i> BEST OFFER
+                    </div>
+                    <div class="shop-nav-item">
+                        <i class="fas fa-user mr-1"></i> LOGIN/REGISTER
+                    </div>
+                </div>
+                
+                <!-- Hero Banner -->
+                <div class="hero-banner">
+                    <div class="discount-badge">
+                        <div class="discount-value">30%</div>
+                        <div>OFF</div>
+                    </div>
+                    
+                    <div class="hero-content">
+                        <div>100% All Natural Products</div>
+                        <h1 class="hero-title">Get Best Organic Grocery Products</h1>
+                        <a href="#" class="order-btn">ORDER NOW</a>
+                    </div>
+                    
+                    <div class="hero-image"></div>
+                </div>
+                
+                <!-- Features Section -->
+                <div class="feature-section">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tag text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="feature-title">Best Deals & Offer</h3>
+                        <p class="feature-desc">Lorem ipsum is simply dummy text of the printing and typesetting</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-leaf text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="feature-title">Always Fresh</h3>
+                        <p class="feature-desc">Lorem ipsum is simply dummy text of the printing and typesetting</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-check-circle text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="feature-title">100% Natural</h3>
+                        <p class="feature-desc">Lorem ipsum is simply dummy text of the printing and typesetting</p>
+                    </div>
+                </div>
+                
+                <!-- Top Categories -->
+                <div class="category-section">
+                    <h2 class="section-title">Top Products</h2>
+                    
+                    <div class="category-grid">
+                        <div class="category-card">
+                            <div class="category-image" style="background-image: url('/api/placeholder/200/120');"></div>
+                            <div class="category-name">BAKERY & DAIRY</div>
+                        </div>
+                        
+                        <div class="category-card">
+                            <div class="category-image" style="background-image: url('/api/placeholder/200/120');"></div>
+                            <div class="category-name">FRUITS</div>
+                        </div>
+                        
+                        <div class="category-card">
+                            <div class="category-image" style="background-image: url('/api/placeholder/200/120');"></div>
+                            <div class="category-name">DRINK</div>
+                        </div>
+                        
+                        <div class="category-card">
+                            <div class="category-image" style="background-image: url('/api/placeholder/200/120');"></div>
+                            <div class="category-name">MEAT</div>
+                        </div>
+                        
+                        <div class="category-card">
+                            <div class="category-image" style="background-image: url('/api/placeholder/200/120');"></div>
+                            <div class="category-name">VEGETABLE</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Featured Products -->
+                <div class="products-section">
+                    <h2 class="section-title">Featured Products</h2>
+                    
+                    <div class="product-grid">
+                        <!-- Product 1 -->
+                        <div class="product-card">
+                            <span class="product-tag">NEW</span>
+                            <div class="product-image" style="background-image: url('/api/placeholder/300/200');"></div>
+                            <div class="product-info">
+                                <div class="product-category">Fresh Vegetables</div>
+                                <h3 class="product-name">Organic Cherries</h3>
+                                <div class="product-rating">
+                                    <div class="product-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span>(32 Reviews)</span>
+                                </div>
+                                <div class="product-meta">
+                                    <div class="product-price">
+                                        <span class="original">$42.00</span>
+                                        $36.00
+                                    </div>
+                                    <button class="add-cart-btn">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 2 -->
+                        <div class="product-card">
+                            <span class="product-tag">SALE</span>
+                            <div class="product-image" style="background-image: url('/api/placeholder/300/200');"></div>
+                            <div class="product-info">
+                                <div class="product-category">Fresh Fruits</div>
+                                <h3 class="product-name">Sweet Strawberries</h3>
+                                <div class="product-rating">
+                                    <div class="product-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span>(16 Reviews)</span>
+                                </div>
+                                <div class="product-meta">
+                                    <div class="product-price">
+                                        <span class="original">$38.00</span>
+                                        $30.00
+                                    </div>
+                                    <button class="add-cart-btn">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 3 -->
+                        <div class="product-card">
+                            <div class="product-image" style="background-image: url('/api/placeholder/300/200');"></div>
+                            <div class="product-info">
+                                <div class="product-category">Bakery</div>
+                                <h3 class="product-name">Fresh Bread</h3>
+                                <div class="product-rating">
+                                    <div class="product-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span>(24 Reviews)</span>
+                                </div>
+                                <div class="product-meta">
+                                    <div class="product-price">$5.99</div>
+                                    <button class="add-cart-btn">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 4 -->
+                        <div class="product-card">
+                            <span class="product-tag">HOT</span>
+                            <div class="product-image" style="background-image: url('/api/placeholder/300/200');"></div>
+                            <div class="product-info">
+                                <div class="product-category">Dairy</div>
+                                <h3 class="product-name">Fresh Milk</h3>
+                                <div class="product-rating">
+                                    <div class="product-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span>(42 Reviews)</span>
+                                </div>
+                                <div class="product-meta">
+                                    <div class="product-price">$3.99</div>
+                                    <button class="add-cart-btn">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Brands Section -->
+                <div class="brands-section">
+                    <h2 class="brands-title">Choose The Brands You Love!</h2>
+                    
+                    <div class="brands-container">
+                        <img src="/api/placeholder/120/60" alt="Brand 1" class="brand-logo">
+                        <img src="/api/placeholder/120/60" alt="Brand 2" class="brand-logo">
+                        <img src="/api/placeholder/120/60" alt="Brand 3" class="brand-logo">
+                        <img src="/api/placeholder/120/60" alt="Brand 4" class="brand-logo">
+                        <img src="/api/placeholder/120/60" alt="Brand 5" class="brand-logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
