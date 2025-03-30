@@ -1,1 +1,871 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste'n Talk - Favorite Creators</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: calc(100vh - 100px);
+            position: fixed;
+            top: 100px;
+            left: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            overflow: hidden;
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 5%;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                margin-top: 100px;
+            }
+
+            .main-container {
+                margin-left: 0;
+                width: 100%;
+                margin-top: 20px;
+                height: auto;
+            }
+            
+            .header-icons {
+                width: 100%;
+                justify-content: space-around;
+                margin-top: 10px;
+            }
+            
+            .main-container {
+                margin-top: 170px; /* Adjusted to prevent overlap with header */
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {            
+            .header-icons {
+                width: 25%;
+            }
+            
+            .main-container {
+                margin-top: 100px; /* Adjusted to prevent overlap with header */
+            }
+        }
+        
+        @media (min-width: 1025px) {
+            .main-container {
+                margin-top: 100px; /* Adjusted to prevent overlap with header */
+            }
+        }
+
+        /* Highlighted heart icon */
+        .heart-icon {
+            font-size: 1.8rem;
+            background: #f8f9fa;
+            color: #ff3366;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid #ff3366;
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+            transform: scale(1.1);
+        }
+        
+        /* Creator card styles */
+        .creator-card {
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .creator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .creator-img-container {
+            height: 160px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .creator-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .creator-card:hover .creator-img {
+            transform: scale(1.05);
+        }
+        
+        .creator-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .pro-tag {
+            background-color: #ff3366;
+            color: white;
+        }
+        
+        .new-tag {
+            background-color: #13c2c2;
+            color: white;
+        }
+        
+        .popular-tag {
+            background-color: #fa8c16;
+            color: white;
+        }
+        
+        .rating-badge {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #002140;
+        }
+        
+        .specialty-badge {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .category-filter {
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .category-filter.active {
+            background-color: #002140;
+            color: white;
+        }
+        
+        .filter-container {
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        .filter-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        
+        .collection-card {
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            height: 200px;
+            transition: transform 0.3s ease;
+        }
+        
+        .collection-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .collection-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .collection-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 20px 15px;
+            color: white;
+        }
+        
+        .create-collection-card {
+            border: 2px dashed #002140;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease;
+        }
+        
+        .create-collection-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .creator-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: absolute;
+            bottom: -30px;
+            left: 20px;
+        }
+        
+        .follow-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .follow-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .recent-recipe {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .recent-recipe img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="bg-[#002140] min-h-screen">
+
+    <div class="bg-[#002140]">
+
+        <header class="w-[100%] flex items-center justify-between p-3 bg-[#f8f9fa] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10 flex-wrap">
+
+            <div class="flex items-center space-x-4">
+                <div class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]">
+                    <img src="tntLogo.png" alt="Logo" class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer">
+                    <span class="drop-shadow-2xl shadow-[#002140e3]">Taste'n Talk</span>
+                </div>
+            </div>
+            <div class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"><img src="map.png" alt="Location"></div>
+
+            <div class="relative w-[30%] max-w-[400px] md:w-[30%] sm:w-[100%]">
+                <input type="text" style="padding: 10px 40px 10px 20px;" class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic" placeholder="Search recipes, chefs, ingredients...">
+
+                <button class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%]">
+                    <i class="fas fa-search text-[#f8f9fa]"></i>
+                </button>   
+            </div>
+
+            <div class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#f8f9fa] rounded-[25px] px-2 shadow-md shadow-[#002140e3]">
+                <button class="text-2xl flex items-center justify-center">
+                    <span class="text-base">Create</span>➕
+                </button>
+            </div>
+
+            <div class="flex items-center justify-between header-icons w-[25%] md:w-[25%] sm:w-[100%]">
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">🛒</button>
+                </div>
+                
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+                        <i class="fas fa-bookmark text-[#002140]"></i>
+                    </button>
+                </div>
+                
+                <div class="text-3xl">
+                    <!-- Highlighted heart icon -->
+                    <button class="heart-icon">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+    
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+                        <i class="fas fa-bell text-[#002140]"></i>
+                    </button>
+                </div>
+    
+                <div class="text-3xl">
+                    <!-- Highlighted account icon -->
+                    <button class="account-icon">
+                        <i class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+    
+        <aside class="sidebar glass-effect">
+            <nav class="flex flex-col text-xl font-bold gap-5 text-[#f8f9fa]">
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="home.png" class="w-[35px]"> <span>Home</span></a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="cart.png" class="w-[35px]"> <span>Shopping</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <i class="fas fa-graduation-cap w-[35px] text-center"></i> <span>Courses</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="blog.png" class="w-[35px]"> <span>Blog/Articles</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="inbox.png" class="w-[35px]"> <span>Inbox</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="community.png" class="w-[35px]"><span>Community</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="chatbot.png" class="w-[35px]"><span>ChatBot</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="tiffin.png" class="w-[35px]"> <span>Tiffin</span> </a>
+            </nav>
+        </aside>
+
+        <div class="main-container ml-[250px] p-[20px] w-[calc(100% - 250px)] flex flex-col h-auto min-h-[calc(100vh - 100px)] overflow-y-auto">
+            <!-- Favorite Creators Section -->
+            <div class="favorite-creators-container flex flex-col h-full w-full">
+                <div class="favorite-header mb-[20px]">
+                    <h1 class="text-[32px] font-bold text-white mb-[10px]">Favorite Creators</h1>
+                    <p class="text-[#f1f1f1] text-[16px]">Your personal collection of inspiring chefs and food enthusiasts</p>
+                </div>
+                
+                <!-- Collections Section -->
+                <div class="collections-section mb-8 bg-white rounded-[15px] p-6 shadow-[0 5px 15px rgba(0,0,0,0.1)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-[#002140]">Your Creator Collections</h2>
+                        <button class="bg-[#002140] text-white px-3 py-2 rounded-lg text-sm hover:bg-[#003b73] transition-colors">
+                            <i class="fas fa-plus mr-1"></i> New Collection
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- Collection Card 1 -->
+                        <div class="collection-card shadow-lg">
+                            <img src="/api/placeholder/300/200" alt="Top Chefs">
+                            <div class="collection-overlay">
+                                <h3 class="text-lg font-bold">Top Chefs</h3>
+                                <p class="text-sm opacity-80">28 creators</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Collection Card 2 -->
+                        <div class="collection-card shadow-lg">
+                            <img src="/api/placeholder/300/200" alt="Baking Experts">
+                            <div class="collection-overlay">
+                                <h3 class="text-lg font-bold">Baking Experts</h3>
+                                <p class="text-sm opacity-80">14 creators</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Collection Card 3 -->
+                        <div class="collection-card shadow-lg">
+                            <img src="/api/placeholder/300/200" alt="Vegan Cuisine">
+                            <div class="collection-overlay">
+                                <h3 class="text-lg font-bold">Vegan Cuisine</h3>
+                                <p class="text-sm opacity-80">9 creators</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Create New Collection Card -->
+                        <div class="collection-card create-collection-card">
+                            <div class="text-[#002140] text-4xl mb-2">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <p class="text-[#002140] font-medium">Create Collection</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filter Section -->
+                <div class="filter-section mb-8 bg-white rounded-[15px] p-6 shadow-[0 5px 15px rgba(0,0,0,0.1)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-[#002140]">All Favorite Creators</h2>
+                        <div class="flex items-center gap-2">
+                            <button class="bg-[#f0f0f0] text-[#002140] px-3 py-2 rounded-lg text-sm hover:bg-[#e0e0e0] transition-colors">
+                                <i class="fas fa-filter mr-1"></i> Filter
+                            </button>
+                            <button class="bg-[#f0f0f0] text-[#002140] px-3 py-2 rounded-lg text-sm hover:bg-[#e0e0e0] transition-colors">
+                                <i class="fas fa-sort mr-1"></i> Sort
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-container flex items-center gap-3 mb-6 pb-2 overflow-x-auto">
+                        <div class="category-filter active">All Creators</div>
+                        <div class="category-filter">Professional Chefs</div>
+                        <div class="category-filter">Home Cooks</div>
+                        <div class="category-filter">Bakers</div>
+                        <div class="category-filter">Nutritionists</div>
+                        <div class="category-filter">International Cuisine</div>
+                        <div class="category-filter">Vegan & Vegetarian</div>
+                        <div class="category-filter">Dessert Specialists</div>
+                        <div class="category-filter">Recently Added</div>
+                    </div>
+                    
+                    <!-- Creator Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Creator Card 1 -->
+                        <div class="creator-card bg-white shadow-lg">
+                            <div class="creator-img-container">
+                                <img src="/api/placeholder/400/320" alt="Creator Cover" class="creator-img">
+                                <div class="creator-tag pro-tag">PRO CHEF</div>
+                                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                                    <img src="/api/placeholder/80/80" alt="Chef Maria" class="creator-avatar">
+                                </div>
+                            </div>
+                            <div class="p-4 pt-10 relative">
+                                <div class="absolute right-4 top-4">
+                                    <button class="follow-btn bg-[#ff3366] text-white px-3 py-1 rounded-full text-sm font-medium">
+                                        <i class="fas fa-check mr-1"></i> Following
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-bold text-[#002140]">Chef Maria Rodriguez</h3>
+                                <div class="flex items-center gap-2 mt-1 mb-2">
+                                    <div class="rating-badge">
+                                        <i class="fas fa-star text-yellow-400 mr-1"></i> 4.9
+                                    </div>
+                                    <div class="text-sm text-gray-500">12K Followers</div>
+                                </div>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="specialty-badge bg-red-100 text-red-600">Italian Cuisine</span>
+                                    <span class="specialty-badge bg-blue-100 text-blue-600">Seafood</span>
+                                </div>
+                                <div class="text-sm text-gray-600 mb-3 line-clamp-2">
+                                    Award-winning chef specializing in authentic Italian cuisine with a modern twist.
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="text-sm text-gray-500">Recent Recipes:</div>
+                                    <div class="flex gap-2">
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Creator Card 2 -->
+                        <div class="creator-card bg-white shadow-lg">
+                            <div class="creator-img-container">
+                                <img src="/api/placeholder/400/320" alt="Creator Cover" class="creator-img">
+                                <div class="creator-tag popular-tag">TRENDING</div>
+                                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                                    <img src="/api/placeholder/80/80" alt="Chef John" class="creator-avatar">
+                                </div>
+                            </div>
+                            <div class="p-4 pt-10 relative">
+                                <div class="absolute right-4 top-4">
+                                    <button class="follow-btn bg-[#ff3366] text-white px-3 py-1 rounded-full text-sm font-medium">
+                                        <i class="fas fa-check mr-1"></i> Following
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-bold text-[#002140]">Chef John Peterson</h3>
+                                <div class="flex items-center gap-2 mt-1 mb-2">
+                                    <div class="rating-badge">
+                                        <i class="fas fa-star text-yellow-400 mr-1"></i> 4.8
+                                    </div>
+                                    <div class="text-sm text-gray-500">28K Followers</div>
+                                </div>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="specialty-badge bg-green-100 text-green-600">BBQ Master</span>
+                                    <span class="specialty-badge bg-yellow-100 text-yellow-600">American</span>
+                                </div>
+                                <div class="text-sm text-gray-600 mb-3 line-clamp-2">
+                                    Bringing southern BBQ techniques to your kitchen with easy-to-follow recipes.
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="text-sm text-gray-500">Recent Recipes:</div>
+                                    <div class="flex gap-2">
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Creator Card 3 -->
+                        <div class="creator-card bg-white shadow-lg">
+                            <div class="creator-img-container">
+                                <img src="/api/placeholder/400/320" alt="Creator Cover" class="creator-img">
+                                <div class="creator-tag new-tag">NEW</div>
+                                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                                    <img src="/api/placeholder/80/80" alt="Aisha Patel" class="creator-avatar">
+                                </div>
+                            </div>
+                            <div class="p-4 pt-10 relative">
+                                <div class="absolute right-4 top-4">
+                                    <button class="follow-btn bg-[#ff3366] text-white px-3 py-1 rounded-full text-sm font-medium">
+                                        <i class="fas fa-check mr-1"></i> Following
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-bold text-[#002140]">Aisha Patel</h3>
+                                <div class="flex items-center gap-2 mt-1 mb-2">
+                                    <div class="rating-badge">
+                                        <i class="fas fa-star text-yellow-400 mr-1"></i> 4.7
+                                    </div>
+                                    <div class="text-sm text-gray-500">5.2K Followers</div>
+                                </div>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="specialty-badge bg-purple-100 text-purple-600">Indian</span>
+                                    <span class="specialty-badge bg-pink-100 text-pink-600">Vegetarian</span>
+                                </div>
+                                <div class="text-sm text-gray-600 mb-3 line-clamp-2">
+                                    Sharing authentic Indian vegetarian recipes with modern health-conscious adaptations.
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="text-sm text-gray-500">Recent Recipes:</div>
+                                    <div class="flex gap-2">
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Creator Card 4 -->
+                        <div class="creator-card bg-white shadow-lg">
+                            <div class="creator-img-container">
+                                <img src="/api/placeholder/400/320" alt="Creator Cover" class="creator-img">
+                                <div class="creator-tag pro-tag">PATISSIER</div>
+                                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                                    <img src="/api/placeholder/80/80" alt="Pierre Dubois" class="creator-avatar">
+                                </div>
+                            </div>
+                            <div class="p-4 pt-10 relative">
+                                <div class="absolute right-4 top-4">
+                                    <button class="follow-btn bg-[#ff3366] text-white px-3 py-1 rounded-full text-sm font-medium">
+                                        <i class="fas fa-check mr-1"></i> Following
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-bold text-[#002140]">Pierre Dubois</h3>
+                                <div class="flex items-center gap-2 mt-1 mb-2">
+                                    <div class="rating-badge">
+                                        <i class="fas fa-star text-yellow-400 mr-1"></i> 4.9
+                                    </div>
+                                    <div class="text-sm text-gray-500">19K Followers</div>
+                                </div>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="specialty-badge bg-yellow-100 text-yellow-600">French Pastry</span>
+                                    <span class="specialty-badge bg-red-100 text-red-600">Desserts</span>
+                                </div>
+                                <div class="text-sm text-gray-600 mb-3 line-clamp-2">
+                                    Professional pastry chef bringing French patisserie techniques to home bakers.
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="text-sm text-gray-500">Recent Recipes:</div>
+                                    <div class="flex gap-2">
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Creator Card 5 -->
+                        <div class="creator-card bg-white shadow-lg">
+                            <div class="creator-img-container">
+                                <img src="/api/placeholder/400/320" alt="Creator Cover" class="creator-img">
+                                <div class="creator-tag popular-tag">POPULAR</div>
+                                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                                    <img src="/api/placeholder/80/80" alt="Maya Wong" class="creator-avatar">
+                                </div>
+                            </div>
+                            <div class="p-4 pt-10 relative">
+                                <div class="absolute right-4 top-4">
+                                    <button class="follow-btn bg-[#ff3366] text-white px-3 py-1 rounded-full text-sm font-medium">
+                                        <i class="fas fa-check mr-1"></i> Following
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-bold text-[#002140]">Maya Wong</h3>
+                                <div class="flex items-center gap-2 mt-1 mb-2">
+                                    <div class="rating-badge">
+                                        <i class="fas fa-star text-yellow-400 mr-1"></i> 4.8
+                                    </div>
+                                    <div class="text-sm text-gray-500">15K Followers</div>
+                                </div>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="specialty-badge bg-blue-100 text-blue-600">Asian Fusion</span>
+                                    <span class="specialty-badge bg-green-100 text-green-600">Healthy</span>
+                                </div>
+                                <div class="text-sm text-gray-600 mb-3 line-clamp-2">
+                                    Blending traditional Asian flavors with modern healthy cooking techniques for everyday meals.
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="text-sm text-gray-500">Recent Recipes:</div>
+                                    <div class="flex gap-2">
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                        <div class="recent-recipe">
+                                            <img src="/api/placeholder/60/60" alt="Recipe">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Creator Card 6 -->
+<div class="creator-card bg-white shadow-lg">
+    <div class="creator-img-container">
+        <img src="/api/placeholder/400/320" alt="Creator Cover" class="creator-img">
+        <div class="creator-tag new-tag">NEW</div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+            <img src="/api/placeholder/80/80" alt="Carlos Mendez" class="creator-avatar">
+        </div>
+    </div>
+    <div class="p-4 pt-10 relative">
+        <div class="absolute right-4 top-4">
+            <button class="follow-btn bg-[#ff3366] text-white px-3 py-1 rounded-full text-sm font-medium">
+                <i class="fas fa-check mr-1"></i> Following
+            </button>
+        </div>
+        <h3 class="text-xl font-bold text-[#002140]">Carlos Mendez</h3>
+        <div class="flex items-center gap-2 mt-1 mb-2">
+            <div class="rating-badge">
+                <i class="fas fa-star text-yellow-400 mr-1"></i> 4.6
+            </div>
+            <div class="text-sm text-gray-500">8.7K Followers</div>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-3">
+            <span class="specialty-badge bg-orange-100 text-orange-600">Latin American</span>
+            <span class="specialty-badge bg-teal-100 text-teal-600">Street Food</span>
+        </div>
+        <div class="text-sm text-gray-600 mb-3 line-clamp-2">
+            Bringing authentic Latin American street food flavors to your home kitchen with simple techniques.
+        </div>
+        <div class="flex justify-between items-center">
+            <div class="text-sm text-gray-500">Recent Recipes:</div>
+            <div class="flex gap-2">
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Creator Card 7 -->
+<div class="creator-card bg-white shadow-lg">
+    <div class="creator-img-container">
+        <img src="/api/placeholder/400/320" alt="Creator Cover" class="creator-img">
+        <div class="creator-tag pro-tag">NUTRITIONIST</div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+            <img src="/api/placeholder/80/80" alt="Dr. Sarah Kim" class="creator-avatar">
+        </div>
+    </div>
+    <div class="p-4 pt-10 relative">
+        <div class="absolute right-4 top-4">
+            <button class="follow-btn bg-[#ff3366] text-white px-3 py-1 rounded-full text-sm font-medium">
+                <i class="fas fa-check mr-1"></i> Following
+            </button>
+        </div>
+        <h3 class="text-xl font-bold text-[#002140]">Dr. Sarah Kim</h3>
+        <div class="flex items-center gap-2 mt-1 mb-2">
+            <div class="rating-badge">
+                <i class="fas fa-star text-yellow-400 mr-1"></i> 4.9
+            </div>
+            <div class="text-sm text-gray-500">22K Followers</div>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-3">
+            <span class="specialty-badge bg-purple-100 text-purple-600">Nutrition</span>
+            <span class="specialty-badge bg-green-100 text-green-600">Plant-Based</span>
+        </div>
+        <div class="text-sm text-gray-600 mb-3 line-clamp-2">
+            Certified nutritionist creating science-backed, delicious recipes for optimal health and wellness.
+        </div>
+        <div class="flex justify-between items-center">
+            <div class="text-sm text-gray-500">Recent Recipes:</div>
+            <div class="flex gap-2">
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Creator Card 8 -->
+<div class="creator-card bg-white shadow-lg">
+    <div class="creator-img-container">
+        <img src="/api/placeholder/400/320" alt="Creator Cover" class="creator-img">
+        <div class="creator-tag popular-tag">TRENDING</div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+            <img src="/api/placeholder/80/80" alt="Marco Rossi" class="creator-avatar">
+        </div>
+    </div>
+    <div class="p-4 pt-10 relative">
+        <div class="absolute right-4 top-4">
+            <button class="follow-btn bg-[#ff3366] text-white px-3 py-1 rounded-full text-sm font-medium">
+                <i class="fas fa-check mr-1"></i> Following
+            </button>
+        </div>
+        <h3 class="text-xl font-bold text-[#002140]">Marco Rossi</h3>
+        <div class="flex items-center gap-2 mt-1 mb-2">
+            <div class="rating-badge">
+                <i class="fas fa-star text-yellow-400 mr-1"></i> 4.7
+            </div>
+            <div class="text-sm text-gray-500">31K Followers</div>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-3">
+            <span class="specialty-badge bg-red-100 text-red-600">Italian</span>
+            <span class="specialty-badge bg-blue-100 text-blue-600">Mediterranean</span>
+        </div>
+        <div class="text-sm text-gray-600 mb-3 line-clamp-2">
+            Third-generation Italian chef sharing family secrets and authentic Mediterranean recipes.
+        </div>
+        <div class="flex justify-between items-center">
+            <div class="text-sm text-gray-500">Recent Recipes:</div>
+            <div class="flex gap-2">
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Creator Card 9 -->
+<div class="creator-card bg-white shadow-lg">
+    <div class="creator-img-container">
+        <img src="/api/placeholder/400/320" alt="Creator Cover" class="creator-img">
+        <div class="creator-tag new-tag">NEW</div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+            <img src="/api/placeholder/80/80" alt="Emma Chen" class="creator-avatar">
+        </div>
+    </div>
+    <div class="p-4 pt-10 relative">
+        <div class="absolute right-4 top-4">
+            <button class="follow-btn bg-[#ff3366] text-white px-3 py-1 rounded-full text-sm font-medium">
+                <i class="fas fa-check mr-1"></i> Following
+            </button>
+        </div>
+        <h3 class="text-xl font-bold text-[#002140]">Emma Chen</h3>
+        <div class="flex items-center gap-2 mt-1 mb-2">
+            <div class="rating-badge">
+                <i class="fas fa-star text-yellow-400 mr-1"></i> 4.5
+            </div>
+            <div class="text-sm text-gray-500">6.3K Followers</div>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-3">
+            <span class="specialty-badge bg-pink-100 text-pink-600">Desserts</span>
+            <span class="specialty-badge bg-indigo-100 text-indigo-600">Gluten-Free</span>
+        </div>
+        <div class="text-sm text-gray-600 mb-3 line-clamp-2">
+            Specializing in beautiful, delicious gluten-free desserts that everyone can enjoy.
+        </div>
+        <div class="flex justify-between items-center">
+            <div class="text-sm text-gray-500">Recent Recipes:</div>
+            <div class="flex gap-2">
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+                <div class="recent-recipe">
+                    <img src="/api/placeholder/60/60" alt="Recipe">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Load More Button -->
+<div class="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center mt-6">
+    <button class="bg-[#002140] text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-[#003b73] transition-colors flex items-center gap-2">
+        <i class="fas fa-sync-alt"></i> Load More Creators
+    </button>
+</div>
