@@ -1,1 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste'n Talk with Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+        }
 
+        .sidebar {
+            width: 250px;
+            height: calc(100vh - 100px);
+            position: fixed;
+            top: 100px;
+            left: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Blog Section Styles */
+        
+        
+
+        
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            overflow: hidden;
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .read-more {
+            background: #002140;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .read-more:hover {
+            background: #003a73;
+            transform: translateY(-2px);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .blog-card-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .blog-card-content {
+            padding: 20px;
+        }
+
+        .blog-card-tag {
+            background: #002140;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .blog-card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #002140;
+        }
+
+        .blog-card-excerpt {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .blog-card-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 13px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 5%;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                margin-top: 100px;
+            }
+
+            .main-container {
+                margin-left: 0;
+                width: 100%;
+                margin-top: 20px;
+                height: auto;
+            }
+
+            .featured-post {
+                flex-direction: column;
+                height: auto; /* Added to ensure proper height on mobile */
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#002140] min-h-screen">
+
+    <div class="bg-[#002140]">
+
+        <header class="w-[100%] flex items-center justify-between p-3 bg-[#f8f9fa] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10">
+
+            <div class="flex items-center space-x-4">
+                <div class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]">
+                    <img src="tntLogo.png" alt="Logo" class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer">
+                    <span class="drop-shadow-2xl shadow-[#002140e3]">Taste'n Talk</span>
+                </div>
+            </div>
+            <div class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"><img src="map.png" alt="Location"></div>
+
+            <div class="relative w-[30%] max-w-[400px]">
+                <input type="text" style="padding: 10px 40px 10px 20px;" class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic" placeholder="Search">
+
+                <button class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%] " >
+                    <i class="fas fa-search text-[#f8f9fa]"></i>
+                </button>   
+            </div>
+
+            <div class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#f8f9fa] rounded-[25px] px-2 shadow-md shadow-[#002140e3]">
+                <button class="text-2xl flex items-center justify-center">
+                    <span class="text-base">Create</span>➕
+                </button>
+            </div>
+
+            <div class="flex items-center justify-between w-[15%]">
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">❤️</button>
+                </div>
+    
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">🔔</button>
+                </div>
+    
+                <div class="text-3xl">
+                    <!-- Highlighted account icon -->
+                    <button class="account-icon">
+                        <i class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+    
+        <aside class="sidebar glass-effect">
+            <nav class="flex flex-col text-xl font-bold gap-5 text-[#f8f9fa]">
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="home.png" class="w-[35px]"> <span>Home</span></a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="cart.png" class="w-[35px]"> <span>Shopping</span> </a>
+                <!-- Added new Recipe Coaching Classes link -->
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4 bg-[#002140]"> <i class="fas fa-graduation-cap w-[35px] text-center"></i> <span>Courses</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="blog.png" class="w-[35px]"> <span>Blog/Articles</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="inbox.png" class="w-[35px]"> <span>Inbox</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="community.png" class="w-[35px]"><span>Community</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="chatbot.png" class="w-[35px]"><span>ChatBot</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="tiffin.png" class="w-[35px]"> <span>Tiffin</span> </a>
+            </nav>
+        </aside>
+
+        <div class="main-container ml-[250px] p-[20px] w-[calc(100% - 250px)] flex flex-col h-auto min-h-[calc(100vh - 100px)] overflow-y-hidden">
+            <!-- Blog/Article Section -->
+            <div class="blog-container flex flex-col h-full w-full">
+                <div class="blog-header mb-[20px]">
+                    <h1 class="text-[32px] font-bold text-white mb-[10px]">Latest Food Articles & Inspiration</h1>
+                    <p class="text-[#f1f1f1] text-[16px]">Discover recipes, cooking tips, and food stories from our community</p>
+                </div>
+                
+                <!-- Featured Post - John Doe Article -->
+                <div class="featured-post bg-white rounded-[15px] overflow-visible mb-[30px] shadow-[0 5px 15px rgba(0,0,0,0.1)] flex min-h-[300px] w-full relative">
+                    <div class="featured-image flex-1 bg-cover bg-center min-h-[300px]" style="background-image: url('/api/placeholder/500/300');"></div>
+                    <div class="featured-content flex-1 p-[30px] flex flex-col justify-center">
+                        <span class="featured-tag bg-[#002140] text-white p-[5px 10px] text-[12px] mb-[15px] inline-block font-bold">FEATURED</span>
+                        <h2 class="featured-title text-[24px] font-bold mb-[15px] text-[#002140]">What Your Music Preference Says About Your Food Personality</h2>
+                        <p class="featured-excerpt text-[#666] mb-[20px] text-base/6">Explore the fascinating connection between your playlist favorites and your culinary preferences. We've analyzed data from thousands of food enthusiasts to find surprising correlations.</p>
+                        <div class="featured-meta flex items-center text-[#888] text-[14px]">
+                            <div class="author-avatar">
+                                <img src="/api/placeholder/40/40" alt="Author">
+                            </div>
+                            <span>By John Doe • March 8, 2025 • 5 min read</span>
+                        </div>
+                        <a href="#" class="read-more">Read Article</a>
+                    </div>
+                </div>
+                
+                <!-- Blog Grid -->
+                <div class="blog-grid">
+                    <!-- Blog Card 1 -->
+                    <div class="blog-card">
+                        <div class="blog-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="blog-card-content">
+                            <span class="blog-card-tag">RECIPE</span>
+                            <h3 class="blog-card-title">Quick Weeknight Dinner Ideas</h3>
+                            <p class="blog-card-excerpt">10 delicious meals you can prepare in under 30 minutes that your family will love.</p>
+                            <div class="blog-card-meta">
+                                <span>March 7, 2025</span>
+                                <span>4 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Card 2 -->
+                    <div class="blog-card">
+                        <div class="blog-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="blog-card-content">
+                            <span class="blog-card-tag">GUIDE</span>
+                            <h3 class="blog-card-title">Essential Kitchen Tools Every Home Chef Needs</h3>
+                            <p class="blog-card-excerpt">Upgrade your cooking experience with these must-have tools that professionals swear by.</p>
+                            <div class="blog-card-meta">
+                                <span>March 6, 2025</span>
+                                <span>6 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Card 3 -->
+                    <div class="blog-card">
+                        <div class="blog-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="blog-card-content">
+                            <span class="blog-card-tag">CULTURE</span>
+                            <h3 class="blog-card-title">Exploring Mediterranean Food Traditions</h3>
+                            <p class="blog-card-excerpt">Dive into the rich culinary heritage of Mediterranean countries and their healthy eating habits.</p>
+                            <div class="blog-card-meta">
+                                <span>March 5, 2025</span>
+                                <span>8 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Card 4 -->
+                    <div class="blog-card">
+                        <div class="blog-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="blog-card-content">
+                            <span class="blog-card-tag">TIPS</span>
+                            <h3 class="blog-card-title">Food Photography: Capture Stunning Dishes</h3>
+                            <p class="blog-card-excerpt">Learn how to take Instagram-worthy food photos with just your smartphone and basic props.</p>
+                            <div class="blog-card-meta">
+                                <span>March 4, 2025</span>
+                                <span>5 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Card 5 -->
+                    <div class="blog-card">
+                        <div class="blog-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="blog-card-content">
+                            <span class="blog-card-tag">HEALTH</span>
+                            <h3 class="blog-card-title">Superfoods You Should Add to Your Diet</h3>
+                            <p class="blog-card-excerpt">Discover nutrient-packed foods that can boost your immunity and overall wellness.</p>
+                            <div class="blog-card-meta">
+                                <span>March 3, 2025</span>
+                                <span>7 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Card 6 -->
+                    <div class="blog-card">
+                        <div class="blog-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="blog-card-content">
+                            <span class="blog-card-tag">INTERVIEW</span>
+                            <h3 class="blog-card-title">A Day in the Life of a Michelin Chef</h3>
+                            <p class="blog-card-excerpt">We followed chef Maria Rodriguez for 24 hours to see what it takes to run a top restaurant.</p>
+                            <div class="blog-card-meta">
+                                <span>March 2, 2025</span>
+                                <span>10 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Load More Button -->
+                <div class="text-center mt-10 mb-10">
+                    <button class="bg-white text-[#002140] font-bold py-3 px-6 rounded-full hover:bg-gray-100 transition">
+                        Load More Articles
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
