@@ -1,1 +1,478 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste'n Talk - Saved Videos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: calc(100vh - 100px);
+            position: fixed;
+            top: 100px;
+            left: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            overflow: hidden;
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .saved-video-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .saved-video-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-thumbnail {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .video-play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.3);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .video-thumbnail:hover .video-play-button {
+            opacity: 1;
+        }
+
+        .saved-video-content {
+            padding: 15px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .video-category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .video-category-tab {
+            background: white;
+            color: #002140;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .video-category-tab.active {
+            background: #002140;
+            color: white;
+        }
+
+        .video-category-tab:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 5%;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                margin-top: 100px;
+            }
+
+            .main-container {
+                margin-left: 0;
+                width: 100%;
+                margin-top: 20px;
+                height: auto;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-icons {
+                width: 100%;
+                justify-content: space-around;
+                margin-top: 10px;
+            }
+            
+            .main-container {
+                margin-top: 170px; /* Adjusted to prevent overlap with header */
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .header-icons {
+                width: 25%;
+            }
+            
+            .main-container {
+                margin-top: 100px; /* Adjusted to prevent overlap with header */
+            }
+        }
+        
+        @media (min-width: 1025px) {
+            .main-container {
+                margin-top: 100px; /* Adjusted to prevent overlap with header */
+            }
+        }
+
+        /* Highlighted bookmark icon */
+        .bookmark-icon {
+            font-size: 1.8rem;
+            background: #f8f9fa;
+            color: #002140;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid #002140;
+            box-shadow: 0 0 10px rgba(0, 33, 64, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-[#002140] min-h-screen">
+
+    <div class="bg-[#002140]">
+
+        <header class="w-[100%] flex items-center justify-between p-3 bg-[#f8f9fa] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10 flex-wrap">
+
+            <div class="flex items-center space-x-4">
+                <div class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]">
+                    <img src="tntLogo.png" alt="Logo" class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer">
+                    <span class="drop-shadow-2xl shadow-[#002140e3]">Taste'n Talk</span>
+                </div>
+            </div>
+            <div class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"><img src="map.png" alt="Location"></div>
+
+            <div class="relative w-[30%] max-w-[400px] md:w-[30%] sm:w-[100%]">
+                <input type="text" style="padding: 10px 40px 10px 20px;" class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic" placeholder="Search">
+
+                <button class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%]">
+                    <i class="fas fa-search text-[#f8f9fa]"></i>
+                </button>   
+            </div>
+
+            <div class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#f8f9fa] rounded-[25px] px-2 shadow-md shadow-[#002140e3]">
+                <button class="text-2xl flex items-center justify-center">
+                    <span class="text-base">Create</span>➕
+                </button>
+            </div>
+
+            <div class="flex items-center justify-between header-icons w-[25%] md:w-[25%] sm:w-[100%]">
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">🛒</button>
+                </div>
+                
+                <div class="text-3xl">
+                    <!-- Highlighted bookmark icon -->
+                    <button class="bookmark-icon">
+                        <i class="fas fa-bookmark text-[#002140]"></i>
+                    </button>
+                </div>
+                
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">❤️</button>
+                </div>
+    
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">🔔</button>
+                </div>
+    
+                <div class="text-3xl">
+                    <!-- Highlighted account icon -->
+                    <button class="account-icon">
+                        <i class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+    
+        <aside class="sidebar glass-effect">
+            <nav class="flex flex-col text-xl font-bold gap-5 text-[#f8f9fa]">
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="home.png" class="w-[35px]"> <span>Home</span></a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="cart.png" class="w-[35px]"> <span>Shopping</span> </a>
+                <!-- Added new Recipe Coaching Classes link -->
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4 bg-[#002140]"> <i class="fas fa-graduation-cap w-[35px] text-center"></i> <span>Courses</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="blog.png" class="w-[35px]"> <span>Blog/Articles</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="inbox.png" class="w-[35px]"> <span>Inbox</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="community.png" class="w-[35px]"><span>Community</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="chatbot.png" class="w-[35px]"><span>ChatBot</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="tiffin.png" class="w-[35px]"> <span>Tiffin</span> </a>
+            </nav>
+        </aside>
+
+        <div class="main-container ml-[250px] p-[20px] w-[calc(100% - 250px)] flex flex-col h-auto min-h-[calc(100vh - 100px)] overflow-y-auto">
+            <!-- Saved Videos Section -->
+            <div class="saved-videos-container flex flex-col h-full w-full">
+                <div class="saved-videos-header mb-[20px]">
+                    <h1 class="text-[32px] font-bold text-white mb-[10px]">Your Saved Content</h1>
+                    <p class="text-[#f1f1f1] text-[16px]">All your bookmarked videos, recipes, and articles in one place</p>
+                </div>
+                
+                <!-- Category Tabs -->
+                <div class="video-category-tabs">
+                    <div class="video-category-tab active">All Saved</div>
+                    <div class="video-category-tab">Recipe Videos</div>
+                    <div class="video-category-tab">Cooking Tutorials</div>
+                    <div class="video-category-tab">Food Reviews</div>
+                    <div class="video-category-tab">Chef Interviews</div>
+                    <div class="video-category-tab">Articles</div>
+                </div>
+                
+                <!-- Featured Saved Video -->
+                <div class="featured-saved-video bg-white rounded-[15px] overflow-visible mb-[30px] shadow-[0 5px 15px rgba(0,0,0,0.1)] flex min-h-[300px] w-full relative">
+                    <div class="featured-image flex-1 bg-cover bg-center min-h-[300px] relative" style="background-image: url('/api/placeholder/500/300');">
+                        <div class="video-play-button">
+                            <i class="fas fa-play text-white text-4xl"></i>
+                        </div>
+                        <div class="video-duration">18:35</div>
+                    </div>
+                    <div class="featured-content flex-1 p-[30px] flex flex-col justify-center">
+                        <span class="featured-tag bg-[#002140] text-white p-[5px 10px] text-[12px] mb-[15px] inline-block font-bold">SAVED TODAY</span>
+                        <h2 class="featured-title text-[24px] font-bold mb-[15px] text-[#002140]">The Secret to Perfect Pasta Every Time</h2>
+                        <p class="featured-excerpt text-[#666] mb-[20px] text-base/6">Master chef Paulo Rossi shares his Italian grandmother's technique for cooking pasta that will revolutionize your home cooking.</p>
+                        <div class="featured-meta flex items-center text-[#888] text-[14px]">
+                            <div class="author-avatar">
+                                <img src="/api/placeholder/40/40" alt="Author">
+                            </div>
+                            <span>By Chef Paulo • March 12, 2025 • 1.2M views</span>
+                        </div>
+                        <div class="flex gap-4 mt-4">
+                            <button class="bg-[#002140] text-white py-2 px-4 rounded-full flex items-center gap-2">
+                                <i class="fas fa-play"></i> Watch Now
+                            </button>
+                            <button class="border border-[#002140] text-[#002140] py-2 px-4 rounded-full flex items-center gap-2">
+                                <i class="fas fa-bookmark"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Saved Videos Grid -->
+                <div class="video-grid">
+                    <!-- Video Card 1 -->
+                    <div class="saved-video-card">
+                        <div class="video-thumbnail relative" style="background-image: url('/api/placeholder/400/200');">
+                            <div class="video-play-button">
+                                <i class="fas fa-play text-white text-2xl"></i>
+                            </div>
+                            <div class="video-duration">7:12</div>
+                        </div>
+                        <div class="saved-video-content">
+                            <h3 class="text-lg font-bold text-[#002140] mb-2">5-Minute Breakfast Ideas for Busy Mornings</h3>
+                            <div class="flex items-center justify-between text-sm text-gray-600 mb-3">
+                                <span>Healthy Eats</span>
+                                <span>423K views</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-xs text-gray-500">Saved on March 10</span>
+                                <button class="text-[#002140]"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Card 2 -->
+                    <div class="saved-video-card">
+                        <div class="video-thumbnail relative" style="background-image: url('/api/placeholder/400/200');">
+                            <div class="video-play-button">
+                                <i class="fas fa-play text-white text-2xl"></i>
+                            </div>
+                            <div class="video-duration">14:35</div>
+                        </div>
+                        <div class="saved-video-content">
+                            <h3 class="text-lg font-bold text-[#002140] mb-2">Mastering Indian Spices: A Beginner's Guide</h3>
+                            <div class="flex items-center justify-between text-sm text-gray-600 mb-3">
+                                <span>Spice Masters</span>
+                                <span>1.1M views</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-xs text-gray-500">Saved on March 8</span>
+                                <button class="text-[#002140]"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Card 3 -->
+                    <div class="saved-video-card">
+                        <div class="video-thumbnail relative" style="background-image: url('/api/placeholder/400/200');">
+                            <div class="video-play-button">
+                                <i class="fas fa-play text-white text-2xl"></i>
+                            </div>
+                            <div class="video-duration">22:47</div>
+                        </div>
+                        <div class="saved-video-content">
+                            <h3 class="text-lg font-bold text-[#002140] mb-2">Sourdough Bread: From Starter to Loaf</h3>
+                            <div class="flex items-center justify-between text-sm text-gray-600 mb-3">
+                                <span>Artisan Baker</span>
+                                <span>750K views</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-xs text-gray-500">Saved on March 5</span>
+                                <button class="text-[#002140]"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Card 4 -->
+                    <div class="saved-video-card">
+                        <div class="video-thumbnail relative" style="background-image: url('/api/placeholder/400/200');">
+                            <div class="video-play-button">
+                                <i class="fas fa-play text-white text-2xl"></i>
+                            </div>
+                            <div class="video-duration">9:18</div>
+                        </div>
+                        <div class="saved-video-content">
+                            <h3 class="text-lg font-bold text-[#002140] mb-2">3 Ways to Elevate Your Instant Ramen</h3>
+                            <div class="flex items-center justify-between text-sm text-gray-600 mb-3">
+                                <span>Student Meals</span>
+                                <span>2.3M views</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-xs text-gray-500">Saved on March 3</span>
+                                <button class="text-[#002140]"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Card 5 -->
+                    <div class="saved-video-card">
+                        <div class="video-thumbnail relative" style="background-image: url('/api/placeholder/400/200');">
+                            <div class="video-play-button">
+                                <i class="fas fa-play text-white text-2xl"></i>
+                            </div>
+                            <div class="video-duration">16:22</div>
+                        </div>
+                        <div class="saved-video-content">
+                            <h3 class="text-lg font-bold text-[#002140] mb-2">The Perfect Steak: Temperature Guide</h3>
+                            <div class="flex items-center justify-between text-sm text-gray-600 mb-3">
+                                <span>Meat Masters</span>
+                                <span>890K views</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-xs text-gray-500">Saved on February 28</span>
+                                <button class="text-[#002140]"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Card 6 -->
+                    <div class="saved-video-card">
+                        <div class="video-thumbnail relative" style="background-image: url('/api/placeholder/400/200');">
+                            <div class="video-play-button">
+                                <i class="fas fa-play text-white text-2xl"></i>
+                            </div>
+                            <div class="video-duration">11:05</div>
+                        </div>
+                        <div class="saved-video-content">
+                            <h3 class="text-lg font-bold text-[#002140] mb-2">Vegan Desserts That Will Fool Anyone</h3>
+                            <div class="flex items-center justify-between text-sm text-gray-600 mb-3">
+                                <span>Plant-Based Kitchen</span>
+                                <span>1.4M views</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-xs text-gray-500">Saved on February 25</span>
+                                <button class="text-[#002140]"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Load More Button -->
+                <div class="text-center mt-10 mb-10">
+                    <button class="bg-white text-[#002140] font-bold py-3 px-6 rounded-full hover:bg-gray-100 transition">
+                        Load More Saved Content
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
