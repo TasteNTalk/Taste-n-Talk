@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste'n Talk with Tiffin Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="necessary.css">
+    <style>
+        /* Tiffin Section Styles */
+        
+        .tiffin-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .tiffin-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tiffin-card-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .tiffin-card-content {
+            padding: 20px;
+        }
+
+        .tiffin-card-tag {
+            background: #002140;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .tiffin-card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #002140;
+        }
+
+        .tiffin-card-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .tiffin-card-price {
+            font-weight: bold;
+            color: #002140;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .tiffin-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rating {
+            color: #FFD700;
+        }
+
+        .add-to-cart {
+            background: #002140;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: #003a73;
+        }
+
+        .subscription-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .subscription-box h2 {
+            font-size: 24px;
+            color: #002140;
+            margin-bottom: 20px;
+        }
+
+        .subscription-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .subscription-option {
+            background: #f8f8f8;
+            border-radius: 10px;
+            padding: 20px;
+            width: 30%;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .subscription-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .subscription-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #002140;
+            margin: 15px 0;
+        }
+
+        .subscription-period {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .subscription-features {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .subscription-features li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .subscription-features li:before {
+            content: "✓";
+            color: #002140;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .subscribe-button {
+            background: #002140;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .subscribe-button:hover {
+            background: #003a73;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 5%;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                margin-top: 100px;
+            }
+
+            .main-container {
+                margin-left: 0;
+                width: 100%;
+                margin-top: 20px;
+                height: auto;
+            }
+
+            .featured-tiffin {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .featured-image {
+                border-radius: 15px 15px 0 0;
+            }
+
+            .tiffin-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .subscription-options {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .subscription-option {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .tiffin-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .subscription-options {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            .subscription-option {
+                width: 48%;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#002140] min-h-screen">
+
+    <div class="bg-[#002140]">
+
+        <header class="w-[100%] flex items-center justify-between p-3 bg-[#f8f9fa] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10">
+
+            <div class="flex items-center space-x-4">
+                <div class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]">
+                    <img src="tntLogo.png" alt="Logo" class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer">
+                    <span class="drop-shadow-2xl shadow-[#002140e3]">Taste'n Talk</span>
+                </div>
+            </div>
+            <div class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"><img src="map.png" alt="Location"></div>
+
+            <div class="relative w-[30%] max-w-[400px]">
+                <input type="text" style="padding: 10px 40px 10px 20px;" class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic" placeholder="Search">
+
+                <button class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%] " >
+                    <i class="fas fa-search text-[#f8f9fa]"></i>
+                </button>   
+            </div>
+
+            <div class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#f8f9fa] rounded-[25px] px-2 shadow-md shadow-[#002140e3]">
+                <button class="text-2xl flex items-center justify-center">
+                    <span class="text-base">Create</span>➕
+                </button>
+            </div>
+
+            <div class="flex items-center justify-between header-icons w-[25%] md:w-[25%] sm:w-[100%]">
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">🛒</button>
+                </div>
+                
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">🔖</button>
+                </div>
+                
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">❤️</button>
+                </div>
+    
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">🔔</button>
+                </div>
+    
+                <div class="text-3xl">
+                    <!-- Highlighted account icon -->
+                    <button class="account-icon">
+                        <i class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+    
+        <aside class="sidebar glass-effect">
+            <nav class="flex flex-col text-xl font-bold gap-5 text-[#f8f9fa]">
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="home.png" class="w-[35px]"> <span>Home</span></a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="cart.png" class="w-[35px]"> <span>Shopping</span> </a>
+                <!-- Added new Recipe Coaching Classes link -->
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4 bg-[#002140]"> <i class="fas fa-graduation-cap w-[35px] text-center"></i> <span>Courses</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="blog.png" class="w-[35px]"> <span>Blog/Articles</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="inbox.png" class="w-[35px]"> <span>Inbox</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="community.png" class="w-[35px]"><span>Community</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="chatbot.png" class="w-[35px]"><span>ChatBot</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="tiffin.png" class="w-[35px]"> <span>Tiffin</span> </a>
+            </nav>
+        </aside>
+
+        <div class="main-container ml-[250px] mt-[100px] p-[20px] w-[calc(100% - 250px)] flex flex-col h-auto min-h-[calc(100vh - 100px)] overflow-y-visible">
+
+            <!-- Tiffin Section -->
+            <div class="tiffin-container flex flex-col h-[100%] w-[100%]">
+                <div class="tiffin-header mb-[30px]">
+                    <h1 class="text-[32px] font-bold text-white mb-[10px]">Fresh Homemade Tiffin Services</h1>
+                    <p class="text-[#f1f1f1] text-[16px]/[1.6]">Delicious, nutritious meals delivered to your doorstep daily. Choose from a variety of cuisines and meal plans that suit your dietary preferences.</p>
+                </div>
+        
+                <!-- Featured Tiffin Package -->
+                <div class="featured-tiffin  bg-white rounded-[15px] overflow-visible mb-[30px] shadow-[0 5px 15px rgba(0,0,0,0.1)] flex min-h-[300px] w-[100%] relative">
+                    <div class="featured-image flex-1 bg-cover bg-center min-h-[300px] rounded-[15px 0 0 15px]" style="background-image: url('/api/placeholder/500/300');"></div>
+                    <div class="featured-content flex-1 p-[30px] flex flex-col justify-center">
+                        <span class="featured-tag bg-[#002140] text-white p-[5px 10px] rounded-[20px] text-[12px] mb-[15px] inline-block  font-bold">FEATURED</span>
+                        <h2 class="featured-title text-[24px] font-bold mb-[15px] text-[#002140]">Premium Indian Thali Package</h2>
+                        <p class="featured-description text-[#666] mb-[20px] text-base/[1.6]">Our most popular tiffin service featuring authentic Indian home-cooked meals. Includes rice, 2 rotis, dal, 2 vegetable dishes, raita, pickle, and dessert. Made with fresh ingredients and delivered hot.</p>
+                        <div class="featured-price text-[22px] font-bold text-[#002140] mb-[20px]">$12.99 / meal</div>
+                        <a href="#" class="order-now bg-[#002140] text-white px-[20px] py-[10px] rounded-[30px] font-bold inline-block transition-all duration-[0.3s] ease-in-out hover:bg-[#003a73] transform -translate-y-2">Order Now</a>
+                    </div>
+                </div>
+                
+                <!-- Tiffin Options Grid -->
+
+
+                <div class="tiffin-grid grid grid-cols-3 gap-[20px]">
+                    <!-- Tiffin Card 1 -->
+                    <div class="tiffin-card">
+                        <div class="tiffin-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="tiffin-card-content">
+                            <span class="tiffin-card-tag">VEGETARIAN</span>
+                            <h3 class="tiffin-card-title">South Indian Delights</h3>
+                            <p class="tiffin-card-description">Enjoy authentic South Indian dishes including idli, dosa, sambar, and coconut chutney.</p>
+                            <div class="tiffin-card-price">$10.99 / meal</div>
+                            <div class="tiffin-card-meta">
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span class="text-gray-600"> 4.5</span>
+                                </div>
+                                <button class="add-to-cart">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tiffin Card 2 -->
+                    <div class="tiffin-card">
+                        <div class="tiffin-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="tiffin-card-content">
+                            <span class="tiffin-card-tag">NON-VEG</span>
+                            <h3 class="tiffin-card-title">Protein Rich Meal Box</h3>
+                            <p class="tiffin-card-description">High protein meal with grilled chicken, quinoa, steamed vegetables, and yogurt sauce.</p>
+                            <div class="tiffin-card-price">$13.99 / meal</div>
+                            <div class="tiffin-card-meta">
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="text-gray-600"> 4.0</span>
+                                </div>
+                                <button class="add-to-cart">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tiffin Card 3 -->
+                    <div class="tiffin-card">
+                        <div class="tiffin-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="tiffin-card-content">
+                            <span class="tiffin-card-tag">KETO</span>
+                            <h3 class="tiffin-card-title">Low-Carb Special</h3>
+                            <p class="tiffin-card-description">Keto-friendly meal with cauliflower rice, paneer steak, avocado, and leafy greens.</p>
+                            <div class="tiffin-card-price">$14.99 / meal</div>
+                            <div class="tiffin-card-meta">
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span class="text-gray-600"> 5.0</span>
+                                </div>
+                                <button class="add-to-cart">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tiffin Card 4 -->
+                    <div class="tiffin-card">
+                        <div class="tiffin-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="tiffin-card-content">
+                            <span class="tiffin-card-tag">CHINESE</span>
+                            <h3 class="tiffin-card-title">Oriental Meal Box</h3>
+                            <p class="tiffin-card-description">Flavorful Chinese meal with fried rice, vegetable manchurian, and chili paneer.</p>
+                            <div class="tiffin-card-price">$11.99 / meal</div>
+                            <div class="tiffin-card-meta">
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="text-gray-600"> 4.0</span>
+                                </div>
+                                <button class="add-to-cart">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tiffin Card 5 -->
+                    <div class="tiffin-card">
+                        <div class="tiffin-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="tiffin-card-content">
+                            <span class="tiffin-card-tag">VEGAN</span>
+                            <h3 class="tiffin-card-title">Plant-Based Power</h3>
+                            <p class="tiffin-card-description">100% vegan meal with tofu curry, brown rice, and assorted seasonal vegetables.</p>
+                            <div class="tiffin-card-price">$12.99 / meal</div>
+                            <div class="tiffin-card-meta">
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span class="text-gray-600"> 4.5</span>
+                                </div>
+                                <button class="add-to-cart">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tiffin Card 6 -->
+                    <div class="tiffin-card">
+                        <div class="tiffin-card-image" style="background-image: url('/api/placeholder/400/200');"></div>
+                        <div class="tiffin-card-content">
+                            <span class="tiffin-card-tag">PUNJABI</span>
+                            <h3 class="tiffin-card-title">North Indian Special</h3>
+                            <p class="tiffin-card-description">Authentic Punjabi thali with butter naan, chole, paneer butter masala, and jeera rice.</p>
+                            <div class="tiffin-card-price">$13.99 / meal</div>
+                            <div class="tiffin-card-meta">
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span class="text-gray-600"> 5.0</span>
+                                </div>
+                                <button class="add-to-cart">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Subscription Plans -->
+                <div class="subscription-box">
+                    <h2>Subscribe & Save</h2>
+                    <div class="subscription-options">
+                        <!-- Weekly Plan -->
+                        <div class="subscription-option">
+                            <h3>Weekly Plan</h3>
+                            <div class="subscription-price">$69.99</div>
+                            <div class="subscription-period">7 meals per week</div>
+                            <ul class="subscription-features">
+                                <li>7 daily meals</li>
+                                <li>Free delivery</li>
+                                <li>10% off regular price</li>
+                                <li>Menu customization</li>
+                            </ul>
+                            <button class="subscribe-button">Subscribe Now</button>
+                        </div>
+                        
+                        <!-- Monthly Plan -->
+                        <div class="subscription-option" style="background: #f0f5ff; border: 2px solid #002140;">
+                            <h3>Monthly Plan</h3>
+                            <div class="subscription-price">$249.99</div>
+                            <div class="subscription-period">30 meals per month</div>
+                            <ul class="subscription-features">
+                                <li>30 daily meals</li>
+                                <li>Free priority delivery</li>
+                                <li>20% off regular price</li>
+                                <li>Full menu customization</li>
+                                <li>Weekend special dishes</li>
+                            </ul>
+                            <button class="subscribe-button">Subscribe Now</button>
+                        </div>
+                        
+                        <!-- Family Plan -->
+                        <div class="subscription-option">
+                            <h3>Family Plan</h3>
+                            <div class="subscription-price">$399.99</div>
+                            <div class="subscription-period">30 meals for 4 people</div>
+                            <ul class="subscription-features">
+                                <li>4 servings per meal</li>
+                                <li>Free express delivery</li>
+                                <li>25% off regular price</li>
+                                <li>Family-sized portions</li>
+                                <li>Special dietary options</li>
+                            </ul>
+                            <button class="subscribe-button">Subscribe Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Call to Action -->
+                <div class="text-center mt-10 mb-10">
+                    <button class="bg-white text-[#002140] font-bold py-3 px-6 rounded-full hover:bg-gray-100 transition">
+                        View All Tiffin Options
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

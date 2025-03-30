@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Instruction Query Page</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playwrite+VN:wght@100..400&family=Sofadi+One&display=swap" rel="stylesheet">
+</head>
+
+<body 
+      style="background-color: #002140;" 
+      class="antialiased flex flex-col justify-center items-center min-h-screen">
+
+  <div 
+       style="background-color: #002147; font-family: 'Sofadi One', serif; font-weight: 400; font-style: normal;" 
+       class="w-[90%] max-w-[720px] flex flex-col items-center gap-8 text-center font-serif rounded-lg shadow-lg shadow-black p-4 sm:max-w-[1080px] text-white">
+
+    <h1 class="font-bold text-4xl">Instructor Query Section</h1>
+
+    <form id="instructor-form" 
+          class="flex flex-col gap-4 w-full text-base ">
+      
+      <label for="expertise">
+        What is your primary area of expertise in cooking:
+      </label>
+      <select name="expertise" 
+              id="cooking-area-select" required 
+              class="p-2 rounded-md cursor-pointer border-none outline-none shadow-md shadow-black text-center text-[#002140]">
+        <option value="">---Please choose an option---</option>
+        <option value="South Indian">South Indian</option>
+        <option value="North Indian">North Indian</option>
+        <option value="East Indian">East Indian</option>
+        <option value="West Indian">West Indian</option>
+        <option value="Bengali">Bengali</option>
+        <option value="Gujarati">Gujarati</option>
+        <option value="Rajasthani">Rajasthani</option>
+        <option value="Punjabi">Punjabi</option>
+        <option value="Chinese">Chinese</option>
+        <option value="Italian">Italian</option>
+        <option value="French">French</option>
+        <option value="Thai">Thai</option>
+        <option value="Korean">Korean</option>
+        <option value="Mexican">Mexican</option>
+        <option value="Mediterranean">Mediterranean</option>
+        <option value="Latin American">Latin American</option>
+        <option value="American">American</option>
+      </select>
+
+      <label for="experience">
+        Can you share your experience in cooking professionally or teaching culinary skills?
+      </label>
+      <input type="number" 
+             id="experience" 
+             name="experience" min="0" required 
+             class="p-2  rounded-md cursor-pointer text-[#002140] border-none outline-none shadow-md shadow-black text-center">
+
+      <label for="certifications">
+        What certifications or formal training do you have in culinary arts?
+      </label>
+      <textarea id="certifications" 
+                name="certifications" required 
+                class="p-2  rounded-md cursor-pointer text-[#002140] border-none outline-none shadow-md shadow-black text-center">
+      </textarea>
+
+      <label for="instructional_content">
+        Have you ever created instructional content (e.g., videos, recipes, or blogs)? If yes, provide examples.
+      </label>
+      <select name="instructional_content" id="instructional_content" required class="p-2 rounded-md cursor-pointer text-[#002140] border-none outline-none shadow-md shadow-black text-center">
+        <option value="">---Please choose an option---</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+      <input type="file" name="if_yes" id="if_yes" class="bg-slate-500 p-2 rounded-md hidden"> 
+      
+      <label for="strategies">
+        What strategies do you use to keep your audience engaged and answering their questions during a tutorial?
+      </label>
+      <textarea id="strategies" 
+                name="strategies" required 
+                class="p-2  rounded-md cursor-pointer text-[#002140] border-none outline-none shadow-md shadow-black text-center">
+      </textarea>
+      
+      <label for="motivation">
+        What motivates you to teach others about cooking?
+      </label>
+      <textarea id="motivation" 
+                name="motivation" required 
+                class="p-2  rounded-md cursor-pointer text-[#002140] border-none outline-none shadow-md shadow-black text-center">
+      </textarea>
+      
+      <label for="suggestion">
+        How would you suggest an alternative ingredient if a user cannot find the one required?
+      </label>
+      <textarea id="suggestion" 
+                name="suggestion" required 
+                class="p-2  rounded-md cursor-pointer text-[#002140] border-none outline-none shadow-md shadow-black text-center">
+      </textarea>
+      
+      <label for="mistake"> 
+        If a student makes a mistake during a cooking session, how would you handle it?
+      </label>
+      <textarea id="mistake" 
+                name="mistake" required 
+                class="p-2 rounded-md cursor-pointer text-[#002140] border-none outline-none shadow-md shadow-black text-center">
+      </textarea>
+      
+      <label for="feedback">
+        Are you open to receiving feedback from students to improve your teaching methods?
+      </label>
+      <select name="feedback" 
+              id="feedback" required 
+              class="p-2 rounded-md cursor-pointer text-[#002140] border-none outline-none shadow-md shadow-black text-center">
+        <option value="">---Please choose an option---</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+
+      <button 
+               type="submit"
+               class=" bg-gradient-to-r from-indigo-600 from-18% to-indigo-800 to-90% text-white py-2 px-4 rounded hover:bg-gradient-to-r hover:from-indigo-800 hover:from-18% hover:to-indigo-600 hover:to-90% hover:ease-in-out shadow shadow-black hover:shadow-lg hover:shadow-black hover:text-lg hover:drop-shadow active:bg-gradient-to-r active:from-indigo-700 active:from-18% active:to-indigo-500 active:to-90% active:ease-in-out active:shadow-lg active:shadow-black active:text-lg">
+          Submit
+      </button>
+
+    </form>
+
+  </div>
+
+  <script src="instructor_query_page.js"></script>
+</body>
+
+</html>
