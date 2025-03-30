@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste'n Talk - Notifications</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: calc(100vh - 100px);
+            position: fixed;
+            top: 100px;
+            left: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            overflow: hidden;
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 5%;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                margin-top: 100px;
+            }
+
+            .main-container {
+                margin-left: 0;
+                width: 100%;
+                margin-top: 20px;
+                height: auto;
+            }
+            
+            .header-icons {
+                width: 100%;
+                justify-content: space-around;
+                margin-top: 10px;
+            }
+            
+            .main-container {
+                margin-top: 170px; /* Adjusted to prevent overlap with header */
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {            
+            .header-icons {
+                width: 25%;
+            }
+            
+            .main-container {
+                margin-top: 100px; /* Adjusted to prevent overlap with header */
+            }
+        }
+        
+        @media (min-width: 1025px) {
+            .main-container {
+                margin-top: 100px; /* Adjusted to prevent overlap with header */
+            }
+        }
+
+        /* Highlighted notification icon */
+        .notification-icon {
+            font-size: 1.8rem;
+            background: #f8f9fa;
+            color: #002140;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid #002140;
+            box-shadow: 0 0 10px rgba(0, 33, 64, 0.5);
+            transform: scale(1.1);
+        }
+        
+        /* Notification styles */
+        .notification-item {
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .notification-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .notification-unread {
+            border-left: 4px solid #002140;
+        }
+        
+        .notification-read {
+            border-left: 4px solid transparent;
+        }
+        
+        .notification-icon-container {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .like-icon {
+            background-color: #ffecec;
+            color: #ff5252;
+        }
+        
+        .comment-icon {
+            background-color: #e6f7ff;
+            color: #1890ff;
+        }
+        
+        .follow-icon {
+            background-color: #e6fffb;
+            color: #13c2c2;
+        }
+        
+        .order-icon {
+            background-color: #f6ffed;
+            color: #52c41a;
+        }
+        
+        .class-icon {
+            background-color: #fff7e6;
+            color: #fa8c16;
+        }
+        
+        .recipe-icon {
+            background-color: #f9f0ff;
+            color: #722ed1;
+        }
+        
+        .message-icon {
+            background-color: #e6f7ff;
+            color: #2f54eb;
+        }
+        
+        .system-icon {
+            background-color: #f5f5f5;
+            color: #595959;
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        
+        .notification-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+        
+        .notification-tab.active {
+            color: #002140;
+            border-bottom-color: #002140;
+        }
+    </style>
+</head>
+<body class="bg-[#002140] min-h-screen">
+
+    <div class="bg-[#002140]">
+
+        <header class="w-[100%] flex items-center justify-between p-3 bg-[#f8f9fa] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10 flex-wrap">
+
+            <div class="flex items-center space-x-4">
+                <div class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]">
+                    <img src="/images/tntLogo.png" alt="Logo" class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer">
+                    <span class="drop-shadow-2xl shadow-[#002140e3]">Taste'n Talk</span>
+                </div>
+            </div>
+            <div class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"><img src="map.png" alt="Location"></div>
+
+            <div class="relative w-[30%] max-w-[400px] md:w-[30%] sm:w-[100%]">
+                <input type="text" style="padding: 10px 40px 10px 20px;" class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic" placeholder="Search recipes, chefs, ingredients...">
+
+                <button class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%]">
+                    <i class="fas fa-search text-[#f8f9fa]"></i>
+                </button>   
+            </div>
+
+            <div class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#f8f9fa] rounded-[25px] px-2 shadow-md shadow-[#002140e3]">
+                <button class="text-2xl flex items-center justify-center">
+                    <span class="text-base">Create</span>➕
+                </button>
+            </div>
+
+            <div class="flex items-center justify-between header-icons w-[25%] md:w-[25%] sm:w-[100%]">
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">🛒</button>
+                </div>
+                
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+                        <i class="fas fa-bookmark text-[#002140]"></i>
+                    </button>
+                </div>
+                
+                <div class="text-3xl">
+                    <button class="rounded-full shadow-md shadow-[#002140e3] px-3">❤️</button>
+                </div>
+    
+                <div class="text-3xl">
+                    <!-- Highlighted notification icon -->
+                    <button class="notification-icon">
+                        <i class="fas fa-bell text-[#002140]"></i>
+                    </button>
+                </div>
+    
+                <div class="text-3xl">
+                    <!-- Highlighted account icon -->
+                    <button class="account-icon">
+                        <i class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+    
+        <aside class="sidebar glass-effect">
+            <nav class="flex flex-col text-xl font-bold gap-5 text-[#f8f9fa]">
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="home.png" class="w-[35px]"> <span>Home</span></a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="cart.png" class="w-[35px]"> <span>Shopping</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <i class="fas fa-graduation-cap w-[35px] text-center"></i> <span>Courses</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"><img src="blog.png" class="w-[35px]"> <span>Blog/Articles</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="inbox.png" class="w-[35px]"> <span>Inbox</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="community.png" class="w-[35px]"><span>Community</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="chatbot.png" class="w-[35px]"><span>ChatBot</span> </a>
+                <a href="#" class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"> <img src="tiffin.png" class="w-[35px]"> <span>Tiffin</span> </a>
+            </nav>
+        </aside>
+
+        <div class="main-container ml-[250px] p-[20px] w-[calc(100% - 250px)] flex flex-col h-auto min-h-[calc(100vh - 100px)] overflow-y-auto">
+            <!-- Notification Section -->
+            <div class="notification-container flex flex-col h-full w-full">
+                <div class="notification-header mb-[20px]">
+                    <h1 class="text-[32px] font-bold text-white mb-[10px]">Notifications</h1>
+                    <p class="text-[#f1f1f1] text-[16px]">Stay updated with your recipe interactions, comments, and platform activities</p>
+                </div>
+                
+                <!-- Tab Navigation -->
+                <div class="tab-container bg-white rounded-t-[15px] shadow-[0 5px 15px rgba(0,0,0,0.1)]">
+                    <div class="notification-tab active">All</div>
+                    <div class="notification-tab">Interactions</div>
+                    <div class="notification-tab">Comments</div>
+                    <div class="notification-tab">Mentions</div>
+                    <div class="notification-tab">Orders</div>
+                    <div class="notification-tab">Classes</div>
+                    <div class="notification-tab">Messages</div>
+                    <div class="notification-tab">System</div>
+                </div>
+                
+                <!-- Notification List -->
+                <div class="notification-list bg-white rounded-b-[15px] p-6 shadow-[0 5px 15px rgba(0,0,0,0.1)]">
+                    <!-- Notification Header -->
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-[#002140]">Recent Notifications</h2>
+                        <div class="flex items-center gap-4">
+                            <button class="bg-[#002140] text-white px-3 py-2 rounded-lg text-sm hover:bg-[#003b73] transition-colors">
+                                <i class="fas fa-check-double mr-1"></i> Mark all as read
+                            </button>
+                            <div class="relative">
+                                <button class="bg-gray-100 p-2 rounded-full">
+                                    <i class="fas fa-ellipsis-v text-[#002140]"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Today's Notifications -->
+                    <div class="mb-6">
+                        <h3 class="text-gray-500 text-sm mb-3 font-medium">TODAY</h3>
+                        
+                        <!-- Notification Item - Unread -->
+                        <div class="notification-item notification-unread bg-blue-50 p-4 flex items-start">
+                            <div class="notification-icon-container like-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <div class="flex justify-between items-start">
+                                    <p class="text-gray-800 font-medium">
+                                        <span class="font-bold text-[#002140]">Chef Amanda</span> liked your Butter Chicken recipe
+                                    </p>
+                                    <span class="text-xs text-gray-500">10 min ago</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mt-1">Your recipe has received 25 likes in the last 24 hours!</p>
+                                <div class="mt-2 flex items-center gap-3">
+                                    <button class="text-[#002140] text-sm hover:underline">View Recipe</button>
+                                    <button class="text-[#002140] text-sm hover:underline">View Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Notification Item - Unread -->
+                        <div class="notification-item notification-unread bg-blue-50 p-4 flex items-start">
+                            <div class="notification-icon-container comment-icon">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <div class="flex justify-between items-start">
+                                    <p class="text-gray-800 font-medium">
+                                        <span class="font-bold text-[#002140]">Michael S.</span> commented on your Pasta Carbonara video
+                                    </p>
+                                    <span class="text-xs text-gray-500">45 min ago</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mt-1">"This is the best carbonara recipe I've tried! The technique for the egg sauce is perfect."</p>
+                                <div class="mt-2 flex items-center gap-3">
+                                    <button class="text-[#002140] text-sm hover:underline">Reply</button>
+                                    <button class="text-[#002140] text-sm hover:underline">View Comment</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Notification Item - Unread -->
+                        <div class="notification-item notification-unread bg-blue-50 p-4 flex items-start">
+                            <div class="notification-icon-container order-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <div class="flex justify-between items-start">
+                                    <p class="text-gray-800 font-medium">Your grocery order #TT28745 has been dispatched</p>
+                                    <span class="text-xs text-gray-500">1 hour ago</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mt-1">Your fresh ingredients will be delivered within 30-45 minutes</p>
+                                <div class="mt-2 flex items-center gap-3">
+                                    <button class="text-[#002140] text-sm hover:underline">Track Order</button>
+                                    <button class="text-[#002140] text-sm hover:underline">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Yesterday's Notifications -->
+                    <div class="mb-6">
+                        <h3 class="text-gray-500 text-sm mb-3 font-medium">YESTERDAY</h3>
+                        
+                        <!-- Notification Item - Read -->
+                        <div class="notification-item notification-read bg-white p-4 flex items-start border border-gray-100">
+                            <div class="notification-icon-container class-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <div class="flex justify-between items-start">
+                                    <p class="text-gray-800 font-medium">Your Italian Basics cooking class starts in 2 hours</p>
+                                    <span class="text-xs text-gray-500">Yesterday, 4:15 PM</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mt-1">7 students have enrolled in your class. Make sure to prepare all ingredients!</p>
+                                <div class="mt-2 flex items-center gap-3">
+                                    <button class="text-[#002140] text-sm hover:underline">Start Class</button>
+                                    <button class="text-[#002140] text-sm hover:underline">View Enrollments</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Notification Item - Read -->
+                        <div class="notification-item notification-read bg-white p-4 flex items-start border border-gray-100">
+                            <div class="notification-icon-container follow-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <div class="flex justify-between items-start">
+                                    <p class="text-gray-800 font-medium">
+                                        <span class="font-bold text-[#002140]">5 new chefs</span> started following you
+                                    </p>
+                                    <span class="text-xs text-gray-500">Yesterday, 2:30 PM</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mt-1">Professional Chef John, Sara, and 3 others started following your recipes</p>
+                                <div class="mt-2 flex items-center gap-3">
+                                    <button class="text-[#002140] text-sm hover:underline">View Followers</button>
+                                    <button class="text-[#002140] text-sm hover:underline">Follow Back</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Notification Item - Read -->
+                        <div class="notification-item notification-read bg-white p-4 flex items-start border border-gray-100">
+                            <div class="notification-icon-container message-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <div class="flex justify-between items-start">
+                                    <p class="text-gray-800 font-medium">
+                                        <span class="font-bold text-[#002140]">Rachel T.</span> sent you a direct message
+                                    </p>
+                                    <span class="text-xs text-gray-500">Yesterday, 11:20 AM</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mt-1">"Hi there! I'd love to collaborate on a fusion recipe video for our channels..."</p>
+                                <div class="mt-2 flex items-center gap-3">
+                                    <button class="text-[#002140] text-sm hover:underline">Reply</button>
+                                    <button class="text-[#002140] text-sm hover:underline">View Message</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- This Week's Notifications -->
+                    <div>
+                        <h3 class="text-gray-500 text-sm mb-3 font-medium">THIS WEEK</h3>
+                        
+                        <!-- Notification Item - Read -->
+                        <div class="notification-item notification-read bg-white p-4 flex items-start border border-gray-100">
+                            <div class="notification-icon-container recipe-icon">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <div class="flex justify-between items-start">
+                                    <p class="text-gray-800 font-medium">Your recipe was featured in "Weekly Favorites"</p>
+                                    <span class="text-xs text-gray-500">Monday, 10:00 AM</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mt-1">Your "Thai Green Curry" recipe was selected as one of this week's best recipes!</p>
+                                <div class="mt-2 flex items-center gap-3">
+                                    <button class="text-[#002140] text-sm hover:underline">View Feature</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Notification Item - Read -->
+                        <div class="notification-item notification-read bg-white p-4 flex items-start border border-gray-100">
+                            <div class="notification-icon-container system-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <div class="flex justify-between items-start">
+                                    <p class="text-gray-800 font-medium">Premium Chef membership renewed</p>
+                                    <span class="text-xs text-gray-500">Sunday, 11:35 PM</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mt-1">Your Premium Chef subscription has been successfully renewed for another month. Next billing: April 17, 2025</p>
+                                <div class="mt-2 flex items-center gap-3">
+                                    <button class="text-[#002140] text-sm hover:underline">View Subscription</button>
+                                    <button class="text-[#002140] text-sm hover:underline">Manage Payment</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Load More Button -->
+                        <div class="text-center mt-6">
+                            <button class="bg-gray-100 text-[#002140] px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                                Load More Notifications
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notification Settings -->
+                <div class="notification-settings mt-8 bg-white rounded-[15px] p-6 shadow-[0 5px 15px rgba(0,0,0,0.1)]">
+                    <h2 class="text-xl font-bold text-[#002140] mb-4">Notification Preferences</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                            <div>
+                                <h3 class="font-bold text-gray-800">Recipe Interactions</h3>
+                                <p class="text-sm text-gray-600">Likes, comments, and shares on your recipes</p>
+                            </div>
+                            <div class="relative inline-block w-12 align-middle select-none">
+                                <input type="checkbox" id="toggle1" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                <label for="toggle1" class="toggle-label block overflow-hidden h-6 rounded-full bg-green-400 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                            <div>
+                                <h3 class="font-bold text-gray-800">Direct Messages</h3>
+                                <p class="text-sm text-gray-600">When you receive a message from another user</p>
+                            </div>
+                            <div class="relative inline-block w-12 align-middle select-none">
+                                <input type="checkbox" id="toggle2" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                <label for="toggle2" class="toggle-label block overflow-hidden h-6 rounded-full bg-green-400 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                            <div>
+                                <h3 class="font-bold text-gray-800">Order Updates</h3>
+                                <p class="text-sm text-gray-600">Updates about your grocery or tiffin orders</p>
+                            </div>
+                            <div class="relative inline-block w-12 align-middle select-none">
+                                <input type="checkbox" id="toggle3" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                <label for="toggle3" class="toggle-label block overflow-hidden h-6 rounded-full bg-green-400 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                            <div>
+                                <h3 class="font-bold text-gray-800">Class Reminders</h3>
+                                <p class="text-sm text-gray-600">Reminders about upcoming cooking classes</p>
+                            </div>
+                            <div class="relative inline-block w-12 align-middle select-none">
+                                <input type="checkbox" id="toggle4" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                <label for="toggle4" class="toggle-label block overflow-hidden h-6 rounded-full bg-green-400 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                            <div>
+                                <h3 class="font-bold text-gray-800">New Followers</h3>
+                                <p class="text-sm text-gray-600">When someone follows your profile</p>
+                            </div>
+                            <div class="relative inline-block w-12 align-middle select-none">
+                                <input type="checkbox" id="toggle5" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                <label for="toggle5" class="toggle-label block overflow-hidden h-6 rounded-full bg-green-400 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                            <div>
+                                <h3 class="font-bold text-gray-800">Marketing Updates</h3>
+                                <p class="text-sm text-gray-600">Promotions, new features, and platform news</p>
+                            </div>
+                            <div class="relative inline-block w-12 align-middle select-none">
+                                <input type="checkbox" id="toggle6" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                <label for="toggle6" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button class="bg-[#002140] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#003b73] transition-colors">
+                            Save Preferences
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Mobile Notifications -->
+                <div class="notification-mobile mt-8 bg-white rounded-[15px] p-6 shadow-[0 5px 15px rgba(0,0,0,0.1)]">
+                    <h2 class="text-xl font-bold text-[#002140] mb-4">Mobile Notification Settings</h2>
+                    
+                    <div class="mb-6">
+                        <p class="text-gray-600 mb-4">Configure how you receive notifications on your mobile device.</p>
+                        
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg mb-3">
+                            <div>
+                                <h3 class="font-bold text-gray-800">Push Notifications</h3>
+                                <p class="text-sm text-gray-600">Receive instant alerts on your mobile device</p>
+                            </div>
+                            <div class="relative inline-block w-12 align-middle select-none">
+                                <input type="checkbox" id="toggle-push" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                <label for="toggle-push" class="toggle-label block overflow-hidden h-6 rounded-full bg-green-400 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg mb-3">
+                            <div>
+                                <h3 class="font-bold text-gray-800">SMS Notifications</h3>
+                                <p class="text-sm text-gray-600">Receive updates via text message</p>
+                            </div>
+                            <div class="relative inline-block w-12 align-middle select-none">
+                                <input type="checkbox" id="toggle-sms" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                <label for="toggle-sms" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                            <div>
+                                <h3 class="font-bold text-gray-800">Email Digest</h3>
+                                <p class="text-sm text-gray-600">Receive a daily summary of all notifications</p>
+                            </div>
+                            <div class="relative inline-block w-12 align-middle select-none">
+                                <input type="checkbox" id="toggle-email" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                <label for="toggle-email" class="toggle-label block overflow-hidden h-6 rounded-full bg-green-400 cursor-pointer"></label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quiet Hours Section -->
+                    <div class="mb-6">
+                        <h3 class="font-bold text-gray-800 mb-3">Quiet Hours</h3>
+                        <p class="text-sm text-gray-600 mb-4">Set times when you don't want to receive notifications</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Start Time</label>
+                                <select class="w-full p-2 border border-gray-300 rounded-md">
+                                    <option>10:00 PM</option>
+                                    <option>11:00 PM</option>
+                                    <option>12:00 AM</option>
+                                    <option>1:00 AM</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">End Time</label>
+                                <select class="w-full p-2 border border-gray-300 rounded-md">
+                                    <option>6:00 AM</option>
+                                    <option>7:00 AM</option>
+                                    <option>8:00 AM</option>
+                                    <option>9:00 AM</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center mb-4">
+                            <input type="checkbox" id="enable-quiet" checked class="mr-2 h-5 w-5 text-[#002140]">
+                            <label for="enable-quiet" class="text-gray-700">Enable quiet hours</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Priority Notifications -->
+                    <div class="mb-6">
+                        <h3 class="font-bold text-gray-800 mb-3">Priority Notifications</h3>
+                        <p class="text-sm text-gray-600 mb-4">Select notification types that should bypass quiet hours</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="priority-orders" checked class="mr-2 h-4 w-4 text-[#002140]">
+                                <label for="priority-orders" class="text-gray-700">Order Updates</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="priority-messages" checked class="mr-2 h-4 w-4 text-[#002140]">
+                                <label for="priority-messages" class="text-gray-700">Direct Messages</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="priority-classes" class="mr-2 h-4 w-4 text-[#002140]">
+                                <label for="priority-classes" class="text-gray-700">Class Reminders</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="priority-system" class="mr-2 h-4 w-4 text-[#002140]">
+                                <label for="priority-system" class="text-gray-700">System Alerts</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Connected Devices -->
+                    <div>
+                        <h3 class="font-bold text-gray-800 mb-3">Connected Devices</h3>
+                        <p class="text-sm text-gray-600 mb-4">Manage notification settings for your devices</p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-mobile-alt text-[#002140] text-xl mr-3"></i>
+                                    <div>
+                                        <h4 class="font-medium">iPhone 15 Pro</h4>
+                                        <p class="text-xs text-gray-500">Last active: 10 minutes ago</p>
+                                    </div>
+                                </div>
+                                <button class="text-sm text-[#002140] hover:underline">Configure</button>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-tablet-alt text-[#002140] text-xl mr-3"></i>
+                                    <div>
+                                        <h4 class="font-medium">iPad Air</h4>
+                                        <p class="text-xs text-gray-500">Last active: 2 days ago</p>
+                                    </div>
+                                </div>
+                                <button class="text-sm text-[#002140] hover:underline">Configure</button>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-laptop text-[#002140] text-xl mr-3"></i>
+                                    <div>
+                                        <h4 class="font-medium">MacBook Pro</h4>
+                                        <p class="text-xs text-gray-500">Last active: Now</p>
+                                    </div>
+                                </div>
+                                <button class="text-sm text-[#002140] hover:underline">Configure</button>
+                            </div>
+                        </div>
+                        
+                        <button class="mt-4 flex items-center text-[#002140] hover:underline">
+                            <i class="fas fa-plus-circle mr-1"></i> Add New Device
+                        </button>
+                    </div>
+                    
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <button class="bg-[#002140] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#003b73] transition-colors">
+                            Save All Settings
+                        </button>
+                        <button class="bg-white text-[#002140] border border-[#002140] px-4 py-2 rounded-lg text-sm hover:bg-gray-100 transition-colors">
+                            Reset to Default
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Notification tab switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.notification-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Here you would normally fetch and display 
+                    // the corresponding notifications based on the selected tab
+                    // For this demo, we'll just show a message in the console
+                    console.log(`Selected tab: ${this.textContent.trim()}`);
+                });
+            });
+            
+            // Toggle switches for notification settings
+            const toggles = document.querySelectorAll('.toggle-checkbox');
+            toggles.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    const label = this.nextElementSibling;
+                    if (this.checked) {
+                        label.classList.remove('bg-gray-300');
+                        label.classList.add('bg-green-400');
+                    } else {
+                        label.classList.remove('bg-green-400');
+                        label.classList.add('bg-gray-300');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
