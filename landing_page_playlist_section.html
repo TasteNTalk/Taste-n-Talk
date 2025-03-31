@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desktop Landing Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 15px;
+      }
+
+      .sidebar {
+        width: 250px;
+        height: calc(100vh - 100px);
+        position: fixed;
+        top: 100px;
+        left: 0;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .slider-container {
+        position: relative;
+        margin: 0 auto;
+        max-width: 1200px;
+        overflow: hidden;
+      }
+
+      .main-content {
+        margin-left: 250px;
+        padding: 100px 20px 20px;
+      }
+
+      .main-container {
+        margin-left: 250px;
+        margin-top: 100px;
+        padding: 20px;
+        width: calc(100% - 250px);
+      }
+
+      .stories-wrapper {
+        position: relative;
+        width: 95%;
+        margin: auto;
+        overflow: hidden;
+      }
+
+      .stories-container {
+        background-color: #002140be;
+        border-radius: 0.75rem; /* rounded-xl */
+        display: flex;
+        overflow-x: auto;
+        gap: 1rem; /* gap-4 */
+        padding: 1rem; /* p-4 */
+        white-space: nowrap;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+      }
+
+      .stories-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .story-item {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem; /* gap-2 */
+      }
+
+      .story-item:hover {
+        scale: 1.2;
+        transition: all 0.5s ease-in;
+      }
+
+      .story-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .story-avatar {
+        height: 4rem; /* h-16 */
+        width: 4rem; /* w-16 */
+        border-radius: 100%; /* rounded-full */
+        overflow: hidden;
+        border: 4px solid rgb(255, 255, 255); /* ring-2 ring-white */
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .story-avatar img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      .story-name {
+        font-size: 0.75rem; /* text-xs */
+        font-weight: 500; /* font-medium */
+        color: white; /* text-white */
+      }
+
+      /* For better scrolling experience on various devices */
+      .stories-container::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      .stories-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+      }
+
+      .stories-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 999px;
+      }
+
+      /* Arrow Buttons */
+      .arrow-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .arrow-left {
+        left: 0;
+      }
+
+      .arrow-right {
+        right: 0;
+      }
+
+      .arrow-btn:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      .slider {
+        display: flex;
+        transition: transform 0.5s ease;
+        gap: 30px;
+        padding: 0 20px;
+      }
+
+      .slide {
+        min-width: 300px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
+      }
+
+      .slide h3 {
+        margin-bottom: 10px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .slide p {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .slider-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+      }
+
+      .slider-button {
+        background: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .content-section {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 0 5%;
+        margin-left: 250px;
+      }
+
+      .video-card {
+        margin-top: 30px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .video-card h3 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        header {
+          padding: 15px 5%;
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .logo {
+          font-size: 20px;
+        }
+
+        .search-container {
+          width: 100%;
+        }
+
+        .sidebar {
+          width: 100%;
+          height: auto;
+          position: static;
+          margin-top: 100px;
+        }
+
+        .main-container {
+          margin-left: 0;
+          width: 100%;
+          margin-top: 20px;
+        }
+
+        .content-section {
+          margin-left: 0;
+        }
+
+        .slider-container {
+          margin: 20px 0;
+        }
+
+        .slide {
+          min-width: calc(100% - 40px);
+          margin: 0 20px;
+        }
+
+        .slider-button {
+          width: 35px;
+          height: 35px;
+          padding: 8px;
+        }
+
+        .slider-nav {
+          padding: 0 10px;
+        }
+      }
+
+      .slider-container {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 50px;
+      }
+      .recipe-video-slider {
+        display: flex;
+        overflow: hidden;
+        scroll-behavior: smooth;
+        gap: 20px;
+        padding: 20px 0;
+      }
+      .slider-wrapper {
+        display: flex;
+        transition: transform 0.5s ease;
+      }
+      .recipe-video-card {
+        min-width: 300px;
+        flex: 0 0 300px;
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      .recipe-video-card:hover {
+        transform: scale(1.05);
+      }
+      .video-thumbnail {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+      .video-details {
+        padding: 15px;
+      }
+      .slider-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background: #002140;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .prev-arrow {
+        left: 10px;
+      }
+      .next-arrow {
+        right: 10px;
+      }
+      .slider-arrow:hover {
+        background: #003366;
+      }
+      .slider-arrow:focus {
+        outline: none;
+      }
+
+      .recipe-video-container {
+        display: flex;
+        max-height: 600px;
+        overflow-y: auto;
+        padding: 20px;
+        scrollbar-width: none;
+      }
+      .recipe-video-container::-webkit-scrollbar {
+        display: none;
+      }
+      .recipe-video-card {
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        transition: transform 0.3s ease;
+      }
+
+      .nav-container {
+        max-width: 100%;
+        margin: -10px auto 20px;
+        background: linear-gradient(135deg, #e2e4d6, #c4c2c2);
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .nav-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 20px;
+        background: linear-gradient(
+          to right,
+          #ff4d4d,
+          #f9cb28,
+          #0099ff,
+          #6a5acd
+        );
+      }
+
+      .nav-items {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px;
+      }
+
+      .nav-item {
+        flex: 1;
+        text-align: center;
+        transition: all 0.3s ease;
+        padding: 16px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nav-item:hover {
+        background-color: #e2e4d6;
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .nav-item:hover .icon {
+        transform: scale(1.1);
+      }
+
+      .nav-item::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        background: linear-gradient(to right, #ff4d4d, #002140);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      .nav-item:hover::after {
+        width: 80%;
+      }
+
+      .nav-item.active {
+        background-color: #e2e4d6;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .nav-item.active::after {
+        width: 80%;
+        background: linear-gradient(to right, #002140, #ff4d4d);
+      }
+
+      .icon {
+        font-size: 24px;
+        margin-bottom: 5px;
+        color: #555;
+        transition: all 0.3s ease;
+      }
+
+      .label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        transition: all 0.3s ease;
+      }
+
+      .nav-item:hover .label {
+        color: #0099ff;
+      }
+
+      .nav-item.active .icon {
+        color: #002140;
+      }
+
+      .nav-item.active .label {
+        color: #002140;
+        font-weight: 600;
+      }
+
+      @media (max-width: 768px) {
+        .nav-items {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .nav-item {
+          flex-basis: calc(33.333% - 10px);
+          margin-bottom: 10px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .nav-item {
+          flex-basis: calc(50% - 10px);
+        }
+      }
+
+      /* Playlist section enhancements */
+      .playlist-section {
+        margin-top: 40px;
+        padding: 20px;
+        border-radius: 16px;
+        background: linear-gradient(
+          135deg,
+          #57289aaa 0%,
+          #002140 100%
+        );
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .playlist-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(
+          to right,
+          #ff4d4d,
+          #f9cb28,
+          #0099ff,
+          #6a5acd
+        );
+        z-index: 1;
+      }
+
+      .playlist-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      .playlist-header h2 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #e2e4d6;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+      }
+
+      .playlist-header h2 i {
+        margin-right: 10px;
+        font-size: 24px;
+        color: #f9cb28;
+      }
+
+      .view-all-btn {
+        background: rgba(255, 255, 255, 0.15);
+        color: #e2e4d6;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .view-all-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .playlist-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .playlist-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        position: relative;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .playlist-card:hover {
+        transform: translateY(-10px) scale(1.03);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .playlist-card:hover .playlist-overlay {
+        opacity: 1;
+      }
+
+      .playlist-image {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        transition: all 0.5s ease;
+      }
+
+      .playlist-card:hover .playlist-image {
+        transform: scale(1.1);
+      }
+
+      .playlist-details {
+        padding: 15px;
+        background: rgba(0, 33, 64, 0.8);
+        position: relative;
+      }
+
+      .playlist-title {
+        font-weight: 700;
+        font-size: 18px;
+        margin: 0 0 5px 0;
+        color: #fff;
+      }
+
+      .playlist-meta {
+        display: flex;
+        justify-content: space-between;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+      }
+
+      .playlist-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 33, 64, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+
+      .play-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 30px;
+        backdrop-filter: blur(5px);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .play-icon:hover {
+        transform: scale(1.1);
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .playlist-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 77, 77, 0.9);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 2;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      .trending-badge {
+        background: linear-gradient(45deg, #ff4d4d, #ff9900);
+      }
+
+      .new-badge {
+        background: linear-gradient(45deg, #0099ff, #6a5acd);
+      }
+
+      .premium-badge {
+        background: linear-gradient(45deg, #f9cb28, #ff9900);
+      }
+
+      /* Featured playlist styles */
+      .featured-playlist {
+        grid-column: span 2;
+        display: flex;
+        background: linear-gradient(
+          45deg,
+          rgba(0, 33, 64, 0.95),
+          rgba(100, 0, 100, 0.95)
+        );
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .featured-playlist-image {
+        width: 40%;
+        object-fit: cover;
+      }
+
+      .featured-playlist-details {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 60%;
+      }
+
+      .featured-playlist-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #fff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .featured-playlist-description {
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 15px;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      .featured-playlist-stats {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .stat {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .featured-playlist-actions {
+        display: flex;
+        gap: 15px;
+      }
+
+      .play-now-btn {
+        background: #ff4d4d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .play-now-btn:hover {
+        background: #ff6666;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .add-to-library-btn {
+        background: transparent;
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        padding: 8px 18px;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .add-to-library-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+
+      /* Create playlist button animation */
+      .create-playlist-btn {
+        background: linear-gradient(45deg, #002140, #0099ff);
+        color: white;
+        border: none;
+        padding: 12px 22px;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .create-playlist-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, #0099ff, #6a5acd);
+        transition: all 0.5s ease;
+        z-index: -1;
+      }
+
+      .create-playlist-btn:hover::before {
+        left: 0;
+      }
+
+      .create-playlist-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      @media (max-width: 768px) {
+        .playlist-grid {
+          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        }
+
+        .featured-playlist {
+          grid-column: span 1;
+          flex-direction: column;
+        }
+
+        .featured-playlist-image {
+          width: 100%;
+          height: 200px;
+        }
+
+        .featured-playlist-details {
+          width: 100%;
+        }
+
+        .featured-playlist-title {
+          font-size: 22px;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-[#002140] min-h-screen">
+    <div class="bg-[#002140]">
+      <header
+        class="w-[100%] flex items-center justify-between p-3 bg-[#e2e4d6] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10"
+      >
+        <div class="flex items-center space-x-4">
+          <div
+            class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]"
+          >
+            <a href="#"
+              ><img
+                src="/images/tntLogo.png"
+                alt="Logo"
+                class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer"
+            /></a>
+            <a href="#"
+              ><span class="drop-shadow-2xl shadow-[#002140e3]"
+                >Taste'n Talk</span
+              ></a
+            >
+          </div>
+        </div>
+        <div
+          class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"
+        >
+          <img src="map.png" alt="Location" />
+        </div>
+
+        <div class="relative w-[30%] max-w-[400px]">
+          <input
+            type="text"
+            style="padding: 10px 40px 10px 20px"
+            class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic"
+            placeholder="Search"
+          />
+
+          <button
+            class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+          >
+            <i class="fas fa-search text-[#f8f9fa]"></i>
+          </button>
+        </div>
+
+        <div
+          class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#f8f9fa] rounded-[25px] px-2 shadow-md shadow-[#002140e3]"
+        >
+          <button class="text-2xl flex items-center justify-center">
+            <span class="text-base">Create</span>➕
+          </button>
+        </div>
+
+        <div
+          class="flex items-center justify-between header-icons w-[25%] md:w-[25%] sm:w-[100%]"
+        >
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🛒
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-5 py-1">
+              <i class="fas fa-bookmark text-[#002140]"></i>
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              ❤️
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🔔
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <!-- Highlighted account icon -->
+            <button class="account-icon">
+              <i
+                class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"
+              ></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <aside class="sidebar glass-effect">
+        <nav class="flex flex-col text-xl font-bold gap-5 text-[#f8f9fa]">
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4 bg-[#e2e4d6] text-[#002140] scale-110"
+            ><img src="home.png" class="w-[35px]" />
+            <span class="text-2xl font-bold text-center">Home</span></a
+          >
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="cart.png" class="w-[35px]" /> <span>Shopping</span>
+          </a>
+          <!-- Added new Recipe Coaching Classes link -->
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <i class="fas fa-graduation-cap w-[35px] text-center"></i>
+            <span>Courses</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+            ><img src="blog.png" class="w-[35px]" /> <span>Blog/Articles</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="inbox.png" class="w-[35px]" /> <span>Inbox</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="community.png" class="w-[35px]" /><span>Community</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="chatbot.png" class="w-[35px]" /><span>ChatBot</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="tiffin.png" class="w-[35px]" /> <span>Tiffin</span>
+          </a>
+        </nav>
+      </aside>
+
+      <div class="main-container ml-[250px] mt-[100px] p-5">
+        <!-- other option Container }-->
+        <div class="nav-container">
+          <div class="nav-items">
+            <div class="nav-item ">
+              <div class="icon">🏠</div>
+              <div class="label">Home</div>
+            </div>
+            <div class="nav-item">
+              <div class="icon">🔥</div>
+              <div class="label">Trending</div>
+            </div>
+
+            <div class="nav-item">
+              <div class="icon">📽️</div>
+              <div class="label">Repi</div>
+            </div>
+            <div class="nav-item">
+              <div class="icon">📹</div>
+              <div class="label">Your Content</div>
+            </div>
+            <div class="nav-item active">
+              <div class="icon">🎵</div>
+              <div class="label">Playlists</div>
+            </div>
+            <div class="nav-item">
+              <div class="icon">🕒</div>
+              <div class="label">History</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HTML for enhanced playlist section -->
+        <div class="playlist-section">
+          <div class="playlist-header">
+            <h2><i class="fas fa-headphones-alt"></i>Your Playlists</h2>
+            <button class="view-all-btn">
+              View All <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+
+          <div class="playlist-grid">
+            <!-- Featured playlist -->
+            <div class="featured-playlist">
+              <img
+                src="/api/placeholder/400/400"
+                alt="High Distortion"
+                class="featured-playlist-image"
+              />
+              <div class="featured-playlist-details">
+                <div>
+                  <div class="featured-playlist-title">High Distortion</div>
+                  <p class="featured-playlist-description">
+                    Your ultimate collection of high-energy tracks to keep you
+                    pumped throughout the day.
+                  </p>
+                  <div class="featured-playlist-stats">
+                    <div class="stat">
+                      <i class="fas fa-music"></i> 45 songs
+                    </div>
+                    <div class="stat"><i class="fas fa-clock"></i> 95 mins</div>
+                    <div class="stat">
+                      <i class="fas fa-heart"></i> 1.2k likes
+                    </div>
+                  </div>
+                </div>
+                <div class="featured-playlist-actions">
+                  <button class="play-now-btn">
+                    <i class="fas fa-play"></i> Play Now
+                  </button>
+                  <button class="add-to-library-btn">
+                    <i class="fas fa-plus"></i> Add
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Regular playlist cards -->
+            <div class="playlist-card">
+              <span class="playlist-badge trending-badge">Trending</span>
+              <div class="playlist-overlay">
+                <div class="play-icon"><i class="fas fa-play"></i></div>
+              </div>
+              <img
+                src="/api/placeholder/400/400"
+                alt="Easy Breezy Beats"
+                class="playlist-image"
+              />
+              <div class="playlist-details">
+                <h3 class="playlist-title">Easy Breezy Beats</h3>
+                <div class="playlist-meta">
+                  <span>23 songs</span>
+                  <span>40 mins</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="playlist-card">
+              <span class="playlist-badge new-badge">New</span>
+              <div class="playlist-overlay">
+                <div class="play-icon"><i class="fas fa-play"></i></div>
+              </div>
+              <img
+                src="/api/placeholder/400/400"
+                alt="Mellow Moments"
+                class="playlist-image"
+              />
+              <div class="playlist-details">
+                <h3 class="playlist-title">Mellow Moments</h3>
+                <div class="playlist-meta">
+                  <span>45 songs</span>
+                  <span>95 mins</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="playlist-card">
+              <div class="playlist-overlay">
+                <div class="play-icon"><i class="fas fa-play"></i></div>
+              </div>
+              <img
+                src="/api/placeholder/400/400"
+                alt="Laid-Back Grooves"
+                class="playlist-image"
+              />
+              <div class="playlist-details">
+                <h3 class="playlist-title">Laid-Back Grooves</h3>
+                <div class="playlist-meta">
+                  <span>45 songs</span>
+                  <span>95 mins</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="playlist-card">
+              <span class="playlist-badge premium-badge">Premium</span>
+              <div class="playlist-overlay">
+                <div class="play-icon"><i class="fas fa-play"></i></div>
+              </div>
+              <img
+                src="/api/placeholder/400/400"
+                alt="Sunset Song"
+                class="playlist-image"
+              />
+              <div class="playlist-details">
+                <h3 class="playlist-title">Sunset Song</h3>
+                <div class="playlist-meta">
+                  <span>23 songs</span>
+                  <span>40 mins</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="create-playlist-btn">
+            <i class="fas fa-plus"></i> Create New Playlist
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get all playlist cards
+        const playlistCards = document.querySelectorAll(".playlist-card");
+
+        // Add hover effect for smoother animations
+        playlistCards.forEach((card) => {
+          card.addEventListener("mouseenter", function () {
+            this.style.transform = "translateY(-10px) scale(1.03)";
+            this.style.boxShadow = "0 15px 30px rgba(0, 0, 0, 0.3)";
+            this.querySelector(".playlist-overlay").style.opacity = "1";
+            this.querySelector(".playlist-image").style.transform =
+              "scale(1.1)";
+          });
+
+          card.addEventListener("mouseleave", function () {
+            this.style.transform = "translateY(0) scale(1)";
+            this.style.boxShadow = "0 5px 15px rgba(0, 0, 0, 0.2)";
+            this.querySelector(".playlist-overlay").style.opacity = "0";
+            this.querySelector(".playlist-image").style.transform = "scale(1)";
+          });
+
+          card.addEventListener("click", function () {
+            // Simulate click action with animation
+            this.style.transform = "translateY(5px) scale(0.98)";
+            setTimeout(() => {
+              this.style.transform = "translateY(-10px) scale(1.03)";
+            }, 100);
+
+            // Redirect to playlist detail page (in a real app)
+            // window.location.href = '/playlist/' + playlistId;
+          });
+        });
+
+        // Featured playlist animation
+        const featuredPlaylist = document.querySelector(".featured-playlist");
+
+        if (featuredPlaylist) {
+          featuredPlaylist.addEventListener("mouseenter", function () {
+            this.style.transform = "translateY(-10px)";
+            this.style.boxShadow = "0 20px 40px rgba(0, 0, 0, 0.4)";
+          });
+
+          featuredPlaylist.addEventListener("mouseleave", function () {
+            this.style.transform = "translateY(0)";
+            this.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.3)";
+          });
+        }
+
+        // Create playlist button effect
+        const createPlaylistBtn = document.querySelector(
+          ".create-playlist-btn"
+        );
+
+        if (createPlaylistBtn) {
+          createPlaylistBtn.addEventListener("click", function () {
+            this.style.transform = "translateY(2px)";
+            this.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.2)";
+            setTimeout(() => {
+              this.style.transform = "translateY(-3px)";
+              this.style.boxShadow = "0 8px 20px rgba(0, 0, 0, 0.3)";
+
+              // Show create playlist modal/form (in a real app)
+              // showCreatePlaylistModal();
+            }, 150);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
