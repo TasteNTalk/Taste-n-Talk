@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desktop Landing Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 15px;
+      }
+
+      .sidebar {
+        width: 250px;
+        height: calc(100vh - 100px);
+        position: fixed;
+        top: 100px;
+        left: 0;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .slider-container {
+        position: relative;
+        margin: 0 auto;
+        max-width: 1200px;
+        overflow: hidden;
+      }
+
+      .main-content {
+        margin-left: 250px;
+        padding: 100px 20px 20px;
+      }
+
+      .main-container {
+        margin-left: 250px;
+        margin-top: 100px;
+        padding: 20px;
+        width: calc(100% - 250px);
+      }
+
+      .stories-wrapper {
+        position: relative;
+        width: 95%;
+        margin: auto;
+        overflow: hidden;
+      }
+
+      .stories-container {
+        background-color: #002140be;
+        border-radius: 0.75rem; /* rounded-xl */
+        display: flex;
+        overflow-x: auto;
+        gap: 1rem; /* gap-4 */
+        padding: 1rem; /* p-4 */
+        white-space: nowrap;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+      }
+
+      .stories-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .story-item {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem; /* gap-2 */
+      }
+
+      .story-item:hover {
+        scale: 1.2;
+        transition: all 0.5s ease-in;
+      }
+
+      .story-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .story-avatar {
+        height: 4rem; /* h-16 */
+        width: 4rem; /* w-16 */
+        border-radius: 100%; /* rounded-full */
+        overflow: hidden;
+        border: 4px solid rgb(255, 255, 255); /* ring-2 ring-white */
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .story-avatar img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      .story-name {
+        font-size: 0.75rem; /* text-xs */
+        font-weight: 500; /* font-medium */
+        color: white; /* text-white */
+      }
+
+      /* For better scrolling experience on various devices */
+      .stories-container::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      .stories-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+      }
+
+      .stories-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 999px;
+      }
+
+      /* Arrow Buttons */
+      .arrow-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .arrow-left {
+        left: 0;
+      }
+
+      .arrow-right {
+        right: 0;
+      }
+
+      .arrow-btn:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      .slider {
+        display: flex;
+        transition: transform 0.5s ease;
+        gap: 30px;
+        padding: 0 20px;
+      }
+
+      .slide {
+        min-width: 300px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
+      }
+
+      .slide h3 {
+        margin-bottom: 10px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .slide p {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .slider-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+      }
+
+      .slider-button {
+        background: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .content-section {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 0 5%;
+        margin-left: 250px;
+      }
+
+      .video-card {
+        margin-top: 30px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .video-card h3 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        header {
+          padding: 15px 5%;
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .logo {
+          font-size: 20px;
+        }
+
+        .search-container {
+          width: 100%;
+        }
+
+        .sidebar {
+          width: 100%;
+          height: auto;
+          position: static;
+          margin-top: 100px;
+        }
+
+        .main-container {
+          margin-left: 0;
+          width: 100%;
+          margin-top: 20px;
+        }
+
+        .content-section {
+          margin-left: 0;
+        }
+
+        .slider-container {
+          margin: 20px 0;
+        }
+
+        .slide {
+          min-width: calc(100% - 40px);
+          margin: 0 20px;
+        }
+
+        .slider-button {
+          width: 35px;
+          height: 35px;
+          padding: 8px;
+        }
+
+        .slider-nav {
+          padding: 0 10px;
+        }
+      }
+
+      .slider-container {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 50px;
+      }
+      .recipe-video-slider {
+        display: flex;
+        overflow: hidden;
+        scroll-behavior: smooth;
+        gap: 20px;
+        padding: 20px 0;
+      }
+      .slider-wrapper {
+        display: flex;
+        transition: transform 0.5s ease;
+      }
+      .recipe-video-card {
+        min-width: 300px;
+        flex: 0 0 300px;
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      .recipe-video-card:hover {
+        transform: scale(1.05);
+      }
+      .video-thumbnail {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+      .video-details {
+        padding: 15px;
+      }
+      .slider-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background: #002140;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .prev-arrow {
+        left: 10px;
+      }
+      .next-arrow {
+        right: 10px;
+      }
+      .slider-arrow:hover {
+        background: #003366;
+      }
+      .slider-arrow:focus {
+        outline: none;
+      }
+
+      .recipe-video-container {
+        display: flex;
+        max-height: 600px;
+        overflow-y: auto;
+        padding: 20px;
+        scrollbar-width: none;
+      }
+      .recipe-video-container::-webkit-scrollbar {
+        display: none;
+      }
+      .recipe-video-card {
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        transition: transform 0.3s ease;
+      }
+
+      .nav-container {
+            max-width: 100%;
+            margin: -10px auto 20px;
+            background: linear-gradient(135deg, #e2e4d6, #c4c2c2);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .nav-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to right, #ff4d4d, #f9cb28, #0099ff, #6a5acd);
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            transition: all 0.3s ease;
+            padding: 16px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item:hover {
+            background-color: #e2e4d6;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-item:hover .icon {
+            transform: scale(1.1);
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(to right, #ff4d4d, #002140);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-item:hover::after {
+            width: 80%;
+        }
+
+        .nav-item.active {
+            background-color: #e2e4d6;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-item.active::after {
+            width: 80%;
+            background: linear-gradient(to right, #002140, #ff4d4d);
+        }
+
+        .icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: #555;
+            transition: all 0.3s ease;
+        }
+
+        .label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover .label {
+            color: #0099ff;
+        }
+
+        .nav-item.active .icon {
+            color: #002140;
+        }
+
+        .nav-item.active .label {
+            color: #002140;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .nav-items {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .nav-item {
+                flex-basis: calc(33.333% - 10px);
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-item {
+                flex-basis: calc(50% - 10px);
+            }
+        }
+    </style>
+  </head>
+  <body class="bg-[#002140] min-h-screen">
+    <div class="bg-[#002140]">
+      <header
+        class="w-[100%] flex items-center justify-between p-3 bg-[#e2e4d6] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10"
+      >
+        <div class="flex items-center space-x-4">
+          <div
+            class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]"
+          >
+            <a href="#"
+              ><img
+                src="/images/tntLogo.png"
+                alt="Logo"
+                class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer"
+            /></a>
+            <a href="#"
+              ><span class="drop-shadow-2xl shadow-[#002140e3]"
+                >Taste'n Talk</span
+              ></a
+            >
+          </div>
+        </div>
+        <div
+          class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"
+        >
+          <img src="map.png" alt="Location" />
+        </div>
+
+        <div class="relative w-[30%] max-w-[400px]">
+          <input
+            type="text"
+            style="padding: 10px 40px 10px 20px"
+            class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic"
+            placeholder="Search"
+          />
+
+          <button
+            class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+          >
+            <i class="fas fa-search text-[#f8f9fa]"></i>
+          </button>
+        </div>
+
+        <div
+          class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#f8f9fa] rounded-[25px] px-2 shadow-md shadow-[#002140e3]"
+        >
+          <button class="text-2xl flex items-center justify-center">
+            <span class="text-base">Create</span>➕
+          </button>
+        </div>
+
+        <div
+          class="flex items-center justify-between header-icons w-[25%] md:w-[25%] sm:w-[100%]"
+        >
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🛒
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-5 py-1">
+              <i class="fas fa-bookmark text-[#002140]"></i>
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              ❤️
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🔔
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <!-- Highlighted account icon -->
+            <button class="account-icon">
+              <i
+                class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"
+              ></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <aside class="sidebar glass-effect">
+        <nav class="flex flex-col text-xl font-bold gap-5 text-[#f8f9fa]">
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4 bg-[#e2e4d6] text-[#002140] scale-110"
+            ><img src="home.png" class="w-[35px]" />
+            <span class="text-2xl font-bold text-center">Home</span></a
+          >
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="cart.png" class="w-[35px]" /> <span>Shopping</span>
+          </a>
+          <!-- Added new Recipe Coaching Classes link -->
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <i class="fas fa-graduation-cap w-[35px] text-center"></i>
+            <span>Courses</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+            ><img src="blog.png" class="w-[35px]" /> <span>Blog/Articles</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="inbox.png" class="w-[35px]" /> <span>Inbox</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="community.png" class="w-[35px]" /><span>Community</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="chatbot.png" class="w-[35px]" /><span>ChatBot</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="tiffin.png" class="w-[35px]" /> <span>Tiffin</span>
+          </a>
+        </nav>
+      </aside>
+
+      <div class="main-container ml-[250px] mt-[100px] p-5">
+        <!-- other option Container }-->
+        <div class="nav-container">
+          <div class="nav-items">
+              <div class="nav-item active">
+                  <div class="icon">🏠</div>
+                  <div class="label">Home</div>
+              </div>
+              <div class="nav-item">
+                  <div class="icon">🔥</div>
+                  <div class="label">Trending</div>
+              </div>
+             
+              <div class="nav-item">
+                <div class="icon">📽️</div>
+                <div class="label">Repi</div>
+              </div>
+              <div class="nav-item">
+                <div class="icon">📹</div>
+                <div class="label">Your Content</div>
+              </div>
+              <div class="nav-item">
+                <div class="icon">🎵</div>
+                <div class="label">Playlists</div>
+              </div>
+              <div class="nav-item">
+                  <div class="icon">🕒</div>
+                  <div class="label">History</div>
+              </div>
+          </div>
+      </div>
+
+        <!-- Stories Container -->
+        <div class="stories-wrapper">
+          <button class="arrow-btn arrow-left" onclick="scrollStories(-200)">
+            &#8249;
+          </button>
+          <div class="stories-container bg-[#002140be]" id="stories-container">
+            <!-- Stories will be dynamically inserted here -->
+          </div>
+          <button class="arrow-btn arrow-right" onclick="scrollStories(200)">
+            &#8250;
+          </button>
+        </div>
+
+        <!-- Recipe Video Slider -->
+        <div class="slider-container">
+          <button class="slider-arrow prev-arrow">&#10094;</button>
+          <div class="recipe-video-slider" id="recipe-video-slider">
+            <div class="slider-wrapper" id="slider-wrapper">
+              <!-- Recipe videos will be inserted here -->
+            </div>
+          </div>
+          <button class="slider-arrow next-arrow">&#10095;</button>
+        </div>
+
+        <!-- Content Section -->
+        <section
+          class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-[90%] ml-auto mr-auto"
+        >
+          <!-- Item Card -->
+          <div class="bg-white p-4 rounded-md shadow-md">
+            <div class="h-40 bg-blue-400 rounded-md"></div>
+            <h2 class="text-lg font-semibold mt-2">Item Name</h2>
+            <p class="text-gray-500 text-sm">Item brief description</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-md shadow-md">
+            <div class="h-40 bg-blue-400 rounded-md"></div>
+            <h2 class="text-lg font-semibold mt-2">Item Name</h2>
+            <p class="text-gray-500 text-sm">Item brief description</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-md shadow-md">
+            <div class="h-40 bg-blue-400 rounded-md"></div>
+            <h2 class="text-lg font-semibold mt-2">Video Name</h2>
+            <p class="text-gray-500 text-sm">Video brief description</p>
+          </div>
+        </section>
+
+        <!-- Additional Video Content Section -->
+        <div class="content-section mt-5">
+          <!-- More detailed recipe videos will be loaded here -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const users = [
+          { name: "Tanisha", image: "tanishaa.jpg" },
+          { name: "Amish", image: "amishh.jpg" },
+          { name: "Prittam", image: "prittam.jpg" },
+          { name: "Piyush", image: "piyush.jpg" },
+          {
+            name: "Andrew",
+            image:
+              "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+          },
+          {
+            name: "Emily",
+            image:
+              "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+          },
+          {
+            name: "Whitney",
+            image:
+              "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+          },
+          {
+            name: "David",
+            image:
+              "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+          },
+          {
+            name: "Kristin",
+            image:
+              "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+          },
+          {
+            name: "Sarah",
+            image:
+              "https://images.unsplash.com/photo-1605405748313-a416a1b84491?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+          },
+          {
+            name: "Michael",
+            image:
+              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+          },
+          {
+            name: "Jessica",
+            image:
+              "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+          },
+          {
+            name: "Alex",
+            image:
+              "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+          },
+          {
+            name: "Jordan",
+            image:
+              "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+          },
+        ];
+
+        const storiesContainer = document.getElementById("stories-container");
+
+        // Create and append story elements
+        users.forEach((user) => {
+          const storyItem = document.createElement("div");
+          storyItem.className = "story-item";
+
+          storyItem.innerHTML = `
+                    <button class="story-button">
+                        <div class="story-avatar">
+                            <img src="${user.image}" alt="${user.name}" onerror="this.src='https://via.placeholder.com/150';this.onerror='';">
+                        </div>
+                        <span class="story-name">${user.name}</span>
+                    </button>   
+                `;
+
+          storiesContainer.appendChild(storyItem);
+        });
+      });
+
+      function scrollStories(amount) {
+        document
+          .getElementById("stories-container")
+          .scrollBy({ left: amount, behavior: "smooth" });
+      }
+
+      let currentIndex = 0;
+      let videoData = [];
+      let cardsPerView = videoData.length;
+
+      async function fetchRecipeVideos() {
+        const sliderWrapper = document.getElementById("slider-wrapper");
+        const API_KEY = "YOUR_YOUTUBE_API_KEY";
+        const CHANNEL_ID = "YOUR_CHANNEL_ID";
+
+        try {
+          const response = await fetch(
+            `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet,id&order=date&type=video&maxResults=10`
+          );
+          const data = await response.json();
+          videoData = data.items;
+
+          if (videoData.length === 0) {
+            addFallbackContent();
+            return;
+          }
+
+          renderVideos();
+          setupSlider();
+        } catch (error) {
+          console.error("Error fetching YouTube videos:", error);
+          addFallbackContent();
+          setupSlider();
+        }
+      }
+
+      function renderVideos() {
+        const sliderWrapper = document.getElementById("slider-wrapper");
+        sliderWrapper.innerHTML = "";
+
+        // Create double set of cards for smooth looping
+        const allVideos = [...videoData, ...videoData];
+
+        allVideos.forEach((video, index) => {
+          const videoCard = document.createElement("div");
+          videoCard.className = "recipe-video-card";
+          videoCard.innerHTML = `
+            <img src="${video.snippet.thumbnails.high.url}" 
+                 alt="${video.snippet.title}" 
+                 class="video-thumbnail">
+            <div class="video-details">
+              <h3 style="font-weight: bold; font-size: 1.125rem;">${
+                video.snippet.title
+              }</h3>
+              <p style="font-size: 0.875rem; color: #666;">${video.snippet.description.substring(
+                0,
+                100
+              )}...</p>
+              <button onclick="window.open('https://www.youtube.com/watch?v=${
+                video.id.videoId
+              }', '_blank')" 
+                      style="margin-top: 0.5rem; background-color: #002140; color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; border: none; cursor: pointer;">
+                Watch Recipe
+              </button>
+            </div>
+          `;
+          sliderWrapper.appendChild(videoCard);
+        });
+      }
+
+      function addFallbackContent() {
+        videoData = [];
+        const sliderWrapper = document.getElementById("slider-wrapper");
+        sliderWrapper.innerHTML = "";
+
+        // Create fallback data
+        for (let i = 0; i < 4; i++) {
+          videoData.push({
+            snippet: {
+              title: `Delicious Recipe ${i + 1}`,
+              description:
+                "Sample recipe description that shows when API is unavailable.",
+              thumbnails: { high: { url: "" } },
+            },
+            id: { videoId: "" },
+          });
+        }
+
+        // Create double set of cards for smooth looping
+        const allVideos = [...videoData, ...videoData];
+
+        allVideos.forEach((video, index) => {
+          const videoCard = document.createElement("div");
+          videoCard.className = "recipe-video-card";
+          videoCard.innerHTML = `
+            <div class="video-thumbnail" style="height: 200px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 2rem; color: #aaa;">🍳</span>
+            </div>
+            <div class="video-details">
+              <h3 style="font-weight: bold; font-size: 1.125rem;">${video.snippet.title}</h3>
+              <p style="font-size: 0.875rem; color: #666;">${video.snippet.description}</p>
+              <button style="margin-top: 0.5rem; background-color: #002140; color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; border: none; cursor: pointer;">
+                Watch Recipe
+              </button>
+            </div>
+          `;
+          sliderWrapper.appendChild(videoCard);
+        });
+      }
+
+      function setupSlider() {
+        const prevArrow = document.querySelector(".prev-arrow");
+        const nextArrow = document.querySelector(".next-arrow");
+        const sliderWrapper = document.getElementById("slider-wrapper");
+
+        // Calculate how many cards can fit in the view
+        const slider = document.querySelector(".recipe-video-slider");
+        const cardWidth = 300 + 20; // card width + gap
+        cardsPerView = Math.floor(slider.offsetWidth / cardWidth);
+
+        // Set initial position
+        updateSliderPosition();
+
+        // Add event listeners for arrows
+        nextArrow.addEventListener("click", () => {
+          slideNext();
+        });
+
+        prevArrow.addEventListener("click", () => {
+          slidePrev();
+        });
+
+        // Handle window resize
+        window.addEventListener("resize", () => {
+          cardsPerView = Math.floor(slider.offsetWidth / cardWidth);
+          updateSliderPosition();
+        });
+      }
+
+      function slideNext() {
+        currentIndex++;
+
+        // If we reach the midpoint (original set of cards), reset to the beginning without animation
+        if (currentIndex >= videoData.length) {
+          currentIndex = 0;
+          const sliderWrapper = document.getElementById("slider-wrapper");
+          sliderWrapper.style.transition = "none";
+          updateSliderPosition();
+
+          // Force reflow
+          sliderWrapper.offsetHeight;
+
+          // Restore transition
+          sliderWrapper.style.transition = "transform 0.5s ease";
+        } else {
+          updateSliderPosition();
+        }
+      }
+
+      function slidePrev() {
+        currentIndex--;
+
+        // If we go before the first slide, jump to the end of the first set
+        if (currentIndex < 0) {
+          currentIndex = videoData.length - 1;
+          const sliderWrapper = document.getElementById("slider-wrapper");
+          sliderWrapper.style.transition = "none";
+          updateSliderPosition();
+
+          // Force reflow
+          sliderWrapper.offsetHeight;
+
+          // Restore transition
+          sliderWrapper.style.transition = "transform 0.5s ease";
+        } else {
+          updateSliderPosition();
+        }
+      }
+
+      function updateSliderPosition() {
+        const sliderWrapper = document.getElementById("slider-wrapper");
+        const cardWidth = 300 + 20; // card width + gap
+        const offset = -currentIndex * cardWidth;
+        sliderWrapper.style.transform = `translateX(${offset}px)`;
+      }
+
+      // Start automatic sliding (optional)
+      function startAutoSlide() {
+        setInterval(() => {
+          slideNext();
+        }, 5000); // Change slide every 5 seconds
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchRecipeVideos();
+        // Uncomment the line below if you want automatic sliding
+        // startAutoSlide();
+      });
+    </script>
+  </body>
+</html>
