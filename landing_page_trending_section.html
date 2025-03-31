@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desktop Landing Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 15px;
+      }
+
+      .sidebar {
+        width: 250px;
+        height: calc(100vh - 100px);
+        position: fixed;
+        top: 100px;
+        left: 0;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .slider-container {
+        position: relative;
+        margin: 0 auto;
+        max-width: 1200px;
+        overflow: hidden;
+      }
+
+      .main-content {
+        margin-left: 250px;
+        padding: 100px 20px 20px;
+      }
+
+      .main-container {
+        margin-left: 250px;
+        margin-top: 100px;
+        padding: 20px;
+        width: calc(100% - 250px);
+      }
+
+      .stories-wrapper {
+        position: relative;
+        width: 95%;
+        margin: auto;
+        overflow: hidden;
+      }
+
+      .stories-container {
+        background-color: #002140be;
+        border-radius: 0.75rem; /* rounded-xl */
+        display: flex;
+        overflow-x: auto;
+        gap: 1rem; /* gap-4 */
+        padding: 1rem; /* p-4 */
+        white-space: nowrap;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+      }
+
+      .stories-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .story-item {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem; /* gap-2 */
+      }
+
+      .story-item:hover {
+        scale: 1.2;
+        transition: all 0.5s ease-in;
+      }
+
+      .story-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .story-avatar {
+        height: 4rem; /* h-16 */
+        width: 4rem; /* w-16 */
+        border-radius: 100%; /* rounded-full */
+        overflow: hidden;
+        border: 4px solid rgb(255, 255, 255); /* ring-2 ring-white */
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .story-avatar img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      .story-name {
+        font-size: 0.75rem; /* text-xs */
+        font-weight: 500; /* font-medium */
+        color: white; /* text-white */
+      }
+
+      /* For better scrolling experience on various devices */
+      .stories-container::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      .stories-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+      }
+
+      .stories-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 999px;
+      }
+
+      /* Arrow Buttons */
+      .arrow-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .arrow-left {
+        left: 0;
+      }
+
+      .arrow-right {
+        right: 0;
+      }
+
+      .arrow-btn:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      .slider {
+        display: flex;
+        transition: transform 0.5s ease;
+        gap: 30px;
+        padding: 0 20px;
+      }
+
+      .slide {
+        min-width: 300px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
+      }
+
+      .slide h3 {
+        margin-bottom: 10px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .slide p {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .slider-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+      }
+
+      .slider-button {
+        background: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .content-section {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 0 5%;
+        margin-left: 250px;
+      }
+
+      .video-card {
+        margin-top: 30px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .video-card h3 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        header {
+          padding: 15px 5%;
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .logo {
+          font-size: 20px;
+        }
+
+        .search-container {
+          width: 100%;
+        }
+
+        .sidebar {
+          width: 100%;
+          height: auto;
+          position: static;
+          margin-top: 100px;
+        }
+
+        .main-container {
+          margin-left: 0;
+          width: 100%;
+          margin-top: 20px;
+        }
+
+        .content-section {
+          margin-left: 0;
+        }
+
+        .slider-container {
+          margin: 20px 0;
+        }
+
+        .slide {
+          min-width: calc(100% - 40px);
+          margin: 0 20px;
+        }
+
+        .slider-button {
+          width: 35px;
+          height: 35px;
+          padding: 8px;
+        }
+
+        .slider-nav {
+          padding: 0 10px;
+        }
+      }
+
+      .slider-container {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 50px;
+      }
+      .recipe-video-slider {
+        display: flex;
+        overflow: hidden;
+        scroll-behavior: smooth;
+        gap: 20px;
+        padding: 20px 0;
+      }
+      .slider-wrapper {
+        display: flex;
+        transition: transform 0.5s ease;
+      }
+      .recipe-video-card {
+        min-width: 300px;
+        flex: 0 0 300px;
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      .recipe-video-card:hover {
+        transform: scale(1.05);
+      }
+      .video-thumbnail {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+      .video-details {
+        padding: 15px;
+      }
+      .slider-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background: #002140;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .prev-arrow {
+        left: 10px;
+      }
+      .next-arrow {
+        right: 10px;
+      }
+      .slider-arrow:hover {
+        background: #003366;
+      }
+      .slider-arrow:focus {
+        outline: none;
+      }
+
+      .recipe-video-container {
+        display: flex;
+        max-height: 600px;
+        overflow-y: auto;
+        padding: 20px;
+        scrollbar-width: none;
+      }
+      .recipe-video-container::-webkit-scrollbar {
+        display: none;
+      }
+      .recipe-video-card {
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        transition: transform 0.3s ease;
+      }
+
+      .nav-container {
+        max-width: 100%;
+        margin: -10px auto 20px;
+        background: linear-gradient(135deg, #e2e4d6, #c4c2c2);
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .nav-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 20px;
+        background: linear-gradient(
+          to right,
+          #ff4d4d,
+          #f9cb28,
+          #0099ff,
+          #6a5acd
+        );
+      }
+
+      .nav-items {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px;
+      }
+
+      .nav-item {
+        flex: 1;
+        text-align: center;
+        transition: all 0.3s ease;
+        padding: 16px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nav-item:hover {
+        background-color: #e2e4d6;
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .nav-item:hover .icon {
+        transform: scale(1.1);
+      }
+
+      .nav-item::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        background: linear-gradient(to right, #ff4d4d, #002140);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      .nav-item:hover::after {
+        width: 80%;
+      }
+
+      .nav-item.active {
+        background-color: #e2e4d6;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .nav-item.active::after {
+        width: 80%;
+        background: linear-gradient(to right, #002140, #ff4d4d);
+      }
+
+      .icon {
+        font-size: 24px;
+        margin-bottom: 5px;
+        color: #555;
+        transition: all 0.3s ease;
+      }
+
+      .label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        transition: all 0.3s ease;
+      }
+
+      .nav-item:hover .label {
+        color: #0099ff;
+      }
+
+      .nav-item.active .icon {
+        color: #002140;
+      }
+
+      .nav-item.active .label {
+        color: #002140;
+        font-weight: 600;
+      }
+
+      /* NEW TRENDING SECTION STYLES */
+      .trending-section {
+        background: linear-gradient(135deg, #ff4d4d, #002140);
+        border-radius: 15px;
+        padding: 25px;
+        margin-top: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        color: white;
+      }
+
+      .trending-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .trending-title {
+        font-size: 26px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .trending-title .pulse {
+        display: inline-block;
+        height: 18px;
+        width: 18px;
+        background-color: #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 0 rgba(255, 255, 255, 0.4);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+        }
+      }
+
+      .trending-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+      }
+
+      .trending-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .trending-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .trending-card-img {
+        height: 180px;
+        width: 100%;
+        object-fit: cover;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .trending-card-content {
+        padding: 15px;
+      }
+
+      .trending-card-title {
+        font-weight: 700;
+        font-size: 18px;
+        margin-bottom: 5px;
+        color: white;
+      }
+
+      .trending-card-info {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .trending-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #ff4d4d;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 1;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .trending-view-all {
+        background: white;
+        color: #ff4d4d;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .trending-view-all:hover {
+        background: #002140;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .trending-stats {
+        display: flex;
+        margin-top: 10px;
+        gap: 15px;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+      }
+
+      .trending-stat {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .trending-shine {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        right: -50%;
+        bottom: -50%;
+        background: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.3) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(25deg);
+        animation: shine 3s infinite;
+      }
+
+      @keyframes shine {
+        0% {
+          transform: translateX(-100%) rotate(25deg);
+        }
+        100% {
+          transform: translateX(100%) rotate(25deg);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .nav-items {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .nav-item {
+          flex-basis: calc(33.333% - 10px);
+          margin-bottom: 10px;
+        }
+
+        .trending-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .nav-item {
+          flex-basis: calc(50% - 10px);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-[#002140] min-h-screen">
+    <div class="bg-[#002140]">
+      <header
+        class="w-[100%] flex items-center justify-between p-3 bg-[#e2e4d6] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10"
+      >
+        <div class="flex items-center space-x-4">
+          <div
+            class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]"
+          >
+            <a href="#"
+              ><img
+                src="/images/tntLogo.png"
+                alt="Logo"
+                class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer"
+            /></a>
+            <a href="#"
+              ><span class="drop-shadow-2xl shadow-[#002140e3]"
+                >Taste'n Talk</span
+              ></a
+            >
+          </div>
+        </div>
+        <div
+          class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"
+        >
+          <img src="map.png" alt="Location" />
+        </div>
+
+        <div class="relative w-[30%] max-w-[400px]">
+          <input
+            type="text"
+            style="padding: 10px 40px 10px 20px"
+            class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic"
+            placeholder="Search"
+          />
+
+          <button
+            class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+          >
+            <i class="fas fa-search text-[#f8f9fa]"></i>
+          </button>
+        </div>
+
+        <div
+          class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#f8f9fa] rounded-[25px] px-2 shadow-md shadow-[#002140e3]"
+        >
+          <button class="text-2xl flex items-center justify-center">
+            <span class="text-base">Create</span>➕
+          </button>
+        </div>
+
+        <div
+          class="flex items-center justify-between header-icons w-[25%] md:w-[25%] sm:w-[100%]"
+        >
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🛒
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-5 py-1">
+              <i class="fas fa-bookmark text-[#002140]"></i>
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              ❤️
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🔔
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <!-- Highlighted account icon -->
+            <button class="account-icon">
+              <i
+                class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"
+              ></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <aside class="sidebar glass-effect">
+        <nav class="flex flex-col text-xl font-bold gap-5 text-[#f8f9fa]">
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+            ><img src="home.png" class="w-[35px]" />
+            <span class="text-2xl font-bold text-center">Home</span></a
+          >
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="cart.png" class="w-[35px]" /> <span>Shopping</span>
+          </a>
+          <!-- Added new Recipe Coaching Classes link -->
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <i class="fas fa-graduation-cap w-[35px] text-center"></i>
+            <span>Courses</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+            ><img src="blog.png" class="w-[35px]" /> <span>Blog/Articles</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="inbox.png" class="w-[35px]" /> <span>Inbox</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="community.png" class="w-[35px]" /><span>Community</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="chatbot.png" class="w-[35px]" /><span>ChatBot</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="tiffin.png" class="w-[35px]" /> <span>Tiffin</span>
+          </a>
+        </nav>
+      </aside>
+
+      <div class="main-container ml-[250px] mt-[100px] p-5">
+        <!-- other option Container }-->
+        <div class="nav-container">
+          <div class="nav-items">
+            <div class="nav-item">
+              <div class="icon">🏠</div>
+              <div class="label">Home</div>
+            </div>
+            <div class="nav-item active">
+              <div class="icon">🔥</div>
+              <div class="label">Trending</div>
+            </div>
+
+            <div class="nav-item">
+              <div class="icon">📽️</div>
+              <div class="label">Repi</div>
+            </div>
+            <div class="nav-item">
+              <div class="icon">📹</div>
+              <div class="label">Your Content</div>
+            </div>
+            <div class="nav-item">
+              <div class="icon">🎵</div>
+              <div class="label">Playlists</div>
+            </div>
+            <div class="nav-item">
+              <div class="icon">🕒</div>
+              <div class="label">History</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEW TRENDING SECTION -->
+        <div class="trending-section">
+          <div class="trending-shine"></div>
+          <div class="trending-header">
+            <h2 class="trending-title">
+              <span class="pulse"></span>
+              What's Trending Today
+            </h2>
+            <button class="trending-view-all">View All</button>
+          </div>
+          <div class="trending-grid">
+            <!-- Trending Card 1 -->
+            <div class="trending-card">
+              <span class="trending-badge">Top Rated</span>
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Pasta Carbonara"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Perfect Pasta Carbonara</h3>
+                <div class="trending-card-info">
+                  <span>By Chef Marcello</span>
+                  <span>23 min</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-eye"></i>
+                    <span>12.5K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-heart"></i>
+                    <span>5.2K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-comment"></i>
+                    <span>328</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trending Card 2 -->
+            <div class="trending-card">
+              <span class="trending-badge">New</span>
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Thai Curry"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Authentic Thai Green Curry</h3>
+                <div class="trending-card-info">
+                  <span>By Aisha Patel</span>
+                  <span>35 min</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-eye"></i>
+                    <span>8.7K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-heart"></i>
+                    <span>3.1K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-comment"></i>
+                    <span>174</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trending Card 3 -->
+            <div class="trending-card">
+              <span class="trending-badge">Popular</span>
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Chocolate Soufflé"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Chocolate Soufflé Secrets</h3>
+                <div class="trending-card-info">
+                  <span>By Dessert Master</span>
+                  <span>40 min</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-eye"></i>
+                    <span>9.3K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-heart"></i>
+                    <span>4.2K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-comment"></i>
+                    <span>256</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trending Card 4 -->
+            <div class="trending-card">
+              <span class="trending-badge">Trending</span>
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Butter Chicken"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Ultimate Butter Chicken</h3>
+                <div class="trending-card-info">
+                  <span>By Chef Raj Kumar</span>
+                  <span>45 min</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-eye"></i>
+                    <span>14.8K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-heart"></i>
+                    <span>6.5K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-comment"></i>
+                    <span>412</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trending Card 5 -->
+            <div class="trending-card">
+              <span class="trending-badge">Featured</span>
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Avocado Toast"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Gourmet Avocado Toast</h3>
+                <div class="trending-card-info">
+                  <span>By Nutrition Expert</span>
+                  <span>15 min</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-eye"></i>
+                    <span>7.6K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-heart"></i>
+                    <span>3.8K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-comment"></i>
+                    <span>197</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trending Card 6 -->
+            <div class="trending-card">
+              <span class="trending-badge">Viral</span>
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Korean BBQ"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Authentic Korean BBQ</h3>
+                <div class="trending-card-info">
+                  <span>By Chef Min-Ji</span>
+                  <span>55 min</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-eye"></i>
+                    <span>18.2K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-heart"></i>
+                    <span>7.9K</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-comment"></i>
+                    <span>523</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- New Section for Top Trending Food Items -->
+        <div
+          class="trending-section mt-10"
+          style="background: linear-gradient(135deg, #002140, #6a5acd)"
+        >
+          <div class="trending-shine"></div>
+          <div class="trending-header">
+            <h2 class="trending-title">
+              <span class="pulse"></span>
+              Top Food Trends
+            </h2>
+            <button class="trending-view-all">Explore All</button>
+          </div>
+          <div class="trending-grid">
+            <!-- Food Trend Card 1 -->
+            <div class="trending-card">
+              <span class="trending-badge">Hot</span>
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Birria Tacos"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Birria Tacos</h3>
+                <div class="trending-card-info">
+                  <span>Mexican Cuisine</span>
+                  <span>1.2M views</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-utensils"></i>
+                    <span>5,892 recipes</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-fire"></i>
+                    <span>Trending Up</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Food Trend Card 2 -->
+            <div class="trending-card">
+              <span class="trending-badge">New</span>
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Cloud Bread"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Cloud Bread</h3>
+                <div class="trending-card-info">
+                  <span>Baking</span>
+                  <span>950K views</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-utensils"></i>
+                    <span>3,245 recipes</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-fire"></i>
+                    <span>Trending Up</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Food Trend Card 3 -->
+            <div class="trending-card">
+              <span class="trending-badge">Viral</span>
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Baked Feta Pasta"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Baked Feta Pasta</h3>
+                <div class="trending-card-info">
+                  <span>Italian Fusion</span>
+                  <span>2.5M views</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-utensils"></i>
+                    <span>8,761 recipes</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-fire"></i>
+                    <span>Trending Up</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Food Trend Card 4 -->
+            <div class="trending-card">
+              <span class="trending-badge">Healthy</span>
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Poke Bowl"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Customized Poke Bowls</h3>
+                <div class="trending-card-info">
+                  <span>Hawaiian</span>
+                  <span>1.8M views</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-utensils"></i>
+                    <span>4,328 recipes</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-fire"></i>
+                    <span>Trending Up</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- New Section for Trending Chefs -->
+        <div
+          class="trending-section mt-10"
+          style="background: linear-gradient(135deg, #7e4444, #002140)"
+        >
+          <div class="trending-shine"></div>
+          <div class="trending-header">
+            <h2 class="trending-title">
+              <span class="pulse"></span>
+              Trending Chefs to Follow
+            </h2>
+            <button class="trending-view-all">View All Chefs</button>
+          </div>
+          <div class="trending-grid">
+            <!-- Chef Card 1 -->    
+            <div class="trending-card">
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Chef Marco Rodriguez"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Chef Marco Rodriguez</h3>
+                <div class="trending-card-info">
+                  <span>Spanish Cuisine Expert</span>
+                  <span>1.5M followers</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-video"></i>
+                    <span>182 videos</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-star"></i>
+                    <span>4.9 rating</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-award"></i>
+                    <span>Top Creator</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chef Card 2 -->
+            <div class="trending-card">
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Chef Priya Patel"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Chef Priya Patel</h3>
+                <div class="trending-card-info">
+                  <span>Indian Fusion</span>
+                  <span>2.3M followers</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-video"></i>
+                    <span>243 videos</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-star"></i>
+                    <span>4.8 rating</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-award"></i>
+                    <span>Celebrity Chef</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chef Card 3 -->
+            <div class="trending-card">
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Chef Maya Johnson"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Chef Maya Johnson</h3>
+                <div class="trending-card-info">
+                  <span>Plant-Based Cooking</span>
+                  <span>1.8M followers</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-video"></i>
+                    <span>156 videos</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-star"></i>
+                    <span>4.7 rating</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-award"></i>
+                    <span>Wellness Expert</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chef Card 4 -->
+            <div class="trending-card">
+              <img
+                src="https://via.placeholder.com/400x250"
+                alt="Chef Hiroshi Tanaka"
+                class="trending-card-img"
+              />
+              <div class="trending-card-content">
+                <h3 class="trending-card-title">Chef Hiroshi Tanaka</h3>
+                <div class="trending-card-info">
+                  <span>Japanese Traditions</span>
+                  <span>3.1M followers</span>
+                </div>
+                <div class="trending-stats">
+                  <div class="trending-stat">
+                    <i class="fas fa-video"></i>
+                    <span>217 videos</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-star"></i>
+                    <span>4.9 rating</span>
+                  </div>
+                  <div class="trending-stat">
+                    <i class="fas fa-award"></i>
+                    <span>Master Chef</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
