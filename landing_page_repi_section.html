@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desktop Landing Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 15px;
+      }
+
+      .sidebar {
+        width: 250px;
+        height: calc(100vh - 100px);
+        position: fixed;
+        top: 100px;
+        left: 0;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .slider-container {
+        position: relative;
+        margin: 0 auto;
+        max-width: 1200px;
+        overflow: hidden;
+      }
+
+      .main-content {
+        margin-left: 250px;
+        padding: 100px 20px 20px;
+      }
+
+      .main-container {
+        margin-left: 250px;
+        margin-top: 100px;
+        padding: 20px;
+        width: calc(100% - 250px);
+      }
+
+      .stories-wrapper {
+        position: relative;
+        width: 95%;
+        margin: auto;
+        overflow: hidden;
+      }
+
+      .stories-container {
+        background-color: #002140be;
+        border-radius: 0.75rem; /* rounded-xl */
+        display: flex;
+        overflow-x: auto;
+        gap: 1rem; /* gap-4 */
+        padding: 1rem; /* p-4 */
+        white-space: nowrap;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+      }
+
+      .stories-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .story-item {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem; /* gap-2 */
+      }
+
+      .story-item:hover {
+        scale: 1.2;
+        transition: all 0.5s ease-in;
+      }
+
+      .story-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .story-avatar {
+        height: 4rem; /* h-16 */
+        width: 4rem; /* w-16 */
+        border-radius: 100%; /* rounded-full */
+        overflow: hidden;
+        border: 4px solid rgb(255, 255, 255); /* ring-2 ring-white */
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .story-avatar img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      .story-name {
+        font-size: 0.75rem; /* text-xs */
+        font-weight: 500; /* font-medium */
+        color: white; /* text-white */
+      }
+
+      /* For better scrolling experience on various devices */
+      .stories-container::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      .stories-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+      }
+
+      .stories-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 999px;
+      }
+
+      /* Arrow Buttons */
+      .arrow-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .arrow-left {
+        left: 0;
+      }
+
+      .arrow-right {
+        right: 0;
+      }
+
+      .arrow-btn:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      .slider {
+        display: flex;
+        transition: transform 0.5s ease;
+        gap: 30px;
+        padding: 0 20px;
+      }
+
+      .slide {
+        min-width: 300px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
+      }
+
+      .slide h3 {
+        margin-bottom: 10px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .slide p {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .slider-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+      }
+
+      .slider-button {
+        background: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .content-section {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 0 5%;
+        margin-left: 250px;
+      }
+
+      .video-card {
+        margin-top: 30px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .video-card h3 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        header {
+          padding: 15px 5%;
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .logo {
+          font-size: 20px;
+        }
+
+        .search-container {
+          width: 100%;
+        }
+
+        .sidebar {
+          width: 100%;
+          height: auto;
+          position: static;
+          margin-top: 100px;
+        }
+
+        .main-container {
+          margin-left: 0;
+          width: 100%;
+          margin-top: 20px;
+        }
+
+        .content-section {
+          margin-left: 0;
+        }
+
+        .slider-container {
+          margin: 20px 0;
+        }
+
+        .slide {
+          min-width: calc(100% - 40px);
+          margin: 0 20px;
+        }
+
+        .slider-button {
+          width: 35px;
+          height: 35px;
+          padding: 8px;
+        }
+
+        .slider-nav {
+          padding: 0 10px;
+        }
+      }
+
+      .slider-container {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 50px;
+      }
+      .recipe-video-slider {
+        display: flex;
+        overflow: hidden;
+        scroll-behavior: smooth;
+        gap: 20px;
+        padding: 20px 0;
+      }
+      .slider-wrapper {
+        display: flex;
+        transition: transform 0.5s ease;
+      }
+      .recipe-video-card {
+        min-width: 300px;
+        flex: 0 0 300px;
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      .recipe-video-card:hover {
+        transform: scale(1.05);
+      }
+      .video-thumbnail {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+      .video-details {
+        padding: 15px;
+      }
+      .slider-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background: #002140;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .prev-arrow {
+        left: 10px;
+      }
+      .next-arrow {
+        right: 10px;
+      }
+      .slider-arrow:hover {
+        background: #003366;
+      }
+      .slider-arrow:focus {
+        outline: none;
+      }
+
+      .recipe-video-container {
+        display: flex;
+        max-height: 600px;
+        overflow-y: auto;
+        padding: 20px;
+        scrollbar-width: none;
+      }
+      .recipe-video-container::-webkit-scrollbar {
+        display: none;
+      }
+      .recipe-video-card {
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        transition: transform 0.3s ease;
+      }
+
+      .nav-container {
+            max-width: 100%;
+            margin: -10px auto 20px;
+            background: linear-gradient(135deg, #e2e4d6, #c4c2c2);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .nav-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to right, #ff4d4d, #f9cb28, #0099ff, #6a5acd);
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            transition: all 0.3s ease;
+            padding: 16px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item:hover {
+            background-color: #e2e4d6;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-item:hover .icon {
+            transform: scale(1.1);
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(to right, #ff4d4d, #002140);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-item:hover::after {
+            width: 80%;
+        }
+
+        .nav-item.active {
+            background-color: #e2e4d6;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-item.active::after {
+            width: 80%;
+            background: linear-gradient(to right, #002140, #ff4d4d);
+        }
+
+        .icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: #555;
+            transition: all 0.3s ease;
+        }
+
+        .label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover .label {
+            color: #0099ff;
+        }
+
+        .nav-item.active .icon {
+            color: #002140;
+        }
+
+        .nav-item.active .label {
+            color: #002140;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .nav-items {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .nav-item {
+                flex-basis: calc(33.333% - 10px);
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-item {
+                flex-basis: calc(50% - 10px);
+            }
+        }
+
+        /* New Repi Section Styles */
+        .repi-container {
+            margin-top: 30px;
+            position: relative;
+            width: 95%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .repi-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: white;
+            padding: 0 10px;
+        }
+
+        .repi-heading h2 {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .repi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .repi-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #1a1a1a;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 500px;
+        }
+
+        .repi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .repi-video-container {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            background: #000;
+        }
+
+        .repi-video, .repi-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .repi-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 20px 15px;
+        }
+
+        .repi-user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .repi-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            overflow: hidden;
+        }
+
+        .repi-user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .repi-user-name {
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .repi-description {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .repi-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .repi-action-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .repi-action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            font-size: 12px;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .repi-action-btn i {
+            font-size: 20px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .repi-action-btn:hover i {
+            transform: scale(1.2);
+            color: #ff4d4d;
+        }
+
+        .repi-action-btn.liked i {
+            color: #ff4d4d;
+        }
+
+        .repi-more-options {
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .repi-more-options:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .repi-progress {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .repi-progress-bar {
+            height: 100%;
+            width: 30%;
+            background: #ff4d4d;
+        }
+
+        .repi-music {
+            position: absolute;
+            bottom: 85px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            max-width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .repi-music i {
+            animation: musicRotate 3s linear infinite;
+        }
+
+        @keyframes musicRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .repi-view-more {
+            display: block;
+            margin: 30px auto 0;
+            background: linear-gradient(45deg, #ff4d4d, #ff9d4d);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.3);
+        }
+
+        .repi-view-more:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 77, 77, 0.5);
+        }
+
+        /* Animation for cards */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .repi-card {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .repi-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .repi-card:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+    </style>
+  </head>
+  <body class="bg-[#002140] min-h-screen">
+    <div class="bg-[#002140]">
+      <header
+        class="w-[100%] flex items-center justify-between p-3 bg-[#e2e4d6] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10"
+      >
+        <div class="flex items-center space-x-4">
+          <div
+            class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]"
+          >
+            <a href="#"
+              ><img
+                src="/images/tntLogo.png"
+                alt="Logo"
+                class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer"
+            /></a>
+            <a href="#"
+              ><span class="drop-shadow-2xl shadow-[#002140e3]"
+                >Taste'n Talk</span
+              ></a
+            >
+          </div>
+        </div>
+        <div
+          class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"
+        >
+          <img src="map.png" alt="Location" />
+        </div>
+
+        <div class="relative w-[30%] max-w-[400px]">
+          <input
+            type="text"
+            style="padding: 10px 40px 10px 20px"
+            class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic"
+            placeholder="Search"
+          />
+
+          <button
+            class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+          >
+            <i class="fas fa-search text-[#f8f9fa]"></i>
+          </button>
+        </div>
+
+        <div
+          class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#f8f9fa] rounded-[25px] px-2 shadow-md shadow-[#002140e3]"
+        >
+          <button class="text-2xl flex items-center justify-center">
+            <span class="text-base">Create</span>➕
+          </button>
+        </div>
+
+        <div
+          class="flex items-center justify-between header-icons w-[25%] md:w-[25%] sm:w-[100%]"
+        >
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🛒
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-5 py-1">
+              <i class="fas fa-bookmark text-[#002140]"></i>
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              ❤️
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🔔
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <!-- Highlighted account icon -->
+            <button class="account-icon">
+              <i
+                class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"
+              ></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <aside class="sidebar glass-effect">
+        <nav class="flex flex-col text-xl font-bold gap-5 text-[#f8f9fa]">
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4 bg-[#e2e4d6] text-[#002140] scale-110"
+            ><img src="home.png" class="w-[35px]" />
+            <span class="text-2xl font-bold text-center">Home</span></a
+          >
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="cart.png" class="w-[35px]" /> <span>Shopping</span>
+          </a>
+          <!-- Added new Recipe Coaching Classes link -->
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <i class="fas fa-graduation-cap w-[35px] text-center"></i>
+            <span>Courses</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+            ><img src="blog.png" class="w-[35px]" /> <span>Blog/Articles</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="inbox.png" class="w-[35px]" /> <span>Inbox</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="community.png" class="w-[35px]" /><span>Community</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="chatbot.png" class="w-[35px]" /><span>ChatBot</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="tiffin.png" class="w-[35px]" /> <span>Tiffin</span>
+          </a>
+        </nav>
+      </aside>
+
+      <div class="main-container ml-[250px] mt-[100px] p-5">
+        <!-- other option Container }-->
+        <div class="nav-container">
+          <div class="nav-items">
+              <div class="nav-item ">
+                  <div class="icon">🏠</div>
+                  <div class="label">Home</div>
+              </div>
+              <div class="nav-item">
+                  <div class="icon">🔥</div>
+                  <div class="label">Trending</div>
+              </div>
+             
+              <div class="nav-item active">
+                <div class="icon">📽️</div>
+                <div class="label">Repi</div>
+              </div>
+              <div class="nav-item">
+                <div class="icon">📹</div>
+                <div class="label">Your Content</div>
+              </div>
+              <div class="nav-item">
+                <div class="icon">🎵</div>
+                <div class="label">Playlists</div>
+              </div>
+              <div class="nav-item">
+                  <div class="icon">🕒</div>
+                  <div class="label">History</div>
+              </div>
+          </div>
+      </div>
+
+        <!-- Stories Container -->
+        <div class="stories-wrapper">
+          <button class="arrow-btn arrow-left" onclick="scrollStories(-200)">
+            &#8249;
+          </button>
+          <div class="stories-container bg-[#002140be]" id="stories-container">
+            <!-- Stories will be dynamically inserted here -->
+          </div>
+          <button class="arrow-btn arrow-right" onclick="scrollStories(200)">
+            &#8250;
+          </button>
+        </div>
+
+        <!-- NEW REPI SECTION -->
+        <!-- NEW REPI SECTION -->
+<div class="repi-container" id="repi-section">
+    <div class="repi-heading">
+        <h2><i class="fas fa-fire"></i> Popular Repi</h2>
+        <div>
+            <button class="bg-[#ff4d4d] hover:bg-[#ff3333] text-white font-bold py-2 px-4 rounded-full flex items-center gap-2">
+                <i class="fas fa-plus"></i> Create Repi
+            </button>
+        </div>
+    </div>
+
+    <div class="repi-grid" id="repi-grid">
+        <!-- Repi Card 1 -->
+        <div class="repi-card">
+            <div class="repi-progress">
+                <div class="repi-progress-bar"></div>
+            </div>
+            <div class="repi-video-container">
+                <img src="/api/placeholder/400/500" alt="Recipe Video" class="repi-image">
+                <div class="repi-overlay">
+                    <div class="repi-user-info">
+                        <div class="repi-user-avatar">
+                            <img src="/api/placeholder/40/40" alt="User Avatar">
+                        </div>
+                        <div class="repi-user-name">ChefMaster</div>
+                    </div>
+                    <div class="repi-description">Quick and easy homemade pizza recipe that's perfect for weeknight dinners! #pizza #homemade #quickrecipes</div>
+                    <div class="repi-actions">
+                        <div class="repi-action-buttons">
+                            <button class="repi-action-btn">
+                                <i class="fas fa-heart"></i>
+                                <span>8.2K</span>
+                            </button>
+                            <button class="repi-action-btn">
+                                <i class="fas fa-comment"></i>
+                                <span>310</span>
+                            </button>
+                            <button class="repi-action-btn">
+                                <i class="fas fa-share"></i>
+                                <span>Share</span>
+                            </button>
+                        </div>
+                        <button class="repi-more-options">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="repi-music">
+                    <i class="fas fa-music"></i>
+                    <span>Cooking Beats - ChefTunes</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Repi Card 2 -->
+        <div class="repi-card">
+            <div class="repi-progress">
+                <div class="repi-progress-bar" style="width: 70%;"></div>
+            </div>
+            <div class="repi-video-container">
+                <img src="/api/placeholder/400/500" alt="Recipe Video" class="repi-image">
+                <div class="repi-overlay">
+                    <div class="repi-user-info">
+                        <div class="repi-user-avatar">
+                            <img src="/api/placeholder/40/40" alt="User Avatar">
+                        </div>
+                        <div class="repi-user-name">FoodieExplorer</div>
+                    </div>
+                    <div class="repi-description">Trying this viral pasta recipe! The creamy sauce is to die for 🍝 #viral #pastarecipe #foodie</div>
+                    <div class="repi-actions">
+                        <div class="repi-action-buttons">
+                            <button class="repi-action-btn liked">
+                                <i class="fas fa-heart"></i>
+                                <span>12.5K</span>
+                            </button>
+                            <button class="repi-action-btn">
+                                <i class="fas fa-comment"></i>
+                                <span>486</span>
+                            </button>
+                            <button class="repi-action-btn">
+                                <i class="fas fa-share"></i>
+                                <span>Share</span>
+                            </button>
+                        </div>
+                        <button class="repi-more-options">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="repi-music">
+                    <i class="fas fa-music"></i>
+                    <span>Italian Vibes - Cooking Playlist</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Repi Card 3 -->
+        <div class="repi-card">
+            <div class="repi-progress">
+                <div class="repi-progress-bar" style="width: 45%;"></div>
+            </div>
+            <div class="repi-video-container">
+                <img src="/api/placeholder/400/500" alt="Recipe Video" class="repi-image">
+                <div class="repi-overlay">
+                    <div class="repi-user-info">
+                        <div class="repi-user-avatar">
+                            <img src="/api/placeholder/40/40" alt="User Avatar">
+                        </div>
+                        <div class="repi-user-name">HealthyEats</div>
+                    </div>
+                    <div class="repi-description">5-ingredient smoothie bowl that's packed with protein and perfect for breakfast! #smoothiebowl #healthyrecipe #breakfast</div>
+                    <div class="repi-actions">
+                        <div class="repi-action-buttons">
+                            <button class="repi-action-btn">
+                                <i class="fas fa-heart"></i>
+                                <span>6.8K</span>
+                            </button>
+                            <button class="repi-action-btn">
+                                <i class="fas fa-comment"></i>
+                                <span>245</span>
+                            </button>
+                            <button class="repi-action-btn">
+                                <i class="fas fa-share"></i>
+                                <span>Share</span>
+                            </button>
+                        </div>
+                        <button class="repi-more-options">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="repi-music">
+                    <i class="fas fa-music"></i>
+                    <span>Morning Energy - Workout Mix</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="repi-view-more">View More</button>
+</div>
+
+<!-- Recipe Video Slider -->
+<div class="slider-container mt-10">
+    <h2 class="text-2xl font-bold mb-5 text-white flex items-center gap-3">
+        <i class="fas fa-video"></i> Featured Videos
+    </h2>
+    <button class="slider-arrow prev-arrow" id="prevArrow">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <div class="recipe-video-slider" id="recipeVideoSlider">
+        <div class="slider-wrapper" id="sliderWrapper">
+            <!-- Video Card 1 -->
+            <div class="recipe-video-card">
+                <img src="/api/placeholder/300/200" alt="Recipe" class="video-thumbnail">
+                <div class="video-details">
+                    <h3 class="font-bold text-lg mb-2">Homemade Pasta Recipe</h3>
+                    <p class="text-gray-600 mb-3">Learn how to make fresh pasta from scratch with just a few ingredients.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500">15:24</span>
+                        <div class="flex items-center">
+                            <i class="fas fa-eye mr-1 text-gray-500"></i>
+                            <span class="text-sm text-gray-500">8.2K views</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video Card 2 -->
+            <div class="recipe-video-card">
+                <img src="/api/placeholder/300/200" alt="Recipe" class="video-thumbnail">
+                <div class="video-details">
+                    <h3 class="font-bold text-lg mb-2">Quick Breakfast Ideas</h3>
+                    <p class="text-gray-600 mb-3">5 healthy breakfast recipes you can make in under 10 minutes.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500">08:47</span>
+                        <div class="flex items-center">
+                            <i class="fas fa-eye mr-1 text-gray-500"></i>
+                            <span class="text-sm text-gray-500">12.5K views</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video Card 3 -->
+            <div class="recipe-video-card">
+                <img src="/api/placeholder/300/200" alt="Recipe" class="video-thumbnail">
+                <div class="video-details">
+                    <h3 class="font-bold text-lg mb-2">Perfect Steak Guide</h3>
+                    <p class="text-gray-600 mb-3">Master the art of cooking the perfect steak every time.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500">12:18</span>
+                        <div class="flex items-center">
+                            <i class="fas fa-eye mr-1 text-gray-500"></i>
+                            <span class="text-sm text-gray-500">19.3K views</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video Card 4 -->
+            <div class="recipe-video-card">
+                <img src="/api/placeholder/300/200" alt="Recipe" class="video-thumbnail">
+                <div class="video-details">
+                    <h3 class="font-bold text-lg mb-2">Vegan Dessert Collection</h3>
+                    <p class="text-gray-600 mb-3">10 amazing vegan desserts that everyone will love.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500">22:35</span>
+                        <div class="flex items-center">
+                            <i class="fas fa-eye mr-1 text-gray-500"></i>
+                            <span class="text-sm text-gray-500">7.8K views</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video Card 5 -->
+            <div class="recipe-video-card">
+                <img src="/api/placeholder/300/200" alt="Recipe" class="video-thumbnail">
+                <div class="video-details">
+                    <h3 class="font-bold text-lg mb-2">One-Pot Meals</h3>
+                    <p class="text-gray-600 mb-3">Easy recipes with minimal cleanup for busy weeknights.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500">18:07</span>
+                        <div class="flex items-center">
+                            <i class="fas fa-eye mr-1 text-gray-500"></i>
+                            <span class="text-sm text-gray-500">15.1K views</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="slider-arrow next-arrow" id="nextArrow">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+</div>
+
+<script>
+    // Generate Stories Dynamically
+    document.addEventListener('DOMContentLoaded', function() {
+        const storiesContainer = document.getElementById('stories-container');
+        const storyUsers = [
+            { name: 'PizzaPro', avatar: '/api/placeholder/64/64' },
+            { name: 'BakingQueen', avatar: '/api/placeholder/64/64' },
+            { name: 'ChefMike', avatar: '/api/placeholder/64/64' },
+            { name: 'VeganDelights', avatar: '/api/placeholder/64/64' },
+            { name: 'SweetTooth', avatar: '/api/placeholder/64/64' },
+            { name: 'GrillMaster', avatar: '/api/placeholder/64/64' },
+            { name: 'PastaLover', avatar: '/api/placeholder/64/64' },
+            { name: 'SpiceGuru', avatar: '/api/placeholder/64/64' },
+            { name: 'HealthyEats', avatar: '/api/placeholder/64/64' },
+            { name: 'DessertKing', avatar: '/api/placeholder/64/64' }
+        ];
+        
+        storyUsers.forEach(user => {
+            const storyItem = document.createElement('div');
+            storyItem.className = 'story-item';
+            storyItem.innerHTML = `
+                <button class="story-button">
+                    <div class="story-avatar">
+                        <img src="${user.avatar}" alt="${user.name}">
+                    </div>
+                    <span class="story-name">${user.name}</span>
+                </button>
+            `;
+            storiesContainer.appendChild(storyItem);
+        });
+    });
+
+    // Function to scroll stories
+    function scrollStories(scrollAmount) {
+        const container = document.getElementById('stories-container');
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+
+    // Recipe Video Slider
+    document.addEventListener('DOMContentLoaded', function() {
+        const sliderWrapper = document.getElementById('sliderWrapper');
+        const prevArrow = document.getElementById('prevArrow');
+        const nextArrow = document.getElementById('nextArrow');
+        
+        let position = 0;
+        const cardWidth = 320; // card width + gap
+        const visibleCards = Math.floor(sliderWrapper.parentElement.clientWidth / cardWidth);
+        const maxPosition = (sliderWrapper.children.length - visibleCards) * cardWidth;
+        
+        prevArrow.addEventListener('click', function() {
+            if (position > 0) {
+                position -= cardWidth;
+                updateSliderPosition();
+            }
+        });
+        
+        nextArrow.addEventListener('click', function() {
+            if (position < maxPosition) {
+                position += cardWidth;
+                updateSliderPosition();
+            }
+        });
+        
+        function updateSliderPosition() {
+            sliderWrapper.style.transform = `translateX(-${position}px)`;
+        }
+        
+        // Update on window resize
+        window.addEventListener('resize', function() {
+            const visibleCards = Math.floor(sliderWrapper.parentElement.clientWidth / cardWidth);
+            const maxPosition = (sliderWrapper.children.length - visibleCards) * cardWidth;
+            if (position > maxPosition) {
+                position = maxPosition;
+                updateSliderPosition();
+            }
+        });
+    });
+
+    // Animation for Repi progress
+    document.addEventListener('DOMContentLoaded', function() {
+        const progressBars = document.querySelectorAll('.repi-progress-bar');
+        
+        progressBars.forEach(bar => {
+            if (!bar.style.width) {
+                animateProgress(bar, 0, 100);
+            }
+        });
+        
+        function animateProgress(element, start, end) {
+            let width = start;
+            const interval = setInterval(() => {
+                if (width >= end) {
+                    clearInterval(interval);
+                } else {
+                    width++;
+                    element.style.width = width + '%';
+                }
+            }, 50);
+        }
+    });
+</script>
