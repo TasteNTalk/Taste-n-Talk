@@ -1,0 +1,207 @@
+import React, { useEffect, useRef } from 'react';
+
+const StoriesComponent = () => {
+  const storiesContainerRef = useRef(null);
+
+  const users = [
+    { name: "Tanisha", image: "tanishaa.jpg" },
+    { name: "Amish", image: "amishh.jpg" },
+    { name: "Prittam", image: "prittam.jpg" },
+    { name: "Piyush", image: "piyush.jpg" },
+    {
+      name: "Andrew",
+      image:
+        "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+    },
+    {
+      name: "Emily",
+      image:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+    },
+    {
+      name: "Whitney",
+      image:
+        "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+    },
+    {
+      name: "David",
+      image:
+        "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+    },
+    {
+      name: "Kristin",
+      image:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+    },
+    {
+      name: "Sarah",
+      image:
+        "https://images.unsplash.com/photo-1605405748313-a416a1b84491?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+    },
+    {
+      name: "Michael",
+      image:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+    },
+    {
+      name: "Jessica",
+      image:
+        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+    },
+    {
+      name: "Alex",
+      image:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+    },
+    {
+      name: "Jordan",
+      image:
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80",
+    },
+  ];
+
+  const scrollStories = (amount) => {
+    if (storiesContainerRef.current) {
+      storiesContainerRef.current.scrollBy({
+        left: amount,
+        behavior: "smooth"
+      });
+    }
+  };
+
+  return (
+    <div className="stories-wrapper">
+      <button 
+        className="arrow-btn arrow-left" 
+        onClick={() => scrollStories(-200)}
+      >
+        &#8249;
+      </button>
+      
+      <div 
+        className="stories-container bg-[#002140be]" 
+        ref={storiesContainerRef}
+      >
+        {users.map((user, index) => (
+          <div className="story-item" key={index}>
+            <button className="story-button">
+              <div className="story-avatar">
+                <img 
+                  src={user.image} 
+                  alt={user.name} 
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/150';
+                    e.target.onError = null;
+                  }}
+                />
+              </div>
+              <span className="story-name">{user.name}</span>
+            </button>
+          </div>
+        ))}
+      </div>
+      
+      <button 
+        className="arrow-btn arrow-right" 
+        onClick={() => scrollStories(200)}
+      >
+        &#8250;
+      </button>
+    </div>
+  );
+};
+
+export default StoriesComponent;
+
+// css part
+
+/* CSS for the Stories Component */
+.stories-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.stories-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  padding: 10px;
+  gap: 15px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.stories-container::-webkit-scrollbar {
+  display: none;
+}
+
+.story-item {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.story-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70px;
+}
+
+.story-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #3498db;
+  padding: 2px;
+  margin-bottom: 5px;
+}
+
+.story-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.story-name {
+  font-size: 12px;
+  color: white;
+  text-align: center;
+  max-width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arrow-btn {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.arrow-left {
+  left: 5px;
+}
+
+.arrow-right {
+  right: 5px;
+}
