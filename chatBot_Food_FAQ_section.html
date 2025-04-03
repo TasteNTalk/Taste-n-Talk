@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taste'n Talk with Chatbot</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 15px;
+      }
+
+      .sidebar {
+        width: 250px;
+        height: calc(100vh - 100px);
+        position: fixed;
+        top: 100px;
+        left: 0;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .main-container {
+        margin-left: 250px;
+        margin-top: 100px;
+        padding: 20px;
+        width: calc(100% - 250px);
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 100px);
+      }
+
+      /* Enhanced Chatbot Section Styles */
+      .chatbot-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background-color: #f8f9fa;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 33, 64, 0.25);
+        overflow: hidden;
+        border: 2px solid #002140;
+        animation: pulse 2s infinite alternate;
+        position: relative;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 10px 30px rgba(0, 33, 64, 0.2);
+        }
+        100% {
+          box-shadow: 0 15px 40px rgba(0, 33, 64, 0.4);
+        }
+      }
+
+      /* Floating help button */
+      .chatbot-float-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background-color: #002140;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        z-index: 1000;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .chatbot-header {
+        padding: 18px 24px;
+        background: linear-gradient(135deg, #002140 0%, #003a6d 100%);
+        border-bottom: 1px solid #e6e6e6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+      }
+
+      .chatbot-title {
+        font-weight: 600;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .chatbot-title i {
+        color: #ffd700;
+        animation: glow 1.5s infinite alternate;
+        font-size: 24px;
+      }
+
+      @keyframes glow {
+        from {
+          text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ffd700,
+            0 0 20px #ffd700;
+        }
+        to {
+          text-shadow: 0 0 10px #fff, 0 0 15px #ffd700, 0 0 20px #ffd700,
+            0 0 25px #ffd700;
+        }
+      }
+
+      .chatbot-options {
+        display: flex;
+        gap: 18px;
+      }
+
+      .chatbot-option {
+        cursor: pointer;
+        color: #f8f9fa;
+        transition: all 0.3s;
+      }
+
+      .chatbot-option:hover {
+        color: #ffd700;
+        transform: scale(1.2);
+      }
+
+      .chatbot-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23002140' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+      }
+
+      .message {
+        max-width: 75%;
+        padding: 15px 18px;
+        border-radius: 16px;
+        position: relative;
+        margin-bottom: 5px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+
+      .message:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .message-time {
+        font-size: 11px;
+        color: #888;
+        margin-top: 8px;
+        text-align: right;
+      }
+
+      .bot-message {
+        background: linear-gradient(135deg, #e6f7ff 0%, #e6e6e6 100%);
+        color: #333;
+        align-self: flex-start;
+        border-bottom-left-radius: 2px;
+        border-left: 4px solid #002140;
+      }
+
+      .user-message {
+        background: linear-gradient(135deg, #002140 0%, #004b8d 100%);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 2px;
+        border-right: 4px solid #ffd700;
+      }
+
+      .message-suggestions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+
+      .suggestion-chip {
+        background-color: white;
+        padding: 10px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+        border: 1px solid #e6e6e6;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .suggestion-chip:hover {
+        background-color: #002140;
+        color: white;
+        transform: scale(1.05);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .chatbot-footer {
+        padding: 18px 24px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-top: 1px solid #e6e6e6;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .message-input {
+        flex: 1;
+        padding: 15px 20px;
+        border-radius: 30px;
+        border: 2px solid #e6e6e6;
+        outline: none;
+        font-size: 14px;
+        background-color: #f5f5f5;
+        transition: all 0.3s;
+        box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .message-input:focus {
+        border-color: #002140;
+        box-shadow: 0 0 0 3px rgba(0, 33, 64, 0.1);
+      }
+
+      .send-button {
+        background: linear-gradient(135deg, #002140 0%, #004b8d 100%);
+        color: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .send-button:hover {
+        transform: scale(1.1) rotate(15deg);
+        background: linear-gradient(135deg, #004b8d 0%, #002140 100%);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .chat-actions {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .chat-action {
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 18px;
+      }
+
+      .chat-action:hover {
+        color: #002140;
+        transform: scale(1.2);
+      }
+
+      /* New typing indicator */
+      .typing-indicator {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 5px;
+        padding-left: 10px;
+      }
+
+      .typing-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #002140;
+        border-radius: 50%;
+        opacity: 0.7;
+        animation: typingAnimation 1.5s infinite ease-in-out;
+      }
+
+      .typing-dot:nth-child(1) {
+        animation-delay: 0s;
+      }
+
+      .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes typingAnimation {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+
+      /* Chat Features Section */
+      /* Chat Features Section - Updated to match image layout */
+      .chat-features {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .feature-card {
+        background: #002140;
+        color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.544);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .feature-card i {
+        font-size: 24px;
+        color: #ffd700;
+        margin-bottom: 15px;
+      }
+
+      .feature-card h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .feature-card p {
+        font-size: 14px;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      /* Optional: Add a simple hover effect */
+      .feature-card:hover i {
+        transform: scale(1.2);
+        transition: all 0.3s ease-in;
+      }
+
+      /* Ensure proper spacing for mobile view */
+      @media (max-width: 768px) {
+        .chat-features {
+          flex-direction: column;
+        }
+
+        .feature-card {
+          margin-bottom: 15px;
+        }
+      }
+
+      /* FAQ Expanded Content */
+      .faq-content {
+        margin-top: 15px;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .faq-category {
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        background-color: #e6f7ff;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        color: #002140;
+        transition: all 0.2s;
+      }
+
+      .faq-category:hover {
+        background-color: #bae7ff;
+      }
+
+      .faq-item {
+        margin-top: 5px;
+        padding: 8px 12px;
+        background-color: #f5f5f5;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .faq-item:hover {
+        background-color: #e6e6e6;
+      }
+
+      /* Cards for FAQ answers */
+      .faq-answer-card {
+        padding: 15px;
+        background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+        border-radius: 12px;
+        margin-top: 10px;
+        border-left: 4px solid #ffd700;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body class="bg-[#002140] min-h-screen">
+    <div class="bg-[#002140]">
+      <header
+        class="w-[100%] flex items-center justify-between p-3 bg-[#e2e4d6] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10"
+      >
+        <div class="flex items-center space-x-4">
+          <div
+            class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]"
+          >
+            <img
+              src="/images/tntLogo.png"
+              alt="Logo"
+              class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer"
+            />
+            <span class="drop-shadow-2xl shadow-[#002140e3]">Taste'n Talk</span>
+          </div>
+        </div>
+        <div
+          class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"
+        >
+          <img src="map.png" alt="Location" />
+        </div>
+
+        <div class="relative w-[30%] max-w-[400px]">
+          <input
+            type="text"
+            style="padding: 10px 40px 10px 20px"
+            class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic"
+            placeholder="Search"
+          />
+
+          <button
+            class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+          >
+            <i class="fas fa-search text-[#f8f9fa]"></i>
+          </button>
+        </div>
+
+        <div
+          class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#e2e4d6] rounded-[25px] px-2 shadow-md shadow-[#002140e3]"
+        >
+          <button class="text-2xl flex items-center justify-center">
+            <span class="text-base">Create</span>➕
+          </button>
+        </div>
+
+        <div
+          class="flex items-center justify-between header-icons w-[25%] md:w-[25%] sm:w-[100%]"
+        >
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🛒
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🔖
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              ❤️
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🔔
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <!-- Highlighted account icon -->
+            <button class="account-icon">
+              <i
+                class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"
+              ></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <aside class="sidebar glass-effect">
+        <nav class="flex flex-col text-xl font-bold gap-5 text-[#e2e4d6]">
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+            ><img src="home.png" class="w-[35px]" /> <span>Home</span></a
+          >
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="cart.png" class="w-[35px]" /> <span>Shopping</span>
+          </a>
+          <!-- Added new Recipe Coaching Classes link -->
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <i class="fas fa-graduation-cap w-[35px] text-center"></i>
+            <span>Courses</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+            ><img src="blog.png" class="w-[35px]" /> <span>Blog/Articles</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="inbox.png" class="w-[35px]" /> <span>Inbox</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="community.png" class="w-[35px]" /><span>Community</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4 bg-[#e2e4d6] text-[#002140] scale-110"
+          >
+            <img src="chatbot.png" class="w-[35px]" /><span>ChatBot</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="tiffin.png" class="w-[35px]" /> <span>Tiffin</span>
+          </a>
+        </nav>
+      </aside>
+
+      <div class="main-container">
+        <!-- Chat Features -->
+        <div class="chat-features">
+          <div class="feature-card" id="recipe-assistant">
+            <i class="fas fa-utensils"></i>
+            <h3>Recipe Assistant</h3>
+            <p>Get cooking help and recipes</p>
+          </div>
+          <div class="feature-card scale-105 bg-[#123d66c0]" id="food-faq">
+            <i class="fas fa-question-circle"></i>
+            <h3>Food FAQ</h3>
+            <p>Ask any food-related questions</p>
+          </div>
+          <div class="feature-card" id="shopping-helper">
+            <i class="fas fa-shopping-basket"></i>
+            <h3>Shopping Helper</h3>
+            <p>Meal planning & ingredient suggestions</p>
+          </div>
+        </div>
+
+        <!-- Chatbot Container -->
+        <div class="chatbot-container">
+          <!-- New ribbon element -->
+
+          <div class="chatbot-header">
+            <div class="chatbot-title">
+              <i class="fas fa-robot"></i>
+              <span>Food FAQ Assistant</span>
+            </div>
+            <div class="chatbot-options">
+              <div class="chatbot-option">
+                <i class="fas fa-volume-up"></i>
+              </div>
+              <div class="chatbot-option">
+                <i class="fas fa-info-circle"></i>
+              </div>
+              <div class="chatbot-option">
+                <i class="fas fa-cog"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="chatbot-messages">
+            <!-- Bot Message -->
+            <div class="message bot-message">
+              <div>
+                👋 Hello food explorer! I'm your Food FAQ assistant. Ask me
+                anything about ingredients, cooking methods, dietary needs, or
+                food science!
+              </div>
+              <div class="message-time">10:05 AM</div>
+              <div class="typing-indicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+              <div class="message-suggestions">
+                <div class="suggestion-chip">🥘 About cooking methods</div>
+                <div class="suggestion-chip">🌱 Dietary restrictions</div>
+                <div class="suggestion-chip">🧪 Food science</div>
+                <div class="suggestion-chip">🔍 Ingredient questions</div>
+              </div>
+            </div>
+
+            <!-- User Message -->
+            <div class="message user-message">
+              <div>
+                What's the difference between baking soda and baking powder?
+              </div>
+              <div class="message-time">10:06 AM</div>
+            </div>
+
+            <!-- Bot Message with FAQ Answer -->
+            <div class="message bot-message">
+              <div>Great question about these common baking ingredients!</div>
+              <div class="faq-answer-card">
+                <div
+                  style="font-weight: 600; color: #002140; margin-bottom: 10px"
+                >
+                  🧪 Baking Soda vs. Baking Powder
+                </div>
+
+                <p><strong>Baking Soda:</strong></p>
+                <ul style="margin-left: 15px; margin-bottom: 10px">
+                  <li>Pure sodium bicarbonate</li>
+                  <li>
+                    Needs an acid (like vinegar, lemon juice, or buttermilk) to
+                    activate
+                  </li>
+                  <li>
+                    Reacts immediately when combined with acidic ingredients
+                  </li>
+                  <li>
+                    Stronger leavening power (4x stronger than baking powder)
+                  </li>
+                </ul>
+
+                <p><strong>Baking Powder:</strong></p>
+                <ul style="margin-left: 15px; margin-bottom: 10px">
+                  <li>
+                    Mixture of sodium bicarbonate + cream of tartar (acid) +
+                    cornstarch
+                  </li>
+                  <li>
+                    Contains its own acid, so just needs moisture to activate
+                  </li>
+                  <li>
+                    Double-acting: releases some gas when wet, then more when
+                    heated
+                  </li>
+                  <li>Best for recipes without acidic ingredients</li>
+                </ul>
+
+                <p><strong>Can I substitute one for the other?</strong></p>
+                <p>Yes, but with adjustments:</p>
+                <ul style="margin-left: 15px">
+                  <li>
+                    Replace 1 tsp baking powder with 1/4 tsp baking soda + 1/2
+                    tsp cream of tartar
+                  </li>
+                  <li>
+                    Replace 1 tsp baking soda with 3 tsp baking powder (but may
+                    affect taste)
+                  </li>
+                </ul>
+              </div>
+              <div class="message-time">10:07 AM</div>
+              <div class="message-suggestions">
+                <div class="suggestion-chip">🧁 Baking science tips</div>
+                <div class="suggestion-chip">🍞 Common baking mistakes</div>
+                <div class="suggestion-chip">🔄 Other leavening agents</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chatbot-footer">
+            <div class="chat-actions">
+              <div class="chat-action">
+                <i class="fas fa-camera"></i>
+              </div>
+              <div class="chat-action">
+                <i class="fas fa-microphone"></i>
+              </div>
+              <div class="chat-action">
+                <i class="fas fa-paperclip"></i>
+              </div>
+            </div>
+            <input
+              type="text"
+              class="message-input"
+              placeholder="Ask any food-related question..."
+            />
+            <button class="send-button">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Food FAQ Database
+      // Food FAQ Database
+      const foodFAQs = {
+        ingredients: [
+          {
+            question: "What are the best substitutes for eggs in baking?",
+            answer:
+              "Depending on the recipe, you can use: 1/4 cup applesauce, 1/4 cup mashed banana, 1 tbsp ground flaxseed + 3 tbsp water, 1/4 cup yogurt, or commercial egg replacers.",
+          },
+          {
+            question: "How do I select ripe avocados?",
+            answer:
+              "Gently press the avocado. If it yields slightly, it's ripe. If very soft, it's overripe. Check under the stem - green means ripe, brown means overripe. Color alone isn't reliable.",
+          },
+          {
+            question: "What's the difference between stock and broth?",
+            answer:
+              "Stock is made primarily from bones simmered long-term for a rich mouthfeel from gelatin. Broth is made primarily from meat and cooks faster with more seasoning. Stock is a base ingredient; broth can be consumed directly.",
+          },
+        ],
+        cooking: [
+          {
+            question: "What's the best oil for high-heat cooking?",
+            answer:
+              "Oils with high smoke points are best: refined avocado oil (520°F), ghee (485°F), safflower oil (510°F), and refined coconut oil (450°F). Avoid olive oil and butter for high-heat cooking.",
+          },
+          {
+            question: "How do I properly sear meat?",
+            answer:
+              "Pat the meat dry, season well, use a very hot pan with a thin layer of high smoke-point oil. Place meat in pan and DON'T move it until it releases easily (3-5 min). Flip once only for most cuts.",
+          },
+          {
+            question: "What's the difference between simmering and boiling?",
+            answer:
+              "Boiling occurs at 212°F (100°C) with large, vigorous bubbles and lots of movement. Simmering is gentler at 185-205°F (85-96°C) with smaller bubbles and less agitation, best for most cooking.",
+          },
+        ],
+        nutrition: [
+          {
+            question: "What foods are high in protein but low in fat?",
+            answer:
+              "Lean protein sources include: chicken/turkey breast (skinless), egg whites, white fish, shrimp, non-fat Greek yogurt, tofu, seitan, beans, lentils, and protein powders like whey isolate or pea protein.",
+          },
+          {
+            question: "Which fruits have the lowest sugar content?",
+            answer:
+              "Low-sugar fruits include: berries (especially raspberries, blackberries), avocados, olives, lemons, limes, rhubarb, kiwi, watermelon, cantaloupe, peaches, and nectarines.",
+          },
+          {
+            question:
+              "What's the difference between soluble and insoluble fiber?",
+            answer:
+              "Soluble fiber dissolves in water to form a gel-like substance that slows digestion (in oats, beans, fruits). Insoluble fiber adds bulk to stool and helps food pass through digestive system (in whole grains, vegetables).",
+          },
+        ],
+        storage: [
+          {
+            question:
+              "How should I store fresh herbs to make them last longer?",
+            answer:
+              "For soft herbs (cilantro, parsley): Trim stems, place in water like flowers, cover loosely with plastic bag, refrigerate. For woody herbs (rosemary, thyme): Wrap in damp paper towel in open bag in refrigerator. Or freeze in oil in ice cube trays.",
+          },
+          {
+            question: "Can I freeze cheese?",
+            answer:
+              "Hard and semi-hard cheeses freeze best (cheddar, Swiss, mozzarella). Shred or slice first, double wrap tightly. Quality decreases slightly upon thawing, so best used in cooked dishes. Soft cheeses like cream cheese and brie freeze poorly.",
+          },
+          {
+            question: "What's the best way to store coffee beans?",
+            answer:
+              "Store in an airtight, opaque container away from heat, light, moisture, and strong odors. Keep at room temperature, not in the refrigerator (creates condensation). For long-term storage, freeze in airtight bags in small portions.",
+          },
+        ],
+        techniques: [
+          {
+            question: "What does it mean to 'fold' ingredients?",
+            answer:
+              "Folding is a gentle mixing technique used to incorporate light, airy ingredients (like whipped cream or egg whites) into heavier mixtures without deflating them. Use a spatula with a broad sweeping motion, cutting through the middle and turning over.",
+          },
+          {
+            question: "How do I caramelize onions properly?",
+            answer:
+              "True caramelization takes 30-45 minutes. Use medium-low heat with butter/oil, stir occasionally, and add a pinch of salt. Be patient - the slow cooking develops sweetness. Add small amounts of water to deglaze if they stick.",
+          },
+          {
+            question:
+              "What's the difference between baking soda and baking powder?",
+            answer:
+              "Baking soda is pure sodium bicarbonate that requires acid to activate. Baking powder combines baking soda with cream of tartar (acid) and cornstarch, so it only needs moisture to activate. Baking soda is 3-4 times stronger than baking powder.",
+          },
+        ],
+        equipment: [
+          {
+            question: "Do I really need a stand mixer?",
+            answer:
+              "A stand mixer is helpful but not essential. It's worth it if you bake frequently, make bread/pizza dough, or have hand/wrist issues. For occasional baking, a hand mixer plus manual mixing will handle most tasks.",
+          },
+          {
+            question: "What knives are essential for a home kitchen?",
+            answer:
+              "Start with three: 8-inch chef's knife (all-purpose), 3-4 inch paring knife (detail work), and serrated bread knife. Add a santoku and boning knife later if needed. Good quality in these basics beats having many poor-quality knives.",
+          },
+          {
+            question: "Cast iron vs. non-stick pans - which is better?",
+            answer:
+              "They serve different purposes. Cast iron retains heat well, develops non-stick properties over time, and can go from stovetop to oven. Non-stick is easier to maintain, better for delicate foods like eggs and fish, but doesn't last as long.",
+          },
+        ],
+      };
+
+      // DOM Elements
+      const messageInput = document.querySelector(".message-input");
+      const sendButton = document.querySelector(".send-button");
+      const chatMessages = document.querySelector(".chatbot-messages");
+      const featureCards = document.querySelectorAll(".feature-card");
+      const suggestionChips = document.querySelectorAll(".suggestion-chip");
+
+      // Current chat mode
+      let currentMode = "faq"; // Default mode is FAQ
+
+      // Handle sending messages
+      function sendMessage() {
+        const message = messageInput.value.trim();
+        if (message === "") return;
+
+        // Add user message
+        addMessage(message, "user");
+        messageInput.value = "";
+
+        // Process the message and get response
+        setTimeout(() => {
+          processUserMessage(message);
+        }, 750);
+      }
+
+      // Add message to chat
+      function addMessage(content, sender, additionalContent = null) {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message");
+        messageDiv.classList.add(
+          sender === "user" ? "user-message" : "bot-message"
+        );
+
+        // Add main content
+        messageDiv.innerHTML = `<div>${content}</div>`;
+
+        // Add additional content if provided (for FAQ answers)
+        if (additionalContent) {
+          const faqAnswerCard = document.createElement("div");
+          faqAnswerCard.classList.add("faq-answer-card");
+          faqAnswerCard.innerHTML = additionalContent;
+          messageDiv.appendChild(faqAnswerCard);
+        }
+
+        // Add timestamp
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes().toString().padStart(2, "0");
+        const timeFormat =
+          hours > 12 ? `${hours - 12}:${minutes} PM` : `${hours}:${minutes} AM`;
+
+        const timeDiv = document.createElement("div");
+        timeDiv.classList.add("message-time");
+        timeDiv.textContent = timeFormat;
+        messageDiv.appendChild(timeDiv);
+
+        // Add typing indicator for bot messages
+        if (sender === "bot") {
+          const typingIndicator = document.createElement("div");
+          typingIndicator.classList.add("typing-indicator");
+          typingIndicator.innerHTML = `
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        `;
+          messageDiv.appendChild(typingIndicator);
+
+          // Add suggestion chips based on current mode
+          const suggestions = getSuggestions(currentMode);
+          if (suggestions) {
+            const suggestionsDiv = document.createElement("div");
+            suggestionsDiv.classList.add("message-suggestions");
+
+            suggestions.forEach((suggestion) => {
+              const chip = document.createElement("div");
+              chip.classList.add("suggestion-chip");
+              chip.textContent = suggestion;
+              chip.addEventListener("click", () => {
+                addMessage(suggestion, "user");
+                setTimeout(() => {
+                  processUserMessage(suggestion);
+                }, 750);
+              });
+              suggestionsDiv.appendChild(chip);
+            });
+
+            messageDiv.appendChild(suggestionsDiv);
+          }
+        }
+
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Remove typing indicator after 1.5 seconds for bot messages
+        if (sender === "bot") {
+          setTimeout(() => {
+            const indicator = messageDiv.querySelector(".typing-indicator");
+            if (indicator) {
+              indicator.remove();
+            }
+          }, 1500);
+        }
+      }
+
+      // Process user message and generate response
+      function processUserMessage(message) {
+        // Convert message to lowercase for easier matching
+        const lowerMessage = message.toLowerCase();
+
+        // Check for mode-specific responses
+        if (currentMode === "recipe") {
+          processRecipeAssistantMessage(lowerMessage);
+        } else if (currentMode === "shopping") {
+          processShoppingHelperMessage(lowerMessage);
+        } else {
+          // Default FAQ mode
+          processFAQMessage(lowerMessage);
+        }
+      }
+
+      // Process message in FAQ mode
+      function processFAQMessage(message) {
+        // Check all categories for matching questions
+        for (const category in foodFAQs) {
+          const faqs = foodFAQs[category];
+          for (const faq of faqs) {
+            // Check if message contains key terms from the question
+            const questionWords = faq.question.toLowerCase().split(" ");
+            const matchScore = questionWords.filter(
+              (word) => word.length > 3 && message.includes(word)
+            ).length;
+
+            if (
+              matchScore >= 2 ||
+              message.includes(faq.question.toLowerCase())
+            ) {
+              // Create formatted answer
+              const categoryEmojis = {
+                ingredients: "🥕",
+                cooking: "🍳",
+                nutrition: "🥗",
+                storage: "🧊",
+                techniques: "👨‍🍳",
+                equipment: "🔪",
+              };
+
+              const emoji = categoryEmojis[category] || "🍽️";
+              const formattedAnswer = `
+                    <div style="font-weight: 600; color: #002140; margin-bottom: 10px;">${emoji} ${faq.question}</div>
+                    <p>${faq.answer}</p>
+                `;
+
+              addMessage(
+                `I found an answer to your question about ${
+                  faq.question.toLowerCase().split("?")[0]
+                }:`,
+                "bot",
+                formattedAnswer
+              );
+              return;
+            }
+          }
+        }
+
+        // If no matching FAQ found
+        addMessage(
+          "I don't have a specific answer for that question yet. Can I help you with something else related to food?",
+          "bot"
+        );
+      }
+
+      // Process message in Recipe Assistant mode
+      function processRecipeAssistantMessage(message) {
+        // Simple response for recipe mode - in a real app, this would be more sophisticated
+        if (
+          message.includes("recipe") ||
+          message.includes("make") ||
+          message.includes("cook")
+        ) {
+          addMessage(
+            "I'd be happy to help you find a recipe! In a complete version, I would connect to a recipe database. For now, what type of cuisine are you interested in?",
+            "bot"
+          );
+        } else if (
+          message.includes("substitute") ||
+          message.includes("replace")
+        ) {
+          addMessage(
+            "Looking for ingredient substitutions is a great way to adapt recipes to what you have on hand. What ingredient are you trying to substitute?",
+            "bot"
+          );
+        } else {
+          addMessage(
+            "I'm your recipe assistant. I can help find recipes, suggest substitutions, or provide cooking techniques. What specifically would you like help with?",
+            "bot"
+          );
+        }
+      }
+
+      // Process message in Shopping Helper mode
+      function processShoppingHelperMessage(message) {
+        // Simple response for shopping mode
+        if (
+          message.includes("list") ||
+          message.includes("need") ||
+          message.includes("buy")
+        ) {
+          addMessage(
+            "I can help create a shopping list based on recipes or meal plans. In a complete version, I would store your preferences and dietary needs. What are you planning to cook this week?",
+            "bot"
+          );
+        } else if (
+          message.includes("budget") ||
+          message.includes("cheap") ||
+          message.includes("cost")
+        ) {
+          addMessage(
+            "Smart shopping can help you stay within budget. Consider seasonal produce, buying in bulk for staples, and planning meals around sales. Would you like specific budget-friendly meal ideas?",
+            "bot"
+          );
+        } else {
+          addMessage(
+            "I'm your shopping assistant. I can help with shopping lists, finding ingredients, or budget-friendly options. How can I assist with your food shopping today?",
+            "bot"
+          );
+        }
+      }
+
+      // Get appropriate suggestions based on current mode
+      function getSuggestions(mode) {
+        switch (mode) {
+          case "recipe":
+            return [
+              "🍽️ Find a pasta recipe",
+              "🥘 How to make curry",
+              "🔄 Substitute for butter",
+              "⏱️ Quick dinner ideas",
+            ];
+          case "shopping":
+            return [
+              "📝 Create shopping list",
+              "💰 Budget-friendly meals",
+              "🛒 Pantry essentials",
+              "🥦 Seasonal produce",
+            ];
+          case "faq":
+          default:
+            return [
+              "🥘 About cooking methods",
+              "🌱 Dietary restrictions",
+              "🧪 Food science",
+              "🔍 Ingredient questions",
+            ];
+        }
+      }
+
+      // Switch between different chat modes
+      function switchChatMode(mode) {
+        currentMode = mode;
+
+        // Update UI to reflect selected mode
+        featureCards.forEach((card) => {
+          if (
+            card.id === `${mode}-assistant` ||
+            card.id === `${mode}-helper` ||
+            card.id === `${mode}-faq`
+          ) {
+            card.classList.add("scale-105", "bg-[#123d66c0]");
+          } else {
+            card.classList.remove("scale-105", "bg-[#123d66c0]");
+          }
+        });
+
+        // Update chatbot title
+        const chatbotTitle = document.querySelector(".chatbot-title span");
+        if (mode === "recipe") {
+          chatbotTitle.textContent = "Recipe Assistant";
+        } else if (mode === "shopping") {
+          chatbotTitle.textContent = "Shopping Helper";
+        } else {
+          chatbotTitle.textContent = "Food FAQ Assistant";
+        }
+
+        // Clear chat and add welcome message
+        chatMessages.innerHTML = "";
+
+        let welcomeMessage;
+        if (mode === "recipe") {
+          welcomeMessage =
+            "👨‍🍳 Welcome to Recipe Assistant! I can help you find recipes, suggest modifications, or answer cooking technique questions. What would you like to cook today?";
+        } else if (mode === "shopping") {
+          welcomeMessage =
+            "🛒 Welcome to Shopping Helper! I can help create shopping lists, find ingredients, or suggest budget-friendly meal plans. How can I help with your food shopping?";
+        } else {
+          welcomeMessage =
+            "👋 Hello food explorer! I'm your Food FAQ assistant. Ask me anything about ingredients, cooking methods, dietary needs, or food science!";
+        }
+
+        addMessage(welcomeMessage, "bot");
+      }
+
+      // Event Listeners
+      sendButton.addEventListener("click", sendMessage);
+      messageInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          sendMessage();
+        }
+      });
+
+      // Feature card click events
+      document
+        .getElementById("recipe-assistant")
+        .addEventListener("click", () => switchChatMode("recipe"));
+      document
+        .getElementById("food-faq")
+        .addEventListener("click", () => switchChatMode("faq"));
+      document
+        .getElementById("shopping-helper")
+        .addEventListener("click", () => switchChatMode("shopping"));
+
+      // Initialize suggestion chips in the current chat
+      suggestionChips.forEach((chip) => {
+        chip.addEventListener("click", () => {
+          addMessage(chip.textContent, "user");
+          setTimeout(() => {
+            processUserMessage(chip.textContent);
+          }, 750);
+        });
+      });
+
+      // Add chatbot float button functionality
+      const floatButton = document.createElement("div");
+      floatButton.classList.add("chatbot-float-button");
+      floatButton.innerHTML = '<i class="fas fa-comment-dots"></i>';
+      document.body.appendChild(floatButton);
+
+      floatButton.addEventListener("click", () => {
+        const chatbot = document.querySelector(".chatbot-container");
+        chatbot.scrollIntoView({ behavior: "smooth" });
+      });
+
+      // Initialize with current date in messages
+      const currentDate = new Date();
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      const dateString = currentDate.toLocaleDateString(undefined, options);
+
+      // Add date indicator to the chat
+      const dateIndicator = document.createElement("div");
+      dateIndicator.style.textAlign = "center";
+      dateIndicator.style.padding = "10px";
+      dateIndicator.style.margin = "10px 0";
+      dateIndicator.style.fontSize = "12px";
+      dateIndicator.style.color = "#888";
+      dateIndicator.textContent = dateString;
+      chatMessages.insertBefore(dateIndicator, chatMessages.firstChild);
+
+      // Voice recognition functionality (simplified)
+      const micButton = document.querySelector(".fa-microphone").parentElement;
+      micButton.addEventListener("click", () => {
+        addMessage(
+          "Voice recognition would activate here in a complete implementation.",
+          "bot"
+        );
+      });
+
+      // Camera functionality (simplified)
+      const cameraButton = document.querySelector(".fa-camera").parentElement;
+      cameraButton.addEventListener("click", () => {
+        addMessage(
+          "Food image recognition would activate here in a complete implementation. You could take pictures of ingredients or dishes for identification.",
+          "bot"
+        );
+      });
+
+      // Attachment functionality (simplified)
+      const attachButton =
+        document.querySelector(".fa-paperclip").parentElement;
+      attachButton.addEventListener("click", () => {
+        addMessage(
+          "File attachment would be available here in a complete implementation. You could share recipes or shopping lists.",
+          "bot"
+        );
+      });
+    </script>
+  </body>
+</html>
