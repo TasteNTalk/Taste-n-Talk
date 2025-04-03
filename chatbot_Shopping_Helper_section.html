@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taste'n Talk with Chatbot</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 15px;
+      }
+
+      .sidebar {
+        width: 250px;
+        height: calc(100vh - 100px);
+        position: fixed;
+        top: 100px;
+        left: 0;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .main-container {
+        margin-left: 250px;
+        margin-top: 100px;
+        padding: 20px;
+        width: calc(100% - 250px);
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 100px);
+      }
+
+      /* Enhanced Chatbot Section Styles */
+      .chatbot-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background-color: #f8f9fa;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 33, 64, 0.25);
+        overflow: hidden;
+        border: 2px solid #002140;
+        animation: pulse 2s infinite alternate;
+        position: relative;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 10px 30px rgba(0, 33, 64, 0.2);
+        }
+        100% {
+          box-shadow: 0 15px 40px rgba(0, 33, 64, 0.4);
+        }
+      }
+
+      /* Floating help button */
+      .chatbot-float-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background-color: #002140;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        z-index: 1000;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .chatbot-header {
+        padding: 18px 24px;
+        background: linear-gradient(135deg, #002140 0%, #003a6d 100%);
+        border-bottom: 1px solid #e6e6e6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+      }
+
+      .chatbot-title {
+        font-weight: 600;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .chatbot-title i {
+        color: #ffd700;
+        animation: glow 1.5s infinite alternate;
+        font-size: 24px;
+      }
+
+      @keyframes glow {
+        from {
+          text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ffd700,
+            0 0 20px #ffd700;
+        }
+        to {
+          text-shadow: 0 0 10px #fff, 0 0 15px #ffd700, 0 0 20px #ffd700,
+            0 0 25px #ffd700;
+        }
+      }
+
+      .chatbot-options {
+        display: flex;
+        gap: 18px;
+      }
+
+      .chatbot-option {
+        cursor: pointer;
+        color: #f8f9fa;
+        transition: all 0.3s;
+      }
+
+      .chatbot-option:hover {
+        color: #ffd700;
+        transform: scale(1.2);
+      }
+
+      .chatbot-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23002140' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+      }
+
+      .message {
+        max-width: 75%;
+        padding: 15px 18px;
+        border-radius: 16px;
+        position: relative;
+        margin-bottom: 5px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+
+      .message:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .message-time {
+        font-size: 11px;
+        color: #888;
+        margin-top: 8px;
+        text-align: right;
+      }
+
+      .bot-message {
+        background: linear-gradient(135deg, #e6f7ff 0%, #e6e6e6 100%);
+        color: #333;
+        align-self: flex-start;
+        border-bottom-left-radius: 2px;
+        border-left: 4px solid #002140;
+      }
+
+      .user-message {
+        background: linear-gradient(135deg, #002140 0%, #004b8d 100%);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 2px;
+        border-right: 4px solid #ffd700;
+      }
+
+      .message-suggestions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+
+      .suggestion-chip {
+        background-color: white;
+        padding: 10px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+        border: 1px solid #e6e6e6;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .suggestion-chip:hover {
+        background-color: #002140;
+        color: white;
+        transform: scale(1.05);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .chatbot-footer {
+        padding: 18px 24px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-top: 1px solid #e6e6e6;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .message-input {
+        flex: 1;
+        padding: 15px 20px;
+        border-radius: 30px;
+        border: 2px solid #e6e6e6;
+        outline: none;
+        font-size: 14px;
+        background-color: #f5f5f5;
+        transition: all 0.3s;
+        box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .message-input:focus {
+        border-color: #002140;
+        box-shadow: 0 0 0 3px rgba(0, 33, 64, 0.1);
+      }
+
+      .send-button {
+        background: linear-gradient(135deg, #002140 0%, #004b8d 100%);
+        color: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .send-button:hover {
+        transform: scale(1.1) rotate(15deg);
+        background: linear-gradient(135deg, #004b8d 0%, #002140 100%);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .chat-actions {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .chat-action {
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 18px;
+      }
+
+      .chat-action:hover {
+        color: #002140;
+        transform: scale(1.2);
+      }
+
+      /* New typing indicator */
+      .typing-indicator {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 5px;
+        padding-left: 10px;
+      }
+
+      .typing-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #002140;
+        border-radius: 50%;
+        opacity: 0.7;
+        animation: typingAnimation 1.5s infinite ease-in-out;
+      }
+
+      .typing-dot:nth-child(1) {
+        animation-delay: 0s;
+      }
+
+      .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes typingAnimation {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+
+      /* Chat Features Section */
+      /* Chat Features Section - Updated to match image layout */
+      .chat-features {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .feature-card {
+        background: #002140;
+        color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.544);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .feature-card i {
+        font-size: 24px;
+        color: #ffd700;
+        margin-bottom: 15px;
+      }
+
+      .feature-card h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .feature-card p {
+        font-size: 14px;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      /* Optional: Add a simple hover effect */
+      .feature-card:hover i {
+        transform: scale(1.2);
+        transition: all 0.3s ease-in;
+      }
+
+      /* Shopping list styles */
+      .shopping-list {
+        background: #f5f5f5;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+        border-left: 4px solid #004b8d;
+      }
+
+      .shopping-list-title {
+        font-weight: 600;
+        color: #002140;
+        font-size: 16px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .shopping-list-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .shopping-list-item:last-child {
+        border-bottom: none;
+      }
+
+      .shopping-list-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+      }
+
+      .shopping-list-item label {
+        flex: 1;
+        cursor: pointer;
+      }
+
+      .shopping-list-item .item-quantity {
+        color: #666;
+        font-size: 13px;
+      }
+
+      .shopping-list-item .item-delete {
+        color: #ff4d4f;
+        cursor: pointer;
+        padding: 5px;
+        font-size: 14px;
+      }
+
+      .shopping-list-footer {
+        margin-top: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .shopping-list-footer button {
+        background: #004b8d;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .shopping-list-footer button:hover {
+        background: #002140;
+        transform: translateY(-2px);
+      }
+
+      .ingredient-suggestions {
+        margin-top: 10px;
+      }
+
+      .ingredient-suggestion-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #002140;
+      }
+
+      .meal-plan {
+        background: linear-gradient(135deg, #e6f7ff 0%, #f0f0f0 100%);
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 15px;
+      }
+
+      .meal-plan-title {
+        font-weight: 600;
+        color: #002140;
+        margin-bottom: 10px;
+      }
+
+      .meal-plan-day {
+        margin-bottom: 12px;
+      }
+
+      .meal-plan-day-title {
+        font-weight: 500;
+        margin-bottom: 5px;
+        color: #004b8d;
+      }
+
+      .meal-plan-meal {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+        border-bottom: 1px dashed #e0e0e0;
+      }
+
+      .meal-plan-meal:last-child {
+        border-bottom: none;
+      }
+
+      .meal-type {
+        font-weight: 500;
+        color: #666;
+      }
+
+      .meal-name {
+        color: #333;
+      }
+
+      /* Smart input suggestions */
+      .input-suggestions-container {
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        width: 100%;
+        background: white;
+        border-radius: 8px 8px 0 0;
+        box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 10;
+        display: none;
+      }
+
+      .input-suggestion {
+        padding: 10px 15px;
+        cursor: pointer;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .input-suggestion:hover {
+        background: #f5f5f5;
+      }
+
+      .input-suggestion:last-child {
+        border-bottom: none;
+      }
+
+      /* Ensure proper spacing for mobile view */
+      @media (max-width: 768px) {
+        .chat-features {
+          flex-direction: column;
+        }
+
+        .feature-card {
+          margin-bottom: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-[#002140] min-h-screen">
+    <div class="bg-[#002140]">
+      <header
+        class="w-[100%] flex items-center justify-between p-3 bg-[#e2e4d6] shadow-lg shadow-gray-900 fixed top-0 left-0 right-0 z-10"
+      >
+        <div class="flex items-center space-x-4">
+          <div
+            class="text-[24px] font-bold hidden md:flex items-center gap-[10px] text-[#163e64]"
+          >
+            <img
+              src="/images/tntLogo.png"
+              alt="Logo"
+              class="w-[75px] rounded-full shadow-md shadow-[#002140e3] cursor-pointer"
+            />
+            <span class="drop-shadow-2xl shadow-[#002140e3]">Taste'n Talk</span>
+          </div>
+        </div>
+        <div
+          class="bg-[#002140e3] p-2 rounded-full w-[62px] shadow-md shadow-[#002140e3] cursor-pointer"
+        >
+          <img src="map.png" alt="Location" />
+        </div>
+
+        <div class="relative w-[30%] max-w-[400px]">
+          <input
+            type="text"
+            style="padding: 10px 40px 10px 20px"
+            class="search-bar w-[100%] border rounded-[25px] bg-[#002140] text-[#f8f9fa] italic shadow-md shadow-[#002140e3] placeholder:text-[#f8f9fa] placeholder:italic"
+            placeholder="Search"
+          />
+
+          <button
+            class="absolute right-[15px] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+          >
+            <i class="fas fa-search text-[#f8f9fa]"></i>
+          </button>
+        </div>
+
+        <div
+          class="flex justify-center items-center relative bg-[#002140] border border-[#002140] text-[#e2e4d6] rounded-[25px] px-2 shadow-md shadow-[#002140e3]"
+        >
+          <button class="text-2xl flex items-center justify-center">
+            <span class="text-base">Create</span>➕
+          </button>
+        </div>
+
+        <div
+          class="flex items-center justify-between header-icons w-[25%] md:w-[25%] sm:w-[100%]"
+        >
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🛒
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🔖
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              ❤️
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <button class="rounded-full shadow-md shadow-[#002140e3] px-3">
+              🔔
+            </button>
+          </div>
+
+          <div class="text-3xl">
+            <!-- Highlighted account icon -->
+            <button class="account-icon">
+              <i
+                class="fas fa-user text-[#002140] rounded-full shadow-md shadow-[#002140e3] px-5 py-1"
+              ></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <aside class="sidebar glass-effect">
+        <nav class="flex flex-col text-xl font-bold gap-5 text-[#e2e4d6]">
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+            ><img src="home.png" class="w-[35px]" /> <span>Home</span></a
+          >
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="cart.png" class="w-[35px]" /> <span>Shopping</span>
+          </a>
+          <!-- Added new Recipe Coaching Classes link -->
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <i class="fas fa-graduation-cap w-[35px] text-center"></i>
+            <span>Courses</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+            ><img src="blog.png" class="w-[35px]" /> <span>Blog/Articles</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="inbox.png" class="w-[35px]" /> <span>Inbox</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="community.png" class="w-[35px]" /><span>Community</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4 bg-[#e2e4d6] text-[#002140] scale-110"
+          >
+            <img src="chatbot.png" class="w-[35px]" /><span>ChatBot</span>
+          </a>
+          <a
+            href="#"
+            class="shadow-xl shadow-slate-900 rounded-[25px] p-2 flex items-center gap-4"
+          >
+            <img src="tiffin.png" class="w-[35px]" /> <span>Tiffin</span>
+          </a>
+        </nav>
+      </aside>
+
+      <div class="main-container">
+        <!-- Chat Features -->
+        <div class="chat-features">
+          <div class="feature-card" id="recipe-assistant">
+            <i class="fas fa-utensils"></i>
+            <h3>Recipe Assistant</h3>
+            <p>Get cooking help and recipes</p>
+          </div>
+          <div class="feature-card" id="food-faq">
+            <i class="fas fa-question-circle"></i>
+            <h3>Food FAQ</h3>
+            <p>Ask any food-related questions</p>
+          </div>
+          <div
+            class="feature-card scale-105 bg-[#123d66c0]"
+            id="shopping-helper"
+          >
+            <i class="fas fa-shopping-basket"></i>
+            <h3>Shopping Helper</h3>
+            <p>Meal planning & ingredient suggestions</p>
+          </div>
+        </div>
+
+        <!-- Chatbot Container -->
+        <div class="chatbot-container">
+            
+          <div class="chatbot-header">
+            <div class="chatbot-title">
+              <i class="fas fa-shopping-cart"></i>
+              <span>Shopping Helper</span>
+            </div>
+            <div class="chatbot-options">
+              <div class="chatbot-option">
+                <i class="fas fa-volume-up"></i>
+              </div>
+              <div class="chatbot-option">
+                <i class="fas fa-info-circle"></i>
+              </div>
+              <div class="chatbot-option">
+                <i class="fas fa-cog"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="chatbot-messages" id="chatMessages">
+            <!-- Bot Message -->
+            <div class="message bot-message">
+              <div>
+                👋 Hello! I'm your Shopping Helper. I can help you plan meals,
+                create shopping lists, and suggest ingredients based on what you
+                have at home.
+              </div>
+              <div class="message-time">10:05 AM</div>
+              <div class="message-suggestions">
+                <div class="suggestion-chip">📝 Create a shopping list</div>
+                <div class="suggestion-chip">🍽️ Plan meals for the week</div>
+                <div class="suggestion-chip">
+                  🔍 Find recipes with ingredients I have
+                </div>
+                <div class="suggestion-chip">💰 Budget-friendly meal ideas</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chatbot-footer">
+            <div class="chat-actions">
+              <div class="chat-action">
+                <i class="fas fa-camera"></i>
+              </div>
+              <div class="chat-action">
+                <i class="fas fa-microphone"></i>
+              </div>
+              <div class="chat-action">
+                <i class="fas fa-paperclip"></i>
+              </div>
+            </div>
+            <div style="position: relative; flex: 1">
+              <input
+                type="text"
+                id="messageInput"
+                class="message-input"
+                placeholder="Ask about meal plans, recipes, or shopping lists..."
+              />
+              <div
+                class="input-suggestions-container"
+                id="inputSuggestions"
+              ></div>
+            </div>
+            <button class="send-button" id="sendButton">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Data for demo purposes
+      // Data for demo purposes
+      const sampleIngredients = {
+        fruits: [
+          "Apple",
+          "Banana",
+          "Orange",
+          "Strawberry",
+          "Blueberry",
+          "Avocado",
+        ],
+        vegetables: [
+          "Carrot",
+          "Broccoli",
+          "Spinach",
+          "Tomato",
+          "Onion",
+          "Garlic",
+          "Bell Pepper",
+        ],
+        proteins: [
+          "Chicken Breast",
+          "Ground Beef",
+          "Tofu",
+          "Salmon",
+          "Eggs",
+          "Greek Yogurt",
+        ],
+        grains: ["Rice", "Pasta", "Quinoa", "Oats", "Bread", "Flour"],
+        dairy: ["Milk", "Cheese", "Butter", "Yogurt", "Cream"],
+        spices: [
+          "Salt",
+          "Pepper",
+          "Cumin",
+          "Cinnamon",
+          "Oregano",
+          "Paprika",
+          "Basil",
+          "Thyme",
+        ],
+      };
+
+      const sampleMealPlan = {
+        Monday: {
+          Breakfast: "Oatmeal with Berries",
+          Lunch: "Chicken Salad Sandwich",
+          Dinner: "Vegetable Stir Fry with Tofu",
+        },
+        Tuesday: {
+          Breakfast: "Greek Yogurt with Honey",
+          Lunch: "Quinoa Bowl with Vegetables",
+          Dinner: "Baked Salmon with Asparagus",
+        },
+        Wednesday: {
+          Breakfast: "Avocado Toast with Eggs",
+          Lunch: "Lentil Soup with Bread",
+          Dinner: "Pasta with Tomato Sauce",
+        },
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const chatMessages = document.getElementById("chatMessages");
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+        const inputSuggestions = document.getElementById("inputSuggestions");
+
+        // Feature card elements
+        const recipeAssistant = document.getElementById("recipe-assistant");
+        const foodFaq = document.getElementById("food-faq");
+        const shoppingHelper = document.getElementById("shopping-helper");
+
+        // Add event listeners
+        sendButton.addEventListener("click", sendMessage);
+        messageInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+
+        // Add event listeners for suggestion chips
+        document.querySelectorAll(".suggestion-chip").forEach((chip) => {
+          chip.addEventListener("click", function () {
+            messageInput.value = this.textContent;
+            sendMessage();
+          });
+        });
+
+        // Add event listeners for feature cards
+        recipeAssistant.addEventListener("click", () =>
+          switchMode("Recipe Assistant")
+        );
+        foodFaq.addEventListener("click", () => switchMode("Food FAQ"));
+        shoppingHelper.addEventListener("click", () =>
+          switchMode("Shopping Helper")
+        );
+
+        // Smart input suggestions
+        messageInput.addEventListener("input", showInputSuggestions);
+
+        function switchMode(mode) {
+          // Update UI to reflect the selected mode
+          document.querySelector(".chatbot-title span").textContent = mode;
+
+          // Change icon based on mode
+          const icon = document.querySelector(".chatbot-title i");
+          icon.className = ""; // Clear existing classes
+
+          if (mode === "Recipe Assistant") {
+            icon.className = "fas fa-utensils";
+            // Set all cards to default state
+            document.querySelectorAll(".feature-card").forEach((card) => {
+              card.classList.remove("scale-105", "bg-[#123d66c0]");
+            });
+            // Highlight the selected card
+            recipeAssistant.classList.add("scale-105", "bg-[#123d66c0]");
+
+            // Add welcome message for Recipe Assistant
+            addBotMessage(
+              "👨‍🍳 I'm your Recipe Assistant! Tell me what ingredients you have or what type of dish you want to make, and I'll help you find the perfect recipe."
+            );
+          } else if (mode === "Food FAQ") {
+            icon.className = "fas fa-question-circle";
+            // Set all cards to default state
+            document.querySelectorAll(".feature-card").forEach((card) => {
+              card.classList.remove("scale-105", "bg-[#123d66c0]");
+            });
+            // Highlight the selected card
+            foodFaq.classList.add("scale-105", "bg-[#123d66c0]");
+
+            // Add welcome message for Food FAQ
+            addBotMessage(
+              "🍽️ Welcome to Food FAQ! Ask me any questions about ingredients, cooking techniques, nutrition facts, or food storage."
+            );
+          } else if (mode === "Shopping Helper") {
+            icon.className = "fas fa-shopping-basket";
+            // Set all cards to default state
+            document.querySelectorAll(".feature-card").forEach((card) => {
+              card.classList.remove("scale-105", "bg-[#123d66c0]");
+            });
+            // Highlight the selected card
+            shoppingHelper.classList.add("scale-105", "bg-[#123d66c0]");
+
+            // Add welcome message for Shopping Helper
+            addBotMessage(
+              "🛒 I'm your Shopping Helper! I can help you plan meals, create shopping lists, and suggest ingredients based on what you have at home."
+            );
+          }
+        }
+
+        function sendMessage() {
+          const message = messageInput.value.trim();
+          if (message === "") return;
+
+          // Add user message to chat
+          addUserMessage(message);
+
+          // Clear input
+          messageInput.value = "";
+
+          // Show typing indicator
+          showTypingIndicator();
+
+          // Process the message and respond (simulated delay)
+          setTimeout(() => {
+            processMessage(message);
+            // Hide typing indicator
+            hideTypingIndicator();
+          }, 1000);
+        }
+
+        function addUserMessage(message) {
+          const currentTime = getCurrentTime();
+          const messageElement = document.createElement("div");
+          messageElement.className = "message user-message";
+          messageElement.innerHTML = `
+            <div>${message}</div>
+            <div class="message-time">${currentTime}</div>
+        `;
+          chatMessages.appendChild(messageElement);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addBotMessage(
+          message,
+          includeTime = true,
+          includeExtra = null
+        ) {
+          const currentTime = getCurrentTime();
+          const messageElement = document.createElement("div");
+          messageElement.className = "message bot-message";
+
+          let messageHTML = `<div>${message}</div>`;
+          if (includeTime) {
+            messageHTML += `<div class="message-time">${currentTime}</div>`;
+          }
+
+          if (includeExtra) {
+            messageHTML += includeExtra;
+          }
+
+          messageElement.innerHTML = messageHTML;
+          chatMessages.appendChild(messageElement);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+          const typingElement = document.createElement("div");
+          typingElement.className = "typing-indicator";
+          typingElement.id = "typingIndicator";
+          typingElement.innerHTML = `
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        `;
+          chatMessages.appendChild(typingElement);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+          const typingIndicator = document.getElementById("typingIndicator");
+          if (typingIndicator) {
+            typingIndicator.remove();
+          }
+        }
+
+        function getCurrentTime() {
+          const now = new Date();
+          let hours = now.getHours();
+          const ampm = hours >= 12 ? "PM" : "AM";
+          hours = hours % 12;
+          hours = hours ? hours : 12; // the hour '0' should be '12'
+          const minutes = now.getMinutes().toString().padStart(2, "0");
+          return `${hours}:${minutes} ${ampm}`;
+        }
+
+        function processMessage(message) {
+          // Convert message to lowercase for easier matching
+          const lowerMessage = message.toLowerCase();
+
+          // Check for shopping list related queries
+          if (
+            lowerMessage.includes("shopping list") ||
+            lowerMessage.includes("create a list") ||
+            lowerMessage.includes("make a list")
+          ) {
+            createShoppingList();
+          }
+          // Check for meal plan related queries
+          else if (
+            lowerMessage.includes("meal plan") ||
+            lowerMessage.includes("plan meals")
+          ) {
+            showMealPlan();
+          }
+          // Check for recipe suggestions
+          else if (
+            lowerMessage.includes("recipe") ||
+            lowerMessage.includes("cook") ||
+            lowerMessage.includes("make")
+          ) {
+            suggestRecipes(lowerMessage);
+          }
+          // Check for ingredient suggestions
+          else if (
+            lowerMessage.includes("ingredients") ||
+            lowerMessage.includes("what can i make")
+          ) {
+            suggestIngredients();
+          }
+          // Check for budget-friendly options
+          else if (
+            lowerMessage.includes("budget") ||
+            lowerMessage.includes("cheap") ||
+            lowerMessage.includes("inexpensive")
+          ) {
+            showBudgetOptions();
+          }
+          // Default response
+          else {
+            const defaultResponses = [
+              "I can help you with shopping lists, meal planning, and recipe suggestions. What would you like assistance with?",
+              "Would you like to create a shopping list, plan your meals for the week, or get recipe ideas?",
+              "I'm here to make your shopping experience easier. I can help with lists, meal plans, or finding recipes based on ingredients you have.",
+            ];
+            const randomResponse =
+              defaultResponses[
+                Math.floor(Math.random() * defaultResponses.length)
+              ];
+
+            // Add suggestion chips for guidance
+            const suggestionHTML = `
+                <div class="message-suggestions">
+                    <div class="suggestion-chip">📝 Create a shopping list</div>
+                    <div class="suggestion-chip">🍽️ Plan meals for the week</div>
+                    <div class="suggestion-chip">🔍 Find recipes with ingredients I have</div>
+                    <div class="suggestion-chip">💰 Budget-friendly meal ideas</div>
+                </div>
+            `;
+
+            addBotMessage(randomResponse, true, suggestionHTML);
+
+            // Re-add event listeners for new suggestion chips
+            document.querySelectorAll(".suggestion-chip").forEach((chip) => {
+              chip.addEventListener("click", function () {
+                messageInput.value = this.textContent;
+                sendMessage();
+              });
+            });
+          }
+        }
+
+        function createShoppingList() {
+          // Sample shopping list with checkboxes
+          const shoppingListHTML = `
+            <div class="shopping-list">
+                <div class="shopping-list-title">
+                    <i class="fas fa-clipboard-list"></i> Your Shopping List
+                </div>
+                <div class="shopping-list-items">
+                    <div class="shopping-list-item">
+                        <input type="checkbox" id="item1">
+                        <label for="item1">Chicken Breast</label>
+                        <span class="item-quantity">500g</span>
+                        <span class="item-delete"><i class="fas fa-times"></i></span>
+                    </div>
+                    <div class="shopping-list-item">
+                        <input type="checkbox" id="item2">
+                        <label for="item2">Brown Rice</label>
+                        <span class="item-quantity">1kg</span>
+                        <span class="item-delete"><i class="fas fa-times"></i></span>
+                    </div>
+                    <div class="shopping-list-item">
+                        <input type="checkbox" id="item3">
+                        <label for="item3">Broccoli</label>
+                        <span class="item-quantity">2 heads</span>
+                        <span class="item-delete"><i class="fas fa-times"></i></span>
+                    </div>
+                    <div class="shopping-list-item">
+                        <input type="checkbox" id="item4">
+                        <label for="item4">Bell Peppers</label>
+                        <span class="item-quantity">3</span>
+                        <span class="item-delete"><i class="fas fa-times"></i></span>
+                    </div>
+                    <div class="shopping-list-item">
+                        <input type="checkbox" id="item5">
+                        <label for="item5">Greek Yogurt</label>
+                        <span class="item-quantity">500ml</span>
+                        <span class="item-delete"><i class="fas fa-times"></i></span>
+                    </div>
+                </div>
+                <div class="shopping-list-footer">
+                    <button><i class="fas fa-plus"></i> Add Item</button>
+                    <button><i class="fas fa-share"></i> Share List</button>
+                    <button><i class="fas fa-save"></i> Save List</button>
+                </div>
+            </div>
+            
+            <div class="ingredient-suggestions">
+                <div class="ingredient-suggestion-title">Suggested additional items:</div>
+                <div class="message-suggestions">
+                    <div class="suggestion-chip">🥛 Milk</div>
+                    <div class="suggestion-chip">🧀 Cheese</div>
+                    <div class="suggestion-chip">🍎 Apples</div>
+                    <div class="suggestion-chip">🧅 Onions</div>
+                </div>
+            </div>
+        `;
+
+          addBotMessage(
+            "I've created a shopping list based on healthy meal options. You can check items off as you shop, add new items, or share the list with others.",
+            true,
+            shoppingListHTML
+          );
+
+          // Add functionality to delete buttons
+          document.querySelectorAll(".item-delete").forEach((deleteBtn) => {
+            deleteBtn.addEventListener("click", function () {
+              this.closest(".shopping-list-item").remove();
+            });
+          });
+
+          // Add functionality to suggestion chips
+          document
+            .querySelectorAll(".ingredient-suggestions .suggestion-chip")
+            .forEach((chip) => {
+              chip.addEventListener("click", function () {
+                const itemName = this.textContent.substring(2); // Remove emoji
+                const newItem = document.createElement("div");
+                newItem.className = "shopping-list-item";
+                newItem.innerHTML = `
+                    <input type="checkbox" id="item${Math.random()
+                      .toString(36)
+                      .substring(7)}">
+                    <label for="item">${itemName}</label>
+                    <span class="item-quantity">1</span>
+                    <span class="item-delete"><i class="fas fa-times"></i></span>
+                `;
+
+                document
+                  .querySelector(".shopping-list-items")
+                  .appendChild(newItem);
+
+                // Add delete functionality to new item
+                newItem
+                  .querySelector(".item-delete")
+                  .addEventListener("click", function () {
+                    this.closest(".shopping-list-item").remove();
+                  });
+              });
+            });
+        }
+
+        function showMealPlan() {
+          // Create meal plan HTML
+          let mealPlanHTML = `
+            <div class="meal-plan">
+                <div class="meal-plan-title">
+                    <i class="fas fa-calendar-alt"></i> Your Weekly Meal Plan
+                </div>
+        `;
+
+          // Add days from the sample meal plan
+          for (const day in sampleMealPlan) {
+            mealPlanHTML += `
+                <div class="meal-plan-day">
+                    <div class="meal-plan-day-title">${day}</div>
+            `;
+
+            // Add meals for each day
+            for (const meal in sampleMealPlan[day]) {
+              mealPlanHTML += `
+                    <div class="meal-plan-meal">
+                        <span class="meal-type">${meal}:</span>
+                        <span class="meal-name">${sampleMealPlan[day][meal]}</span>
+                    </div>
+                `;
+            }
+
+            mealPlanHTML += `</div>`;
+          }
+
+          // Add buttons
+          mealPlanHTML += `
+                <div class="shopping-list-footer">
+                    <button><i class="fas fa-shopping-cart"></i> Generate Shopping List</button>
+                    <button><i class="fas fa-print"></i> Print Plan</button>
+                    <button><i class="fas fa-edit"></i> Edit Plan</button>
+                </div>
+            </div>
+        `;
+
+          addBotMessage(
+            "Here's a sample meal plan for the week. This plan is designed to be nutritionally balanced and use ingredients efficiently to reduce waste.",
+            true,
+            mealPlanHTML
+          );
+
+          // Add event listener for the Generate Shopping List button
+          document
+            .querySelector(".meal-plan .fa-shopping-cart")
+            .parentElement.addEventListener("click", createShoppingList);
+        }
+
+        function suggestRecipes(message) {
+          // Simple recipe suggestion based on keywords
+          let recipeType = "healthy";
+
+          if (message.includes("chicken")) recipeType = "chicken";
+          else if (message.includes("vegetarian") || message.includes("vegan"))
+            recipeType = "vegetarian";
+          else if (message.includes("quick") || message.includes("fast"))
+            recipeType = "quick";
+          else if (message.includes("pasta")) recipeType = "pasta";
+
+          // Build recipe suggestions
+          let responseMessage = "";
+          let suggestionsHTML = `<div class="message-suggestions">`;
+
+          switch (recipeType) {
+            case "chicken":
+              responseMessage =
+                "Here are some delicious chicken recipes you might enjoy:";
+              suggestionsHTML += `
+                    <div class="suggestion-chip">🍗 Lemon Garlic Roast Chicken</div>
+                    <div class="suggestion-chip">🥗 Chicken Caesar Salad</div>
+                    <div class="suggestion-chip">🍜 Chicken Noodle Soup</div>
+                    <div class="suggestion-chip">🥘 Chicken Curry</div>
+                `;
+              break;
+            case "vegetarian":
+              responseMessage =
+                "Here are some tasty vegetarian recipe options:";
+              suggestionsHTML += `
+                    <div class="suggestion-chip">🥗 Buddha Bowl</div>
+                    <div class="suggestion-chip">🍝 Vegetable Lasagna</div>
+                    <div class="suggestion-chip">🌮 Bean & Vegetable Tacos</div>
+                    <div class="suggestion-chip">🍲 Lentil Soup</div>
+                `;
+              break;
+            case "quick":
+              responseMessage =
+                "Need something quick? Try these 15-minute recipes:";
+              suggestionsHTML += `
+                    <div class="suggestion-chip">🍳 Quick Veggie Omelette</div>
+                    <div class="suggestion-chip">🍝 Pasta Aglio e Olio</div>
+                    <div class="suggestion-chip">🌯 Bean & Cheese Quesadilla</div>
+                    <div class="suggestion-chip">🥪 Avocado Toast with Egg</div>
+                `;
+              break;
+            case "pasta":
+              responseMessage = "Here are some delicious pasta recipes to try:";
+              suggestionsHTML += `
+                    <div class="suggestion-chip">🍝 Classic Spaghetti Carbonara</div>
+                    <div class="suggestion-chip">🍝 Creamy Mushroom Pasta</div>
+                    <div class="suggestion-chip">🍝 Pesto Pasta with Vegetables</div>
+                    <div class="suggestion-chip">🍝 One-Pot Tomato Pasta</div>
+                `;
+              break;
+            default:
+              responseMessage = "Here are some healthy recipe suggestions:";
+              suggestionsHTML += `
+                    <div class="suggestion-chip">🥗 Quinoa Salad</div>
+                    <div class="suggestion-chip">🍲 Turkey Chili</div>
+                    <div class="suggestion-chip">🍣 Baked Salmon</div>
+                    <div class="suggestion-chip">🥘 Vegetable Stir-Fry</div>
+                `;
+          }
+
+          suggestionsHTML += `</div>`;
+
+          addBotMessage(responseMessage, true, suggestionsHTML);
+
+          // Add event listeners for recipe suggestion chips
+          document
+            .querySelectorAll(".message-suggestions .suggestion-chip")
+            .forEach((chip) => {
+              chip.addEventListener("click", function () {
+                const recipeName = this.textContent.substring(2); // Remove emoji
+                addUserMessage(`Tell me more about ${recipeName}`);
+
+                // Simulate bot response with delay
+                showTypingIndicator();
+                setTimeout(() => {
+                  showRecipeDetails(recipeName);
+                  hideTypingIndicator();
+                }, 1000);
+              });
+            });
+        }
+
+        function showRecipeDetails(recipeName) {
+          // This would typically come from an API or database
+          // Here we're just using a simple hardcoded response
+          const response = `Here's how to make ${recipeName}:\n\nIngredients:\n- Main ingredients based on the recipe\n- Additional common ingredients\n- Spices and seasonings\n\nInstructions:\n1. Prep your ingredients\n2. Cook according to the recipe\n3. Serve and enjoy!\n\nWould you like to add the ingredients to your shopping list?`;
+
+          const addToListHTML = `
+            <div class="message-suggestions">
+                <div class="suggestion-chip">✅ Add ingredients to shopping list</div>
+                <div class="suggestion-chip">📋 Show nutrition information</div>
+                <div class="suggestion-chip">🍽️ Find similar recipes</div>
+            </div>
+        `;
+
+          addBotMessage(response, true, addToListHTML);
+
+          // Add event listeners for suggestion chips
+          document
+            .querySelectorAll(".message-suggestions .suggestion-chip")
+            .forEach((chip) => {
+              chip.addEventListener("click", function () {
+                if (this.textContent.includes("Add ingredients")) {
+                  addUserMessage("Add ingredients to shopping list");
+
+                  // Show typing indicator and create shopping list
+                  showTypingIndicator();
+                  setTimeout(() => {
+                    createShoppingList();
+                    hideTypingIndicator();
+                  }, 1000);
+                }
+              });
+            });
+        }
+
+        function suggestIngredients() {
+          // Create category-based ingredient suggestions
+          let responseMessage =
+            "Here are some ingredient suggestions grouped by category. What do you have in your kitchen?";
+
+          let categoryHTML = `
+            <div style="margin-top: 10px;">
+                <div style="font-weight: 600; margin-bottom: 8px;">Select a category:</div>
+                <div class="message-suggestions">
+                    <div class="suggestion-chip category-chip" data-category="fruits">🍎 Fruits</div>
+                    <div class="suggestion-chip category-chip" data-category="vegetables">🥦 Vegetables</div>
+                    <div class="suggestion-chip category-chip" data-category="proteins">🍗 Proteins</div>
+                    <div class="suggestion-chip category-chip" data-category="grains">🌾 Grains</div>
+                    <div class="suggestion-chip category-chip" data-category="dairy">🥛 Dairy</div>
+                    <div class="suggestion-chip category-chip" data-category="spices">🌶️ Spices</div>
+                </div>
+            </div>
+        `;
+
+          addBotMessage(responseMessage, true, categoryHTML);
+
+          // Add event listeners for category chips
+          document.querySelectorAll(".category-chip").forEach((chip) => {
+            chip.addEventListener("click", function () {
+              const category = this.getAttribute("data-category");
+              showIngredientsForCategory(category);
+            });
+          });
+        }
+
+        function showIngredientsForCategory(category) {
+          // Get ingredients for the selected category
+          const ingredients = sampleIngredients[category] || [];
+
+          // Create HTML for ingredient chips
+          let ingredientsHTML = `
+            <div class="shopping-list">
+                <div class="shopping-list-title">
+                    <i class="fas fa-list"></i> ${
+                      category.charAt(0).toUpperCase() + category.slice(1)
+                    }
+                </div>
+                <div class="shopping-list-items">
+        `;
+
+          // Add ingredients as checkable items
+          ingredients.forEach((ingredient, index) => {
+            ingredientsHTML += `
+                <div class="shopping-list-item">
+                    <input type="checkbox" id="${category}${index}">
+                    <label for="${category}${index}">${ingredient}</label>
+                    <span class="item-delete"><i class="fas fa-plus"></i></span>
+                </div>
+            `;
+          });
+
+          ingredientsHTML += `
+                </div>
+                <div class="shopping-list-footer">
+                    <button><i class="fas fa-search"></i> Find Recipes With Selected</button>
+                </div>
+            </div>
+        `;
+
+          addBotMessage(
+            `Check the ingredients you have from the ${category} category:`,
+            true,
+            ingredientsHTML
+          );
+
+          // Add functionality to "Find Recipes" button
+          document
+            .querySelector(".shopping-list-footer button")
+            .addEventListener("click", function () {
+              const selectedIngredients = [];
+              document
+                .querySelectorAll(".shopping-list-item input:checked")
+                .forEach((checkbox) => {
+                  selectedIngredients.push(
+                    checkbox.nextElementSibling.textContent
+                  );
+                });
+
+              if (selectedIngredients.length > 0) {
+                addUserMessage(
+                  `Find recipes with: ${selectedIngredients.join(", ")}`
+                );
+
+                // Show typing indicator and suggest recipes
+                showTypingIndicator();
+                setTimeout(() => {
+                  suggestRecipesWithIngredients(selectedIngredients);
+                  hideTypingIndicator();
+                }, 1000);
+              } else {
+                addBotMessage(
+                  "Please select at least one ingredient to find recipes."
+                );
+              }
+            });
+        }
+
+        function suggestRecipesWithIngredients(ingredients) {
+          // In a real app, this would query a recipe API with the ingredients
+          // For now, we'll just provide some generic suggestions
+
+          const responseMessage = `Here are some recipes you can make with ${ingredients.join(
+            ", "
+          )}:`;
+
+          const recipeHTML = `
+            <div class="message-suggestions">
+                <div class="suggestion-chip">🍲 Simple ${ingredients[0]} Dish</div>
+                <div class="suggestion-chip">🥗 ${ingredients[0]} Salad</div>
+                <div class="suggestion-chip">🍜 Quick ${ingredients[0]} Soup</div>
+                <div class="suggestion-chip">🥘 ${ingredients[0]} Stir-Fry</div>
+            </div>
+        `;
+
+          addBotMessage(responseMessage, true, recipeHTML);
+
+          // Add event listeners for recipe suggestion chips
+          document
+            .querySelectorAll(".message-suggestions .suggestion-chip")
+            .forEach((chip) => {
+              chip.addEventListener("click", function () {
+                const recipeName = this.textContent.substring(2); // Remove emoji
+                addUserMessage(`Tell me more about ${recipeName}`);
+
+                // Simulate bot response with delay
+                showTypingIndicator();
+                setTimeout(() => {
+                  showRecipeDetails(recipeName);
+                  hideTypingIndicator();
+                }, 1000);
+              });
+            });
+        }
+
+        function showBudgetOptions() {
+          const budgetResponse =
+            "Here are some budget-friendly meal ideas that are nutritious and delicious:";
+
+          const budgetHTML = `
+            <div style="margin-top: 10px;">
+                <div class="message-suggestions">
+                    <div class="suggestion-chip">🍜 Bean and Rice Bowl</div>
+                    <div class="suggestion-chip">🥣 Lentil Soup</div>
+                    <div class="suggestion-chip">🍝 Pasta with Vegetables</div>
+                    <div class="suggestion-chip">🥚 Frittata with Leftovers</div>
+                    <div class="suggestion-chip">🥔 Baked Potato Bar</div>
+                    <div class="suggestion-chip">🥙 Chickpea Wraps</div>
+                </div>
+            </div>
+            <div style="margin-top: 15px; font-weight: 500;">Budget Tips:</div>
+            <div style="margin-top: 5px;">
+                1. Buy seasonal produce<br>
+                2. Use frozen vegetables<br>
+                3. Buy in bulk for pantry staples<br>
+                4. Plan meals around sales<br>
+                5. Repurpose leftovers
+            </div>
+        `;
+
+          addBotMessage(budgetResponse, true, budgetHTML);
+
+          // Add event listeners for suggestion chips
+          document
+            .querySelectorAll(".message-suggestions .suggestion-chip")
+            .forEach((chip) => {
+              chip.addEventListener("click", function () {
+                const recipeName = this.textContent.substring(2); // Remove emoji
+                addUserMessage(`Tell me more about ${recipeName}`);
+
+                // Simulate bot response with delay
+                showTypingIndicator();
+                setTimeout(() => {
+                  showRecipeDetails(recipeName);
+                  hideTypingIndicator();
+                }, 1000);
+              });
+            });
+        }
+
+        function showInputSuggestions() {
+          const input = messageInput.value.toLowerCase().trim();
+
+          // Don't show suggestions for empty input
+          if (input === "") {
+            inputSuggestions.style.display = "none";
+            return;
+          }
+
+          // Simple logic for input suggestions
+          let suggestions = [];
+
+          if (input.includes("recipe")) {
+            suggestions = [
+              "Recipe for chicken dinner",
+              "Recipe using pasta and tomatoes",
+              "Recipe for quick breakfast",
+              "Recipe for vegetarian meal",
+            ];
+          } else if (input.includes("shop") || input.includes("list")) {
+            suggestions = [
+              "Shopping list for the week",
+              "Shopping list for dinner tonight",
+              "Shopping list for healthy meals",
+              "Shopping list for 4 people",
+            ];
+          } else if (input.includes("meal") || input.includes("plan")) {
+            suggestions = [
+              "Meal plan for weight loss",
+              "Meal plan for the week",
+              "Meal plan for family of 4",
+              "Meal plan on a budget",
+            ];
+          }
+
+          // Filter suggestions to match input
+          suggestions = suggestions.filter((s) =>
+            s.toLowerCase().includes(input)
+          );
+
+          // Update suggestion container
+          if (suggestions.length > 0) {
+            inputSuggestions.innerHTML = "";
+            suggestions.forEach((s) => {
+              const div = document.createElement("div");
+              div.className = "input-suggestion";
+              div.textContent = s;
+              div.addEventListener("click", () => {
+                messageInput.value = s;
+                inputSuggestions.style.display = "none";
+              });
+              inputSuggestions.appendChild(div);
+            });
+            inputSuggestions.style.display = "block";
+          } else {
+            inputSuggestions.style.display = "none";
+          }
+        }
+
+        // Hide suggestions when clicking outside
+        document.addEventListener("click", function (e) {
+          if (e.target !== messageInput && e.target !== inputSuggestions) {
+            inputSuggestions.style.display = "none";
+          }
+        });
+
+        // Add event listeners to the feature cards
+        document
+          .querySelector(".chatbot-float-button")
+          ?.addEventListener("click", function () {
+            document
+              .querySelector(".chatbot-container")
+              .scrollIntoView({ behavior: "smooth" });
+          });
+      });
+    </script>
+  </body>
+</html>
