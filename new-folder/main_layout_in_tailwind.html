@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taste'n Talk with Blog</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#002140",
+              secondary: "#004a8f",
+              light: "#e2e4d6",
+            },
+            fontFamily: {
+              poppins: ["Poppins", "Arial", "sans-serif"],
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0", transform: "translateY(-20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+            },
+            animation: {
+              fadeIn: "fadeIn 0.8s ease-in-out",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-br from-primary to-secondary min-h-screen font-poppins text-light m-0 p-0 box-border"
+  >
+    <!-- Header -->
+    <header
+      class="animate-fadeIn w-full flex items-center justify-between p-3 bg-light shadow-lg fixed top-0 left-0 right-0 z-10 h-[100px] animate-[fadeIn_0.8s_ease-in-out]"
+    >
+      <!-- Logo -->
+      <div class="flex items-center space-x-4">
+        <div
+          class="text-2xl font-bold hidden md:flex items-center gap-3 text-primary"
+        >
+          <img
+            src="/api/placeholder/75/75"
+            alt="Logo"
+            class="w-[75px] rounded-full shadow-md cursor-pointer"
+          />
+          <span class="drop-shadow-xl">Taste'n Talk</span>
+        </div>
+      </div>
+
+      <!-- Map Button -->
+      <button
+        class="bg-primary p-2 rounded-full w-[55px] shadow-md cursor-pointer hover:scale-110 transition-transform duration-300"
+        title="Map"
+      >
+        <i class="fas fa-map-marked-alt"></i>
+      </button>
+
+      <!-- Search Bar -->
+      <div class="relative w-[30%] max-w-[400px]">
+        <input
+          type="text"
+          placeholder="Search"
+          class="w-full py-[10px] pr-[40px] pl-[20px] rounded-[25px] bg-[#002140] text-[#f8f9fa] italic placeholder-[#f8f9fa] placeholder-italic shadow-[0_4px_6px_rgba(0,33,64,0.89)] border-none transition-all duration-300 ease-in-out focus:shadow-[0_5px_25px_rgba(0,0,0,0.2)] focus:-translate-y-0.5 focus:outline-none"
+        />
+        <button
+          class="absolute right-[15px] top-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent border-none text-[#f8f9fa] cursor-pointer"
+        >
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+
+      <!-- Create Button -->
+      <button
+        class="flex items-center justify-center bg-gradient-to-r from-[#002140] to-[#004a8f] text-[#f8f9fa] rounded-[25px] px-3 py-2 shadow-[0_4px_6px_rgba(0,33,64,0.89)] border-none cursor-pointer transition-all duration-300 hover:shadow-[0_6px_8px_rgba(0,0,0,0.3)] hover:-translate-y-1"
+      >
+        <span class="text-[16px] font-semibold mr-1">Create</span>➕
+      </button>
+
+      <!-- Action Icons -->
+      <div
+        class="flex items-center justify-between w-1/4 md:w-1/4 sm:w-full gap-2"
+      >
+        <button
+          class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-300 hover:-translate-y-[3px]"
+        >
+          🛒
+        </button>
+        <button
+          class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-300 hover:-translate-y-[3px]"
+        >
+          🔖
+        </button>
+        <button
+          class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-300 hover:-translate-y-[3px]"
+        >
+          ❤️
+        </button>
+        <button
+          class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-300 hover:-translate-y-[3px]"
+        >
+          🔔
+        </button>
+        <button
+          class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-300 hover:-translate-y-[3px]"
+        >
+          <i class="fas fa-user text-primary rounded-full px-2 py-1"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <!-- Sidebar -->
+    <aside
+      class="w-[250px] h-[calc(100vh-100px)] fixed top-[100px] left-0 bg-[#ffffff26] backdrop-blur-md p-4 border-r border-white/20 shadow-[5px_0_15px_rgba(0,0,0,0.1)] z-[5] overflow-y-hidden"
+    >
+      <nav
+        class="flex flex-col justify-between text-[16px] font-semibold gap-4 text-[#e2e4d6]"
+      >
+        <!-- Reusable nav-link format for all items -->
+        <a
+          href="#"
+          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
+        >
+          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Home" />
+          <span>Home</span>
+        </a>
+        <a
+          href="#"
+          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
+        >
+          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Cart" />
+          <span>Shopping</span>
+        </a>
+        <a
+          href="#"
+          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
+        >
+          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Courses" />
+          <span>Courses</span>
+        </a>
+        <a
+          href="#"
+          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
+        >
+          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Blog" />
+          <span>Blog/Articles</span>
+        </a>
+        <a
+          href="#"
+          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
+        >
+          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Inbox" />
+          <span>Inbox</span>
+        </a>
+        <a
+          href="#"
+          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
+        >
+          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Community" />
+          <span>Community</span>
+        </a>
+        <a
+          href="#"
+          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
+        >
+          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Chefii" />
+          <span>Chefii</span>
+        </a>
+        <a
+          href="#"
+          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
+        >
+          <img src="/api/placeholder/35/35" class   ="w-[35px]" alt="Tiffin" />
+          <span>Tiffin</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main
+      class="ml-[250px] p-5 w-[calc(100%-250px)] mt-[100px] min-h-[calc(100vh-100px)] z-1"
+    >
+      <!-- Main content goes here -->
+    </main>
+
+    <script>
+      // Add click event listener to all navigation links
+      document.querySelectorAll(".nav-link").forEach((link) => {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          // Remove active class from all links
+          document.querySelectorAll(".nav-link").forEach((item) => {
+            item.classList.remove("bg-light", "text-primary", "scale-110");
+            item.classList.add("text-light");
+          });
+
+          // Add active class to clicked link
+          this.classList.add("bg-light", "text-primary", "scale-110");
+          this.classList.remove("text-light");
+        });
+      });
+    </script>
+  </body>
+</html>
