@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taste'n Talk with Blog</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="nav_bar_side_bar_container.css">
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="/images/tntLogo.png" alt="Logo" />
+        <span>Taste'n Talk</span>
+      </div>
+
+      <button class="map-button" title="Map">
+        <i class="fas fa-map-marked-alt"></i>
+      </button>
+
+      <div class="search-container">
+        <input type="text" class="search-bar" placeholder="Search" />
+        <button class="search-button">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+
+      <button class="create-button"><span>Create</span>➕</button>
+
+      <div class="header-icons">
+        <button>🛒</button>
+        <button>🔖</button>
+        <button>❤️</button>
+        <button>🔔</button>
+        <button class="account-button" title="Account">
+          <i class="fas fa-user"></i>
+      </button>
+      
+      </div>
+    </header>
+
+    <aside class="sidebar glass-effect">
+      <nav>
+        <a href="#" class="nav-link" data-section="home">
+          <img src="home.png" alt="Home" /> <span>Home</span>
+        </a>
+        <a href="#" class="nav-link" data-section="shopping">
+          <img src="cart.png" alt="Shopping" /> <span>Shopping</span>
+        </a>
+        <a href="#" class="nav-link" data-section="courses">
+          <i class="fas fa-graduation-cap"></i> <span>Courses</span>
+        </a>
+        <a href="#" class="nav-link active" data-section="blog">
+          <img src="blog.png" alt="Blog" /> <span>Blog/Articles</span>
+        </a>
+        <a href="#" class="nav-link" data-section="inbox">
+          <img src="inbox.png" alt="Inbox" /> <span>Inbox</span>
+        </a>
+        <a href="#" class="nav-link" data-section="community">
+          <img src="community.png" alt="Community" /> <span>Community</span>
+        </a>
+        <a href="#" class="nav-link" data-section="chatbot">
+          <img src="chatbot.png" alt="ChatBot" /> <span>ChatBot</span>
+        </a>
+        <a href="#" class="nav-link" data-section="tiffin">
+          <img src="tiffin.png" alt="Tiffin" /> <span>Tiffin</span>
+        </a>
+      </nav>
+    </aside>
+
+    <div class="main-container">
+      <!-- Content goes here -->
+    </div>
+
+    <script src="nav_bar_side_bar_container.js"></script>
+  </body>
+</html>
