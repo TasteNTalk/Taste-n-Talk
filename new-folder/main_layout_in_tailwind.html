@@ -13,11 +13,6 @@
       tailwind.config = {
         theme: {
           extend: {
-            colors: {
-              primary: "#002140",
-              secondary: "#004a8f",
-              light: "#e2e4d6",
-            },
             fontFamily: {
               poppins: ["Poppins", "Arial", "sans-serif"],
             },
@@ -26,9 +21,20 @@
                 "0%": { opacity: "0", transform: "translateY(-20px)" },
                 "100%": { opacity: "1", transform: "translateY(0)" },
               },
+              slideDown: {
+                "0%": { opacity: "0", transform: "translateY(-10px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              pulse: {
+                "0%": { transform: "scale(1)" },
+                "50%": { transform: "scale(1.05)" },
+                "100%": { transform: "scale(1)" },
+              },
             },
             animation: {
               fadeIn: "fadeIn 0.8s ease-in-out",
+              slideDown: "slideDown 0.3s ease-in-out forwards",
+              pulse: "pulse 2s infinite",
             },
           },
         },
@@ -39,40 +45,46 @@
     </style>
   </head>
   <body
-    class="bg-gradient-to-br from-primary to-secondary min-h-screen font-poppins text-light m-0 p-0 box-border"
+    class="bg-gradient-to-br from-[#002140] to-[#004a8f] min-h-screen font-poppins text-[#e2e4d6] m-0 p-0 box-border"
   >
     <!-- Header -->
     <header
-      class="animate-fadeIn w-full flex items-center justify-between p-3 bg-light shadow-lg fixed top-0 left-0 right-0 z-10 h-[100px] animate-[fadeIn_0.8s_ease-in-out]"
+      class="animate-fadeIn w-full flex items-center justify-between p-3 bg-[#e2e4d6] shadow-lg fixed top-0 left-0 right-0 z-10 h-[100px]"
     >
       <!-- Logo -->
       <div class="flex items-center space-x-4">
         <div
-          class="text-2xl font-bold hidden md:flex items-center gap-3 text-primary"
+          class="text-2xl font-bold hidden md:flex items-center gap-3 text-[#002140]"
         >
           <img
             src="/api/placeholder/75/75"
             alt="Logo"
-            class="w-[75px] rounded-full shadow-md cursor-pointer"
+            class="w-[75px] rounded-full shadow-md cursor-pointer hover:scale-110 transition-transform duration-[0.8s]"
           />
           <span class="drop-shadow-xl">Taste'n Talk</span>
         </div>
       </div>
 
       <!-- Map Button -->
-      <button
-        class="bg-primary p-2 rounded-full w-[55px] shadow-md cursor-pointer hover:scale-110 transition-transform duration-300"
-        title="Map"
-      >
-        <i class="fas fa-map-marked-alt"></i>
-      </button>
+      <div class="relative group">
+        <button
+          class="bg-[#002140] p-2 rounded-full w-[55px] shadow-md cursor-pointer hover:scale-110 transition-transform duration-[0.8s] hover:shadow-lg"
+          title="Map"
+        >
+          <i class="fas fa-map-marked-alt"></i>
+        </button>
+        <span
+          class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[0.8s] whitespace-nowrap text-sm"
+          >Find Nearby Locations</span
+        >
+      </div>
 
       <!-- Search Bar -->
       <div class="relative w-[30%] max-w-[400px]">
         <input
           type="text"
-          placeholder="Search"
-          class="w-full py-[10px] pr-[40px] pl-[20px] rounded-[25px] bg-[#002140] text-[#f8f9fa] italic placeholder-[#f8f9fa] placeholder-italic shadow-[0_4px_6px_rgba(0,33,64,0.89)] border-none transition-all duration-300 ease-in-out focus:shadow-[0_5px_25px_rgba(0,0,0,0.2)] focus:-translate-y-0.5 focus:outline-none"
+          placeholder="Search recipes, chefs, or topics..."
+          class="w-full py-[10px] pr-[40px] pl-[20px] rounded-[25px] bg-[#002140] text-[#f8f9fa] italic placeholder-[#f8f9fa] placeholder-italic shadow-[0_4px_6px_rgba(0,33,64,0.89)] border-none transition-all duration-[0.8s] ease-in-out focus:shadow-[0_5px_25px_rgba(0,0,0,0.2)] focus:-translate-y-0.5 focus:outline-none"
         />
         <button
           class="absolute right-[15px] top-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent border-none text-[#f8f9fa] cursor-pointer"
@@ -81,110 +93,288 @@
         </button>
       </div>
 
-      <!-- Create Button -->
-      <button
-        class="flex items-center justify-center bg-gradient-to-r from-[#002140] to-[#004a8f] text-[#f8f9fa] rounded-[25px] px-3 py-2 shadow-[0_4px_6px_rgba(0,33,64,0.89)] border-none cursor-pointer transition-all duration-300 hover:shadow-[0_6px_8px_rgba(0,0,0,0.3)] hover:-translate-y-1"
-      >
-        <span class="text-[16px] font-semibold mr-1">Create</span>➕
-      </button>
+      <!-- Create Button with Dropdown -->
+      <div class="relative inline-block group">
+        <button
+          class="flex items-center justify-center bg-gradient-to-r from-[#002140] to-[#004a8f] text-[#f8f9fa] rounded-[25px] px-3 py-2 shadow-[0_4px_6px_rgba(0,33,64,0.89)] border-none cursor-pointer transition-all duration-[0.8s] hover:shadow-[0_6px_8px_rgba(0,0,0,0.3)] hover:-translate-y-1"
+        >
+          <span class="text-[16px] font-semibold mr-1">Create</span>➕
+        </button>
+        <div
+          class="invisible group-hover:visible opacity-0 group-hover:opacity-100 absolute right-0 mt-2 w-40 bg-white/90 backdrop-blur-md min-w-[160px] shadow-lg z-50 rounded-xl transform translate-y-2 group-hover:translate-y-0 transition-all duration-500"
+        >
+          <div
+            class="p-2 rounded-t-lg bg-[#002140] text-[#e2e4d6] font-semibold text-center border-b border-gray-200"
+          >
+            Create New
+          </div>
+          <a
+            href="#"
+            class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+            >Post Story</a
+          >
+          <a
+            href="#"
+            class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+            >Post Videos</a
+          >
+          <a
+            href="#"
+            class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+            >Post Short Videos</a
+          >
+          <a
+            href="#"
+            class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+            >Blogs/Article</a
+          >
+          <a
+            href="#"
+            class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+            >Go Live</a
+          >
+        </div>
+      </div>
 
       <!-- Action Icons -->
       <div
         class="flex items-center justify-between w-1/4 md:w-1/4 sm:w-full gap-2"
       >
-        <button
-          class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-300 hover:-translate-y-[3px]"
-        >
-          🛒
-        </button>
-        <button
-          class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-300 hover:-translate-y-[3px]"
-        >
-          🔖
-        </button>
-        <button
-          class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-300 hover:-translate-y-[3px]"
-        >
-          ❤️
-        </button>
-        <button
-          class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-300 hover:-translate-y-[3px]"
-        >
-          🔔
-        </button>
-        <button
-          class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-300 hover:-translate-y-[3px]"
-        >
-          <i class="fas fa-user text-primary rounded-full px-2 py-1"></i>
-        </button>
+        <!-- Cart Button -->
+        <div class="relative group">
+          <button
+            class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-[0.8s] hover:-translate-y-[3px] hover:shadow-lg"
+          >
+            🛒
+          </button>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[0.8s] whitespace-nowrap text-sm"
+            >Shopping Cart</span
+          >
+        </div>
+
+        <!-- Bookmark Button -->
+        <div class="relative group">
+          <button
+            class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-[0.8s] hover:-translate-y-[3px] hover:shadow-lg"
+          >
+            🔖
+          </button>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[0.8s] whitespace-nowrap text-sm"
+            >Saved Items</span
+          >
+        </div>
+
+        <!-- Likes Button -->
+        <div class="relative group">
+          <button
+            class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-[0.8s] hover:-translate-y-[3px] hover:shadow-lg"
+          >
+            ❤️
+          </button>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[0.8s] whitespace-nowrap text-sm"
+            >My Favorites</span
+          >
+        </div>
+
+        <!-- Notifications Button -->
+        <div class="relative group">
+          <button
+            class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-[0.8s] hover:-translate-y-[3px] hover:shadow-lg"
+          >
+            🔔
+          </button>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[0.8s] whitespace-nowrap text-sm"
+            >Notifications</span
+          >
+        </div>
+
+        <!-- User Account Dropdown -->
+        <div class="relative inline-block group">
+          <button
+            class="text-[24px] rounded-full shadow-[0_4px_6px_rgba(0,33,64,0.89)] px-3 bg-transparent border-none cursor-pointer transition-transform duration-300 hover:-translate-y-[3px] hover:shadow-lg"
+          >
+            <i class="fas fa-user text-[#002140] rounded-full px-2 py-1"></i>
+          </button>
+          <div
+            class="invisible group-hover:visible opacity-0 group-hover:opacity-100 absolute right-0 mt-2 w-48 bg-white/90 backdrop-blur-md min-w-[160px] shadow-lg z-50 rounded-xl transform translate-y-2 group-hover:translate-y-0 transition-all duration-[0.8s]"
+          >
+            <div
+              class="p-2 rounded-t-lg bg-[#002140] text-[#e2e4d6] font-semibold text-center border-b border-gray-200"
+            >
+              My Account
+            </div>
+            <a
+              href="#"
+              class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+              >My Profile</a
+            >
+            <a
+              href="#"
+              class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+              >Settings</a
+            >
+            <a
+              href="#"
+              class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+              >Feedback</a
+            >
+            <a
+              href="#"
+              class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+              >Help?</a
+            >
+            <a
+              href="#"
+              class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+              >Report</a
+            >
+            <a
+              href="#"
+              class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+              >Blocked</a
+            >
+            <a
+              href="#"
+              class="block px-4 py-2 font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5 bg-yellow-100 text-yellow-700"
+              >Upgrade to Premium</a
+            >
+            <a
+              href="#"
+              class="block px-4 py-2 text-[#002140] font-medium transition-all duration-200 hover:bg-[#002140]/10 hover:translate-x-1.5"
+              >Customer Service</a
+            >
+          </div>
+        </div>
       </div>
     </header>
 
     <!-- Sidebar -->
-    <!-- Sidebar -->
     <aside
-      class="w-[250px] h-[calc(100vh-100px)] fixed top-[100px] left-0 bg-[#ffffff26] backdrop-blur-md p-4 border-r border-white/20 shadow-[5px_0_15px_rgba(0,0,0,0.1)] z-[5] overflow-y-hidden"
+      class="w-[250px] h-[calc(100vh-100px)] fixed top-[100px] left-0 bg-white/15 backdrop-blur-md p-4 border-r border-white/20 shadow-[5px_0_15px_rgba(0,0,0,0.1)] z-[5] overflow-y-hidden"
     >
       <nav
         class="flex flex-col justify-between text-[16px] font-semibold gap-4 text-[#e2e4d6]"
       >
         <!-- Reusable nav-link format for all items -->
-        <a
-          href="#"
-          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
-        >
-          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Home" />
-          <span>Home</span>
-        </a>
-        <a
-          href="#"
-          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
-        >
-          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Cart" />
-          <span>Shopping</span>
-        </a>
-        <a
-          href="#"
-          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
-        >
-          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Courses" />
-          <span>Courses</span>
-        </a>
-        <a
-          href="#"
-          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
-        >
-          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Blog" />
-          <span>Blog/Articles</span>
-        </a>
-        <a
-          href="#"
-          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
-        >
-          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Inbox" />
-          <span>Inbox</span>
-        </a>
-        <a
-          href="#"
-          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
-        >
-          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Community" />
-          <span>Community</span>
-        </a>
-        <a
-          href="#"
-          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
-        >
-          <img src="/api/placeholder/35/35" class="w-[35px]" alt="Chefii" />
-          <span>Chefii</span>
-        </a>
-        <a
-          href="#"
-          class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-300 w-full"
-        >
-          <img src="/api/placeholder/35/35" class   ="w-[35px]" alt="Tiffin" />
-          <span>Tiffin</span>
-        </a>
+        <div class="relative group">
+          <a
+            href="#"
+            class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-[0.8s] w-full hover:shadow-lg"
+          >
+            <img src="/api/placeholder/35/35" class="w-[35px]" alt="Home" />
+            <span>Home</span>
+          </a>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[1.2s] whitespace-nowrap text-sm"
+            >My feed</span
+          >
+        </div>
+
+        <div class="relative group">
+          <a
+            href="#"
+            class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-[1.2s] w-full hover:shadow-lg"
+          >
+            <img src="/api/placeholder/35/35" class="w-[35px]" alt="Cart" />
+            <span>Shopping</span>
+          </a>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[1.2s] whitespace-nowrap text-sm"
+            >Shop for ingredients</span
+          >
+        </div>
+
+        <div class="relative group">
+          <a
+            href="#"
+            class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-[1.2s] w-full hover:shadow-lg"
+          >
+            <img src="/api/placeholder/35/35" class="w-[35px]" alt="Courses" />
+            <span>Courses</span>
+          </a>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[1.2s] whitespace-nowrap text-sm"
+            >Cooking classes</span
+          >
+        </div>
+
+        <div class="relative group">
+          <a
+            href="#"
+            class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-[1.2s] w-full hover:shadow-lg"
+          >
+            <img src="/api/placeholder/35/35" class="w-[35px]" alt="Blog" />
+            <span>Blogs</span>
+          </a>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[1.2s] whitespace-nowrap text-sm"
+            >Read cooking tips</span
+          >
+        </div>
+
+        <div class="relative group">
+          <a
+            href="#"
+            class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-[1.2s] w-full hover:shadow-lg"
+          >
+            <img src="/api/placeholder/35/35" class="w-[35px]" alt="Inbox" />
+            <span>Inbox</span>
+          </a>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[1.2s] whitespace-nowrap text-sm"
+            >My messages</span
+          >
+        </div>
+
+        <div class="relative group">
+          <a
+            href="#"
+            class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-[1.2s] w-full hover:shadow-lg"
+          >
+            <img
+              src="/api/placeholder/35/35"
+              class="w-[35px]"
+              alt="Community"
+            />
+            <span>Community</span>
+          </a>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[1.2s] whitespace-nowrap text-sm"
+            >Connect with others</span
+          >
+        </div>
+
+        <div class="relative group">
+          <a
+            href="#"
+            class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-[1.2s] w-full hover:shadow-lg"
+          >
+            <img src="/api/placeholder/35/35" class="w-[35px]" alt="Chefii" />
+            <span>Chefii</span>
+          </a>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[1.2s] whitespace-nowrap text-sm"
+            >AI cooking assistant</span
+          >
+        </div>
+
+        <div class="relative group">
+          <a
+            href="#"
+            class="nav-link group relative flex items-center gap-4 p-2 rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.5)] no-underline text-inherit hover:translate-x-[5px] hover:bg-white/25 transition-all duration-[1.2s] w-full hover:shadow-lg"
+          >
+            <img src="/api/placeholder/35/35" class="w-[35px]" alt="Tiffin" />
+            <span>Tiffin</span>
+          </a>
+          <span
+            class="invisible group-hover:visible absolute w-auto bg-[#002140]/90 text-white text-center rounded-md py-1 px-2.5 z-50 bottom-full left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[1.2s] whitespace-nowrap text-sm"
+            >Meal subscription</span
+          >
+        </div>
       </nav>
     </aside>
 
@@ -203,13 +393,17 @@
 
           // Remove active class from all links
           document.querySelectorAll(".nav-link").forEach((item) => {
-            item.classList.remove("bg-light", "text-primary", "scale-110");
-            item.classList.add("text-light");
+            item.classList.remove(
+              "bg-[#e2e4d6]",
+              "text-[#002140]",
+              "scale-110"
+            );
+            item.classList.add("text-[#e2e4d6]");
           });
 
           // Add active class to clicked link
-          this.classList.add("bg-light", "text-primary", "scale-110");
-          this.classList.remove("text-light");
+          this.classList.add("bg-[#e2e4d6]", "text-[#002140]", "scale-110");
+          this.classList.remove("text-[#e2e4d6]");
         });
       });
     </script>
