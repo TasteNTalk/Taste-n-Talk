@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Animated Navigation Bar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body
+    class="bg-gradient-to-br from-[#002140] to-[#004a8f] min-h-screen font-serif text-[#e2e4d6] m-0 p-0 box-border"
+  >
+
+  <!-- Navigation Container -->
+  <div class="w-full mx-auto mt-5 bg-gradient-to-br from-[#e2e4d6] to-[#c4c2c2] rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.1)] overflow-hidden relative">
+    
+    <!-- Top Color Stripe -->
+    <div class="absolute top-0 left-0 w-full h-5 bg-gradient-to-r from-[#ff4d4d] via-[#6a5acd] to-[#0099ff] "></div>
+    
+    <!-- Navigation Items Wrapper -->
+    <div class="flex flex-wrap justify-between gap-2 p-4 md:gap-0" id="navItems">
+      
+      <!-- Navigation Item -->
+      <div class="nav-item group flex-1 flex flex-col items-center text-center gap-2 p-4 rounded-lg cursor-pointer relative overflow-hidden transition-all duration-300 hover:bg-[#e2e4d6] hover:-translate-y-1 hover:shadow-md">
+        <div class="icon text-[24px] text-[#555] transition-transform duration-300 group-hover:scale-110">🏠</div>
+        <div class="label text-sm font-medium text-[#333] group-hover:text-[#0099ff] transition-colors">Home</div>
+        <div class="indicator absolute bottom-0 left-1/2 w-0 h-[3px] bg-gradient-to-r from-[#ff4d4d] to-[#002140] transition-all duration-300 transform -translate-x-1/2 group-hover:w-4/5"></div>
+      </div>
+
+      <div class="nav-item group flex-1 flex flex-col items-center text-center gap-2 p-4 rounded-lg cursor-pointer relative overflow-hidden transition-all duration-300 hover:bg-[#e2e4d6] hover:-translate-y-1 hover:shadow-md">
+        <div class="icon text-[24px] text-[#555] transition-transform duration-300 group-hover:scale-110">🔥</div>
+        <div class="label text-sm font-medium text-[#333] group-hover:text-[#0099ff] transition-colors">Trending</div>
+        <div class="indicator absolute bottom-0 left-1/2 w-0 h-[3px] bg-gradient-to-r from-[#ff4d4d] to-[#002140] transition-all duration-300 transform -translate-x-1/2 group-hover:w-4/5"></div>
+      </div>
+
+      <div class="nav-item group flex-1 flex flex-col items-center text-center gap-2 p-4 rounded-lg cursor-pointer relative overflow-hidden transition-all duration-300 hover:bg-[#e2e4d6] hover:-translate-y-1 hover:shadow-md">
+        <div class="icon text-[24px] text-[#555] transition-transform duration-300 group-hover:scale-110">📽️</div>
+        <div class="label text-sm font-medium text-[#333] group-hover:text-[#0099ff] transition-colors">Repi</div>
+        <div class="indicator absolute bottom-0 left-1/2 w-0 h-[3px] bg-gradient-to-r from-[#ff4d4d] to-[#002140] transition-all duration-300 transform -translate-x-1/2 group-hover:w-4/5"></div>
+      </div>
+
+      <div class="nav-item group flex-1 flex flex-col items-center text-center gap-2 p-4 rounded-lg cursor-pointer relative overflow-hidden transition-all duration-300 hover:bg-[#e2e4d6] hover:-translate-y-1 hover:shadow-md">
+        <div class="icon text-[24px] text-[#555] transition-transform duration-300 group-hover:scale-110">📹</div>
+        <div class="label text-sm font-medium text-[#333] group-hover:text-[#0099ff] transition-colors">Your Content</div>
+        <div class="indicator absolute bottom-0 left-1/2 w-0 h-[3px] bg-gradient-to-r from-[#ff4d4d] to-[#002140] transition-all duration-300 transform -translate-x-1/2 group-hover:w-4/5"></div>
+      </div>
+
+      <div class="nav-item group flex-1 flex flex-col items-center text-center gap-2 p-4 rounded-lg cursor-pointer relative overflow-hidden transition-all duration-300 hover:bg-[#e2e4d6] hover:-translate-y-1 hover:shadow-md">
+        <div class="icon text-[24px] text-[#555] transition-transform duration-300 group-hover:scale-110">🎵</div>
+        <div class="label text-sm font-medium text-[#333] group-hover:text-[#0099ff] transition-colors">Playlists</div>
+        <div class="indicator absolute bottom-0 left-1/2 w-0 h-[3px] bg-gradient-to-r from-[#ff4d4d] to-[#002140] transition-all duration-300 transform -translate-x-1/2 group-hover:w-4/5"></div>
+      </div>
+
+      <div class="nav-item group flex-1 flex flex-col items-center text-center gap-2 p-4 rounded-lg cursor-pointer relative overflow-hidden transition-all duration-300 hover:bg-[#e2e4d6] hover:-translate-y-1 hover:shadow-md">
+        <div class="icon text-[24px] text-[#555] transition-transform duration-300 group-hover:scale-110">🕒</div>
+        <div class="label text-sm font-medium text-[#333] group-hover:text-[#0099ff] transition-colors">History</div>
+        <div class="indicator absolute bottom-0 left-1/2 w-0 h-[3px] bg-gradient-to-r from-[#ff4d4d] to-[#002140] transition-all duration-300 transform -translate-x-1/2 group-hover:w-4/5"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll(".nav-item").forEach(item => {
+      item.addEventListener("click", function () {
+        document.querySelectorAll(".nav-item").forEach(el => {
+          el.classList.remove("bg-[#e2e4d6]", "shadow-md");
+          el.querySelector(".icon").classList.remove("text-[#002140]");
+          el.querySelector(".label").classList.remove("text-[#002140]", "font-semibold");
+          el.querySelector(".indicator").classList.remove("w-4/5");
+          el.querySelector(".indicator").classList.add("w-0");
+        });
+
+        this.classList.add("bg-[#e2e4d6]", "shadow-md");
+        this.querySelector(".icon").classList.add("text-[#002140]");
+        this.querySelector(".label").classList.add("text-[#002140]", "font-semibold");
+        this.querySelector(".indicator").classList.remove("w-0");
+        this.querySelector(".indicator").classList.add("w-4/5");
+        this.querySelector(".indicator").classList.remove("from-[#ff4d4d]", "to-[#002140]");
+        this.querySelector(".indicator").classList.add("from-[#002140]", "to-[#ff4d4d]");
+      });
+    });
+  </script>
+
+</body>
+</html>
