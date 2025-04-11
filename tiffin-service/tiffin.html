@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taste'n Talk - Tiffin Marketplace</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.5/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-[#002140] min-h-screen font-sans">
+
+    <div class="relative">
+        <div class="h-72 md:h-80 bg-cover bg-center" style="background-image: url('/api/placeholder/1920/600')">
+          <div class="absolute inset-0 bg-gradient-to-r from-black/40 via-black/25 to-transparent"></div>
+          <div class="container mx-auto px-4 h-full flex flex-col justify-center">
+            <div class="text-white w-full">
+              <h3 class="text-2xl md:text-4xl font-bold mb-2">Find Your Perfect Tiffin Service</h3>
+              <p class="text-base md:text-lg mb-4">Connect with home chefs and tiffin providers near you for daily fresh, homemade meals</p>
+      
+              <div class="flex flex-col md:flex-row md:items-center gap-4">
+                <div class="relative flex-1">
+                  <input 
+                    type="text" 
+                    placeholder="Enter your location" 
+                    class="w-full py-2.5 px-4 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  />
+                  <i class="fas fa-map-marker-alt absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+      
+                <button class="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 px-5 rounded-lg transition duration-300">
+                  Find Tiffin Services
+                </button>
+      
+                <div class="relative hidden md:block">
+                  <input
+                    type="text"
+                    placeholder="Search tiffins..."
+                    class="w-52 py-2 pl-4 pr-10 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  />
+                  <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+      
+                <div class="flex items-center gap-4 text-white">
+                  <a href="#" class="relative hover:text-orange-300 transition">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span class="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                  </a>
+                  <a href="#" class="hover:text-orange-300 transition"><i class="fas fa-bell text-xl"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="container mx-auto px-4 py-8" x-data="{ activeTab: 'all' }">
+      <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl shadow-md p-6 mb-8">
+        <div class="flex flex-wrap gap-4 mb-6">
+          <button 
+            @click="activeTab = 'all'" 
+            :class="activeTab === 'all' ? 'bg-[#ff4d4d] text-white' : 'bg-white text-[#ff4d4d] hover:bg-[#ff4d4d] hover:text-white hover:-translate-y-[2px]'"
+            class="px-5 py-2 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md border-none"
+          >
+            All Tiffin Services
+          </button>
+          <button 
+            @click="activeTab = 'veg'" 
+            :class="activeTab === 'veg' ? 'bg-[#ff4d4d] text-white' : 'bg-white text-[#ff4d4d] hover:bg-[#ff4d4d] hover:text-white hover:-translate-y-[2px]'"
+            class="px-5 py-2 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md border-none"
+          >
+            Vegetarian
+          </button>
+          <button 
+            @click="activeTab = 'north'" 
+            :class="activeTab === 'north' ? 'bg-[#ff4d4d] text-white' : 'bg-white text-[#ff4d4d] hover:bg-[#ff4d4d] hover:text-white hover:-translate-y-[2px]'"
+            class="px-5 py-2 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md border-none"
+          >
+            North Indian
+          </button>
+          <button 
+            @click="activeTab = 'south'" 
+            :class="activeTab === 'south' ? 'bg-[#ff4d4d] text-white' : 'bg-white text-[#ff4d4d] hover:bg-[#ff4d4d] hover:text-white hover:-translate-y-[2px]'"
+            class="px-5 py-2 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md border-none"
+          >
+            South Indian
+          </button>
+          <button 
+            @click="activeTab = 'healthy'" 
+            :class="activeTab === 'healthy' ? 'bg-[#ff4d4d] text-white' : 'bg-white text-[#ff4d4d] hover:bg-[#ff4d4d] hover:text-white hover:-translate-y-[2px]'"
+            class="px-5 py-2 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md border-none"
+          >
+            Healthy & Diet
+          </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="relative">
+              <select class="w-full appearance-none bg-white text-[#002140] py-3 px-4 rounded-[25px] 
+                              shadow-[0_4px_6px_rgba(0,33,64,0.89)] border-none cursor-pointer transition-all duration-[0.8s] 
+                              hover:shadow-[0_6px_8px_rgba(0,0,0,0.3)] hover:-translate-y-1">
+                <option>Price Range</option>
+                <option>Under ₹80 per meal</option>
+                <option>₹80 - ₹120 per meal</option>
+                <option>₹120 - ₹180 per meal</option>
+                <option>Above ₹180 per meal</option>
+              </select>
+              <i class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-white pointer-events-none"></i>
+            </div>
+            <div class="relative">
+              <select class="w-full appearance-none bg-white text-[#002140] py-3 px-4 rounded-[25px] 
+                              shadow-[0_4px_6px_rgba(0,33,64,0.89)] border-none cursor-pointer transition-all duration-[0.8s] 
+                              hover:shadow-[0_6px_8px_rgba(0,0,0,0.3)] hover:-translate-y-1">
+                <option>Delivery Time</option>
+                <option>Under 30 minutes</option>
+                <option>30 - 45 minutes</option>
+                <option>45 - 60 minutes</option>
+              </select>
+              <i class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-white pointer-events-none"></i>
+            </div>
+            <div class="relative">
+              <select class="w-full appearance-none bg-white text-[#002140] py-3 px-4 rounded-[25px] 
+                              shadow-[0_4px_6px_rgba(0,33,64,0.89)] border-none cursor-pointer transition-all duration-[0.8s] 
+                              hover:shadow-[0_6px_8px_rgba(0,0,0,0.3)] hover:-translate-y-1">
+                <option>Dietary Preferences</option>
+                <option>Vegan</option>
+                <option>Gluten-Free</option>
+                <option>Low-Carb</option>
+                <option>High-Protein</option>
+              </select>
+              <i class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-white pointer-events-none"></i>
+            </div>
+          
+          </div>
+          
+          
+      </div>
+      
+
+      <h2 class="text-2xl font-bold text-white mb-6">Featured Tiffin Providers</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+
+<div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+    <div class="relative">
+      <img src="/api/placeholder/400/200" alt="South Spice Kitchen" class="w-full h-48 object-cover" />
+      <div class="absolute top-3 left-3 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">POPULAR</div>
+      <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm text-sm font-medium px-3 py-1 rounded-full">
+        <i class="fas fa-clock text-blue-600 mr-1"></i> 25 min delivery
+      </div>
+    </div>
+    <div class="p-5">
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <h3 class="text-xl font-bold text-white">South Spice Kitchen</h3>
+          <p class="text-gray-400 text-sm">South Indian, Traditional</p>
+        </div>
+        <div class="flex items-center bg-green-50 px-2 py-1 rounded-lg">
+          <span class="text-green-700 font-bold mr-1">4.7</span>
+          <i class="fas fa-star text-yellow-400"></i>
+        </div>
+      </div>
+      <p class="text-gray-400 text-sm mb-4">Authentic South Indian meals including idli, dosa, sambar rice, and traditional curries.</p>
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">Pure Veg</span>
+        <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">Organic</span>
+        <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">Eco-friendly Packaging</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <div>
+          <span class="text-lg font-bold text-white">₹95.00</span>
+          <span class="text-sm text-gray-400">/meal</span>
+        </div>
+        <button class="bg-white text-[#ff4d4d] border-none py-2 px-5 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md hover:bg-[#ff4d4d] hover:text-white hover:translate-y-[-2px]" fdprocessedid="yusda"> View Plans </button>        
+      </div>
+    </div>
+  </div>
+  <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+    <div class="relative">
+      <img src="/api/placeholder/400/200" alt="Fit Food Kitchen" class="w-full h-48 object-cover" />
+      <div class="absolute top-3 left-3 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full">HEALTHY</div>
+      <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm text-sm font-medium px-3 py-1 rounded-full">
+        <i class="fas fa-clock text-blue-600 mr-1"></i> 35 min delivery
+      </div>
+    </div>
+    <div class="p-5">
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <h3 class="text-xl font-bold text-white">Fit Food Kitchen</h3>
+          <p class="text-gray-400 text-sm">Health Food, Calorie Counted</p>
+        </div>
+        <div class="flex items-center bg-green-50 px-2 py-1 rounded-lg">
+          <span class="text-green-700 font-bold mr-1">4.6</span>
+          <i class="fas fa-star text-yellow-400"></i>
+        </div>
+      </div>
+      <p class="text-gray-400 text-sm mb-4">Nutrition-focused meals with calorie counting. Perfect for fitness enthusiasts and health-conscious individuals.</p>
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">Protein-Rich</span>
+        <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">Gluten-Free</span>
+        <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">Keto Options</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <div>
+          <span class="text-lg font-bold text-white">₹160.00</span>
+          <span class="text-sm text-gray-400">/meal</span>
+        </div>
+        <button class="bg-white text-[#ff4d4d] border-none py-2 px-5 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md hover:bg-[#ff4d4d] hover:text-white hover:translate-y-[-2px]" fdprocessedid="yusda"> View Plans </button> 
+      </div>
+    </div>
+  </div>
+  
+      </div>
+
+      <div class="mb-16">
+        <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl p-6 md:p-8 mb-8">
+          <div class="flex flex-col md:flex-row items-center justify-between">
+            <div class="mb-6 md:mb-0 md:mr-8">
+              <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">How Our Tiffin Marketplace Works</h2>
+              <p class="text-gray-400 max-w-2xl">Taste'n Talk connects you with the best local tiffin providers. We don't make the food - we bring the makers to you!</p>
+            </div>
+            <button class="bg-white text-[#ff4d4d] border-none flex justify-center items-center py-2 px-5 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md hover:bg-[#ff4d4d] hover:text-white hover:translate-y-[-2px]" fdprocessedid="yusda"> <i class="fas fa-play-circle mr-2"></i> Watch How It Works </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl shadow-md p-6 text-center text-white transform transition-transform duration-300 hover:scale-105 hover:shadow-lg hover:shadow-pink-300">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 mb-4">
+                <i class="fas fa-search text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-2">1. Discover Providers</h3>
+              <p>Browse through a curated list of tiffin service providers in your area, read reviews, and check their menus.</p>
+            </div>
+          
+            <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl shadow-md p-6 text-center text-white transform transition-transform duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 mb-4">
+                <i class="fas fa-calendar-alt text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-2">2. Choose a Plan</h3>
+              <p>Select a subscription plan that fits your needs - from daily meals to weekly or monthly packages with significant savings.</p>
+            </div>
+          
+            <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl shadow-md p-6 text-center text-white transform transition-transform duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-400">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 mb-4">
+                <i class="fas fa-utensils text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-2">3. Enjoy Fresh Meals</h3>
+              <p>Get fresh, homemade meals delivered to your doorstep at your preferred time, every day as per your subscription.</p>
+            </div>
+          </div>
+          
+        </div>
+
+        <div id="subscription-plans" class="bg-white rounded-xl shadow-lg overflow-hidden mb-12">
+          <div class="bg-gradient-to-r from-[#0e1e2c] via-[#183248] to-[#0e1e2c] py-8 px-6 md:px-10 outline-none border-none">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">Subscription Plans</h2>
+            <p class="text-blue-100">Subscribe to your favorite tiffin provider and save more</p>
+          </div>
+          
+          <div class="p-6 md:p-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="border border-gray-400 bg-[#e2e4d6] rounded-xl overflow-hidden hover:border-[#002140] transition-all duration-300 hover:shadow-md">
+                <div class="bg-[#e2e4d6] p-6">
+                  <h3 class="text-xl font-bold text-[#002140]">Weekly Plan</h3>
+                  <p class="text-[#002140c3]">7 days of fresh meals</p>
+                </div>
+                <div class="p-6">
+                  <ul class="space-y-3 mb-6">
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">One meal per day for 7 days</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">Choose your delivery time</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">Basic menu customization</span>
+                    </li>
+                    <li class="flex items-start text-red-600">
+                      <i class="fas fa-times-circle mt-1 mr-2"></i>
+                      <span>Priority delivery</span>
+                    </li>
+                    <li class="flex items-start text-red-600">
+                      <i class="fas fa-times-circle mt-1 mr-2"></i>
+                      <span>Weekend special dishes</span>
+                    </li>
+                  </ul>
+                  <button class="bg-white text-[#ff4d4d] border-none py-2 px-5 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md hover:bg-[#ff4d4d] hover:text-white hover:translate-y-[-2px]" fdprocessedid="yusda"> Choose Weekly </button>
+                </div>
+              </div>
+
+              <div class="border-2 bg-[#e2e4d6] border-blue-500 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 relative">
+                <div class="absolute top-0 right-0 bg-blue-600 text-white px-4 py-1 text-sm font-bold">
+                  POPULAR
+                </div>
+                <div class="bg-[#e2e4d6] p-6">
+                  <h3 class="text-xl font-bold text-gray-800">Monthly Plan</h3>
+                  <p class="text-[#002140c3]">30 days of fresh meals</p>
+                </div>
+                <div class="p-6">
+                  <ul class="space-y-3 mb-6">
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">One meal per day for 30 days</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">Choose your delivery time</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">Full menu customization</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">Priority delivery</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">Weekend special dishes</span>
+                    </li>
+                  </ul>
+                  <button class="bg-white text-[#ff4d4d] border-none py-2 px-5 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md hover:bg-[#ff4d4d] hover:text-white hover:translate-y-[-2px]" fdprocessedid="yusda"> Choose Monthly </button>                 
+                </div>
+              </div>
+
+              <div class="border bg-[#e2e4d6] border-gray-200 rounded-xl overflow-hidden hover:border-blue-400 transition-all duration-300 hover:shadow-md">
+                <div class="bg-[#e2e4d6] p-6">
+                  <h3 class="text-xl font-bold text-gray-800">Family Plan</h3>
+                  <p class="text-[#002140c3]">Meals for the whole family</p>
+                </div>
+                <div class="p-6">
+                  <ul class="space-y-3 mb-6">
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">Meals for 4 people for 30 days</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">Flexible delivery schedule</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">Premium menu customization</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">Priority express delivery</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                      <span class="text-[#002140c3]">Weekend & festival specials</span>
+                    </li>
+                  </ul>
+                  <button class="bg-white text-[#ff4d4d] border-none py-2 px-5 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md hover:bg-[#ff4d4d] hover:text-white hover:translate-y-[-2px]" fdprocessedid="yusda"> Choose Family Plan </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+       <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl p-6 md:p-8 mb-12">
+        <div class="flex flex-col md:flex-row items-center text-white">
+          <div class="mb-6 md:mb-0 md:mr-8 md:w-1/2">
+            <h2 class="text-2xl md:text-3xl font-bold mb-3">Are You a Tiffin Provider?</h2>
+            <p class="mb-6">Join our platform to reach more customers, manage your subscriptions efficiently, and grow your tiffin business.</p>
+            <ul class="space-y-3 mb-6">
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                <span>Reach thousands of potential customers in your area</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                <span>Dedicated dashboard to manage orders and subscriptions</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                <span>Flexible commission structure with weekly payouts</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                <span>Marketing support and business growth insights</span>
+              </li>
+            </ul>
+            <button class="bg-white text-[#ff4d4d] border-none py-2 px-5 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md hover:bg-[#ff4d4d] hover:text-white hover:translate-y-[-2px]">
+              Register as Provider
+            </button>
+          </div>
+          <div class="md:w-1/2">
+            <img src="/api/placeholder/600/400" alt="" class="w-full rounded-lg shadow-md" />
+          </div>
+        </div>
+      </div>
+      
+
+  <div class="mb-16">
+    <h2 class="text-2xl font-bold text-white mb-8 text-center">What Our Customers Say</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-[#e2e4d6] rounded-xl shadow-md p-6 relative">
+        <div class="absolute -top-5 left-6">
+          <div class="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
+            <i class="fas fa-quote-left text-white"></i>
+          </div>
+        </div>
+        <div class="pt-4">
+          <p class="text-gray-600 italic mb-4">"I've been using Taste'n Talk's tiffin service for the past 3 months and it has completely transformed my lunch routine. The meals are fresh, delicious and arrive right on time."</p>
+          <div class="flex items-center">
+            <img src="/api/placeholder/40/40" alt="Customer" class="h-10 w-10 rounded-full mr-3" />
+            <div>
+              <h4 class="font-bold text-gray-800">Priya Sharma</h4>
+              <div class="flex text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-[#e2e4d6] rounded-xl shadow-md p-6 relative">
+        <div class="absolute -top-5 left-6">
+          <div class="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
+            <i class="fas fa-quote-left text-white"></i>
+          </div>
+        </div>
+        <div class="pt-4">
+          <p class="text-gray-600 italic mb-4">"As a busy professional, finding time to cook healthy meals was always a challenge. The monthly subscription from Fit Food Kitchen has been a game-changer for my health goals."</p>
+          <div class="flex items-center">
+            <img src="/api/placeholder/40/40" alt="Customer" class="h-10 w-10 rounded-full mr-3" />
+            <div>
+              <h4 class="font-bold text-gray-800">Rahul Kapoor</h4>
+              <div class="flex text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="mb-16">
+    <h2 class="text-2xl font-bold text-white mb-8 text-center">Frequently Asked Questions</h2>
+    <div class="space-y-4 max-w-3xl mx-auto" x-data="{active: null}">
+      <div class="border border-gray-200 rounded-lg overflow-hidden">
+        <button 
+          @click="active = active === 1 ? null : 1"
+          class="flex items-center justify-between w-full px-6 py-4 text-left bg-white hover:bg-gray-50 focus:outline-none"
+        >
+          <span class="font-medium text-[#002140]">How does the tiffin subscription work?</span>
+          <i 
+            :class="active === 1 ? 'fa-chevron-up' : 'fa-chevron-down'" 
+            class="fas transition-transform duration-200"
+          ></i>
+        </button>
+        <div 
+          x-show="active === 1" 
+          x-transition 
+          class="px-6 py-4 bg-gray-50 border-t border-gray-200"
+        >
+          <p class="text-gray-600">Once you select a tiffin provider and subscription plan, you'll be able to choose your meal preferences, delivery time, and payment method. Your meals will be delivered according to your chosen schedule, and you can manage or pause your subscription at any time through your account dashboard.</p>
+        </div>
+      </div>
+      <div class="border border-gray-200 rounded-lg overflow-hidden">
+        <button 
+          @click="active = active === 2 ? null : 2"
+          class="flex items-center justify-between w-full px-6 py-4 text-left bg-white hover:bg-gray-50 focus:outline-none"
+        >
+          <span class="font-medium text-[#002140]">Can I customize my meals?</span>
+          <i 
+            :class="active === 2 ? 'fa-chevron-up' : 'fa-chevron-down'" 
+            class="fas transition-transform duration-200"
+          ></i>
+        </button>
+        <div 
+          x-show="active === 2" 
+          x-transition 
+          class="px-6 py-4 bg-gray-50 border-t border-gray-200"
+        >
+          <p class="text-gray-600">Yes, most tiffin providers offer customization options. The level of customization depends on the provider and your subscription plan. Monthly and family plans typically offer more customization options. You can specify dietary preferences, allergies, and even request specific dishes on certain days.</p>
+        </div>
+      </div>
+      <div class="border border-gray-200 rounded-lg overflow-hidden">
+        <button 
+          @click="active = active === 3 ? null : 3"
+          class="flex items-center justify-between w-full px-6 py-4 text-left bg-white hover:bg-gray-50 focus:outline-none"
+        >
+          <span class="font-medium text-[#002140]">What if I need to skip a day or cancel?</span>
+          <i 
+            :class="active === 3 ? 'fa-chevron-up' : 'fa-chevron-down'" 
+            class="fas transition-transform duration-200"
+          ></i>
+        </button>
+        <div 
+          x-show="active === 3" 
+          x-transition 
+          class="px-6 py-4 bg-gray-50 border-t border-gray-200"
+        >
+          <p class="text-gray-600">You can easily manage your deliveries through your account dashboard. To skip a day, simply mark it in your calendar at least 24 hours in advance. For cancellations, most plans require a 3-day notice. Any unused balance will be credited to your account for future use or refunded as per our refund policy.</p>
+        </div>
+      </div>
+      <div class="border border-gray-200 rounded-lg overflow-hidden">
+        <button 
+          @click="active = active === 4 ? null : 4"
+          class="flex items-center justify-between w-full px-6 py-4 text-left bg-white hover:bg-gray-50 focus:outline-none"
+        >
+          <span class="font-medium text-[#002140]">How do you ensure food quality and safety?</span>
+          <i 
+            :class="active === 4 ? 'fa-chevron-up' : 'fa-chevron-down'" 
+            class="fas transition-transform duration-200"
+          ></i>
+        </button>
+        <div 
+          x-show="active === 4" 
+          x-transition 
+          class="px-6 py-4 bg-gray-50 border-t border-gray-200"
+        >
+          <p class="text-gray-600">All tiffin providers on our platform undergo a strict verification process. We check their kitchen facilities, cooking practices, and ensure they comply with local food safety regulations. We also conduct periodic quality checks and monitor customer feedback. Additionally, our insulated delivery packaging ensures that your food arrives fresh and at the right temperature.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bg-gradient-to-r from-transparent via-black/60  rounded-xl p-6 md:p-8 mb-16">
+    <div class="max-w-3xl mx-auto text-center text-white">
+      <h2 class="text-2xl font-bold mb-3">Stay Updated</h2>
+      <p class="mb-6">Subscribe to our newsletter to receive updates on new tiffin providers, special offers, and healthy eating tips.</p>
+      <div class="flex flex-col sm:flex-row gap-2 max-w-lg mx-auto">
+        <input 
+          type="email" 
+          placeholder="Enter your email" 
+          class="flex-1 px-4 py-3 rounded-lg border border-gray-300 text-[#002140] focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <button
+          class="bg-white text-[#ff4d4d] border-none py-2 px-5 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md hover:bg-[#ff4d4d] hover:text-white hover:translate-y-[-2px]"
+        >
+          Subscribe
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="bg-gradient-to-r from-black via-black/60 to-transparent text-white pt-12 pb-6 rounded-lg">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <h3 class="text-xl font-bold mb-4">Taste<span class="text-orange-400">'</span>nTalk</h3>
+          <p class="text-gray-400 mb-4">Connecting food lovers with authentic home-cooked tiffin services across India.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-bold mb-4">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Find Tiffin Services</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Subscription Plans</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Become a Provider</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Offers & Discounts</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Download App</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold mb-4">Help & Support</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white transition">FAQ</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Refund Policy</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold mb-4">Contact</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li class="flex items-start">
+              <i class="fas fa-map-marker-alt mt-1 mr-2"></i>
+              <span>123 Food Street, Bangalore, India - 560001</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-phone-alt mr-2"></i>
+              <span>+91 98765 43210</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-envelope mr-2"></i>
+              <span>hello@tastentalk.com</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr class="border-gray-800 mb-6" />
+      <div class="text-center text-gray-500 text-sm">
+        <p>&copy; 2025 <a href="#"><span class="text-orange-400">Taste'n Talk</span></a>. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+    </body>
+  </html>
