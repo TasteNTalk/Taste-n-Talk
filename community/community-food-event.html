@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste'n Talk with Community</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        .animate-pulse-slow {
+            animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.3; }
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-[#002140] min-h-screen">
+
+    <div class="pt-10 px-4 md:px-6 lg:px-8 container mx-auto">
+        <div class="bg-gradient-to-r from-black/40 via-transparent to-black/40 rounded-2xl shadow-xl p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Food <span class="text-[#FF6B35]">Events</span></h2>
+                    <p class="text-sm text-gray-400">Discover culinary experiences near you</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="bg-[#FF6B35] text-white border-none py-2 px-5 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-md hover:bg-white hover:text-[#FF6B35] hover:translate-y-[-2px]"> 
+                        <i class="fas fa-calendar-plus"></i> Create Event 
+                    </button>
+                    <button class="px-5 py-2.5 border border-[#002140] text-[#002140] bg-white opacity-60 rounded-full text-sm font-medium hover:bg-[#244665] hover:text-white transition-all">
+                        View All Events
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-6 overflow-x-auto scrollbar-hide pb-2">
+                <div class="flex gap-3">
+                    <button class="bg-[#002140] text-white px-5 py-2.5 rounded-full text-sm whitespace-nowrap font-medium shadow-md flex items-center gap-2">
+                        <i class="fas fa-th-large"></i> All Events
+                    </button>
+                    <button class="bg-gray-100 text-gray-700 px-5 py-2.5 rounded-full text-sm whitespace-nowrap font-medium hover:bg-[#FF6B35] hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fas fa-utensils"></i> Workshops
+                    </button>
+                    <button class="bg-gray-100 text-gray-700 px-5 py-2.5 rounded-full text-sm whitespace-nowrap font-medium hover:bg-[#FF6B35] hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fas fa-glass-cheers"></i> Food Festivals
+                    </button>
+                    <button class="bg-gray-100 text-gray-700 px-5 py-2.5 rounded-full text-sm whitespace-nowrap font-medium hover:bg-[#FF6B35] hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fas fa-chalkboard-teacher"></i> Classes
+                    </button>
+                    <button class="bg-gray-100 text-gray-700 px-5 py-2.5 rounded-full text-sm whitespace-nowrap font-medium hover:bg-[#FF6B35] hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fas fa-users"></i> Meetups
+                    </button>
+                    <button class="bg-gray-100 text-gray-700 px-5 py-2.5 rounded-full text-sm whitespace-nowrap font-medium hover:bg-[#FF6B35] hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fas fa-globe"></i> Virtual
+                    </button>
+                </div>
+            </div>
+            <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-2xl overflow-hidden mb-6 group hover:shadow-2xl transition-all duration-300">
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-1/2 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 bg-gradient-to-r from-[#000000cc] to-transparent w-full h-full z-10"></div>
+                        <img src="/api/placeholder/600/400" alt="Featured Event" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-6 left-6 z-20">
+                            <div class="bg-[#FF6B35] text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg inline-flex items-center">
+                                <i class="fas fa-star mr-2"></i> Featured Event
+                            </div>
+                        </div>
+                        <div class="absolute bottom-6 left-6 z-20">
+                            <div class="bg-white/90 text-[#002140] px-4 py-3 rounded-lg shadow-lg backdrop-blur-sm">
+                                <div class="flex items-center gap-3 mb-1">
+                                    <div class="w-12 h-12 rounded-full bg-[#002140] flex items-center justify-center">
+                                        <i class="fas fa-calendar-alt text-xl text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs uppercase tracking-wider text-gray-600">Saturday</p>
+                                        <p class="text-2xl font-bold">APR 19</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm">
+                                    <i class="fas fa-clock text-[#FF6B35]"></i>
+                                    <span>10:00 AM - 4:00 PM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 p-6 md:p-8">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-[#FF6B35] transition-colors">International Food Festival 2025</h3>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">In-Person</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 text-gray-400 mb-4">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Central Park, New York City</span>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-5">Experience culinary delights from over 30 countries all in one place! Sample authentic dishes, watch cooking demonstrations from award-winning chefs, and participate in food workshops throughout the day.</p>
+                        
+                        <div class="flex gap-4 mb-5">
+                            <div class="flex flex-col items-center justify-center p-3 bg-black/30 rounded-lg">
+                                <span class="text-[#FF6B35] text-xl font-bold">30+</span>
+                                <span class="text-gray-400 text-xs">Countries</span>
+                            </div>
+                            <div class="flex flex-col items-center justify-center p-3 bg-black/30 rounded-lg">
+                                <span class="text-[#FF6B35] text-xl font-bold">50+</span>
+                                <span class="text-gray-400 text-xs">Vendors</span>
+                            </div>
+                            <div class="flex flex-col items-center justify-center p-3 bg-black/30 rounded-lg">
+                                <span class="text-[#FF6B35] text-xl font-bold">12</span>
+                                <span class="text-gray-400 text-xs">Workshops</span>
+                            </div>
+                            <div class="flex flex-col items-center justify-center p-3 bg-black/30 rounded-lg">
+                                <span class="text-[#FF6B35] text-xl font-bold">5K+</span>
+                                <span class="text-gray-400 text-xs">Attendees</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center mb-5">
+                            <div class="flex -space-x-3 mr-3">
+                                <img src="/api/placeholder/32/32" alt="Attendee" class="w-8 h-8 rounded-full border-2 border-[#002140]">
+                                <img src="/api/placeholder/32/32" alt="Attendee" class="w-8 h-8 rounded-full border-2 border-[#002140]">
+                                <img src="/api/placeholder/32/32" alt="Attendee" class="w-8 h-8 rounded-full border-2 border-[#002140]">
+                                <div class="w-8 h-8 rounded-full bg-[#002140] text-white border-2 border-[#002140] flex items-center justify-center text-xs">+146</div>
+                            </div>
+                            <span class="text-gray-400 text-sm">People are going</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button class="flex-1 bg-[#FF6B35] text-white py-3 px-5 rounded-lg font-semibold shadow-lg hover:bg-[#e05a2b] transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-ticket-alt"></i> Get Tickets
+                            </button>
+                            <button class="bg-white/10 text-white w-12 h-12 rounded-lg flex items-center justify-center hover:bg-white/20 transition-all">
+                                <i class="far fa-heart text-xl"></i>
+                            </button>
+                            <button class="bg-white/10 text-white w-12 h-12 rounded-lg flex items-center justify-center hover:bg-white/20 transition-all">
+                                <i class="fas fa-share-alt text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-bold text-white mb-4">Upcoming Events</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="relative">
+                        <img src="/api/placeholder/400/200" alt="Pasta Making Workshop" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black to-transparent opacity-60"></div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Workshop</span>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                            <div class="bg-white text-[#002140] px-3 py-2 rounded-lg text-center shadow-lg">
+                                <p class="text-xs uppercase tracking-wider text-gray-600">Sun</p>
+                                <p class="text-xl font-bold">APR 20</p>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="bg-[#FF6B35]/90 backdrop-blur-sm text-white px-2 py-1 rounded-lg text-xs flex items-center gap-1">
+                                    <i class="fas fa-users"></i> 18/24 spots
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold text-white group-hover:text-[#FF6B35] transition-colors mb-2">Artisanal Pasta Making Workshop</h4>
+                        <div class="flex items-center gap-2 text-gray-400 text-sm mb-3">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Culinary Institute, Brooklyn</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Learn how to make authentic Italian pasta from scratch with Chef Mario Rossi. Take home your creations and recipes!</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#FF6B35] font-bold">$45.00</span>
+                            <button class="bg-white/10 text-white px-4 py-2 rounded-lg hover:bg-[#FF6B35] transition-all text-sm font-medium">
+                                Reserve Spot
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="relative">
+                        <img src="/api/placeholder/400/200" alt="Wine Tasting" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black to-transparent opacity-60"></div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Tasting</span>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                            <div class="bg-white text-[#002140] px-3 py-2 rounded-lg text-center shadow-lg">
+                                <p class="text-xs uppercase tracking-wider text-gray-600">Thu</p>
+                                <p class="text-xl font-bold">APR 24</p>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="bg-yellow-500/90 backdrop-blur-sm text-white px-2 py-1 rounded-lg text-xs flex items-center gap-1">
+                                    <i class="fas fa-fire"></i> Selling Fast
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold text-white group-hover:text-[#FF6B35] transition-colors mb-2">Mediterranean Wine & Cheese Pairing</h4>
+                        <div class="flex items-center gap-2 text-gray-400 text-sm mb-3">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Harbor Wine Bar, Manhattan</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Explore the exquisite flavors of Mediterranean wines paired with artisanal cheeses. Guided by sommelier Emma Chen.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#FF6B35] font-bold">$65.00</span>
+                            <button class="bg-white/10 text-white px-4 py-2 rounded-lg hover:bg-[#FF6B35] transition-all text-sm font-medium">
+                                Reserve Spot
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="relative">
+                        <img src="/api/placeholder/400/200" alt="Virtual Cooking Class" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black to-transparent opacity-60"></div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Virtual</span>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                            <div class="bg-white text-[#002140] px-3 py-2 rounded-lg text-center shadow-lg">
+                                <p class="text-xs uppercase tracking-wider text-gray-600">Mon</p>
+                                <p class="text-xl font-bold">APR 22</p>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="bg-[#FF6B35]/90 backdrop-blur-sm text-white px-2 py-1 rounded-lg text-xs flex items-center gap-1">
+                                    <i class="fas fa-users"></i> 56/100 spots
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold text-white group-hover:text-[#FF6B35] transition-colors mb-2">Asian Street Food Cooking Class</h4>
+                        <div class="flex items-center gap-2 text-gray-400 text-sm mb-3">
+                            <i class="fas fa-video"></i>
+                            <span>Online via Zoom</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Learn to cook popular Asian street foods from the comfort of your home. Ingredients list provided beforehand.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#FF6B35] font-bold">$25.00</span>
+                            <button class="bg-white/10 text-white px-4 py-2 rounded-lg hover:bg-[#FF6B35] transition-all text-sm font-medium">
+                                Register
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-white">April 2025 Calendar</h3>
+                    <a href="#" class="text-[#FF6B35] hover:underline text-sm font-medium">View Full Calendar</a>
+                </div>
+                
+                <div class="grid grid-cols-7 gap-2 mb-3">
+                    <div class="text-center text-gray-400 text-sm font-medium">Sun</div>
+                    <div class="text-center text-gray-400 text-sm font-medium">Mon</div>
+                    <div class="text-center text-gray-400 text-sm font-medium">Tue</div>
+                    <div class="text-center text-gray-400 text-sm font-medium">Wed</div>
+                    <div class="text-center text-gray-400 text-sm font-medium">Thu</div>
+                    <div class="text-center text-gray-400 text-sm font-medium">Fri</div>
+                    <div class="text-center text-gray-400 text-sm font-medium">Sat</div>
+                </div>
+                
+                <div class="grid grid-cols-7 gap-2">
+                    <div class="text-center p-2 text-gray-500 text-sm">30</div>
+                    <div class="text-center p-2 text-gray-500 text-sm">31</div>
+                    
+                    <div class="text-center p-2 text-white text-sm">1</div>
+                    <div class="text-center p-2 text-white text-sm">2</div>
+                    <div class="text-center p-2 text-white text-sm">3</div>
+                    <div class="text-center p-2 text-white text-sm">4</div>
+                    <div class="text-center p-2 text-white text-sm">5</div>
+                    
+                    <div class="text-center p-2 text-white text-sm">6</div>
+                    <div class="text-center p-2 text-white text-sm">7</div>
+                    <div class="text-center p-2 text-white text-sm">8</div>
+                    <div class="text-center p-2 text-white text-sm">9</div>
+                    <div class="text-center p-2 text-white text-sm">10</div>
+                    <div class="text-center p-2 text-white text-sm">11</div>
+                    <div class="text-center p-2 text-white text-sm relative">
+                        12
+                        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full"></div>
+                    </div>
+                    
+                    <div class="text-center p-2 text-white text-sm">13</div>
+                    <div class="text-center p-2 text-white text-sm">14</div>
+                    <div class="text-center p-2 text-white text-sm">15</div>
+                    <div class="text-center p-2 text-white text-sm">16</div>
+                    <div class="text-center p-2 text-white text-sm">17</div>
+                    <div class="text-center p-2 text-white text-sm">18</div>
+                    <div class="text-center p-2 text-white text-sm relative bg-[#FF6B35]/20 rounded-lg font-bold">
+                        19
+                        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#FF6B35] rounded-full"></div>
+                    </div>
+                    
+                    <div class="text-center p-2 text-white text-sm relative bg-blue-500/20 rounded-lg font-bold">
+                        20
+                        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full"></div>
+                    </div>
+                    <div class="text-center p-2 text-white text-sm">21</div>
+                    <div class="text-center p-2 text-white text-sm relative bg-green-500/20 rounded-lg font-bold">
+                        22
+                        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></div>
+                    </div>
+                    <div class="text-center p-2 text-white text-sm">23</div>
+                    <div class="text-center p-2 text-white text-sm relative bg-purple-500/20 rounded-lg font-bold">
+                        24
+                        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-purple-500 rounded-full"></div>
+                    </div>
+                    <div class="text-center p-2 text-white text-sm">25</div>
+                    <div class="text-center p-2 text-white text-sm">26</div>
+                    
+                    <div class="text-center p-2 text-white text-sm">27</div>
+                    <div class="text-center p-2 text-white text-sm relative">
+                        28
+                        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-yellow-500 rounded-full"></div>
+                    </div>
+                    <div class="text-center p-2 text-white text-sm">29</div>
+                    <div class="text-center p-2 text-white text-sm">30</div>
+                    <div class="text-center p-2 text-gray-500 text-sm">1</div>
+                    <div class="text-center p-2 text-gray-500 text-sm">2</div>
+                    <div class="text-center p-2 text-gray-500 text-sm">3</div>
+                </div>
+                
+                <div class="flex flex-wrap gap-3 mt-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-[#FF6B35]"></div>
+                        <span class="text-sm text-gray-400">Festival</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                        <span class="text-sm text-gray-400">Workshop</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="text-sm text-gray-400">Virtual</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-purple-500"></div>
+                        <span class="text-sm text-gray-400">Tasting</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <span class="text-sm text-gray-400">Meetup</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="text-xl font-bold text-white mb-4">Event Host Spotlight</h3>
+                <div class="bg-gradient-to-r from-black/40 via-black/25 to-transparent rounded-xl overflow-hidden">
+                    <div class="flex flex-col md:flex-row">
+                        <div class="md:w-1/3 relative">
+                            <img src="/api/placeholder/400/400" alt="Chef Profile" class="w-full h-full object-cover">
+                            <div class="absolute top-4 right-4">
+                                <div class="bg-[#FF6B35] text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
+                                    Top Host
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:w-2/3 p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h4 class="text-xl font-bold text-white mb-1">Chef Olivia Martinez</h4>
+                                    <p class="text-[#FF6B35] text-sm">Master Pastry Chef & Culinary Instructor</p>
+                                </div>
+                                <div class="flex items-center gap-1 bg-white/10 px-3 py-1 rounded-full">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <span class="text-white font-medium">4.9</span>
+                                </div>
+                            </div>
+                            
+                            <p class="text-gray-300 mb-4">With over 15 years of experience in Michelin-starred restaurants across Europe and America, Chef Olivia brings passion and expertise to her workshops. Specializing in French pastry with a modern twist, her classes are both educational and entertaining.</p>
+                            
+                            <div class="flex gap-4 flex-wrap mb-5">
+                                <span class="bg-white/10 text-white text-sm px-3 py-1 rounded-full">Pastry</span>
+                                <span class="bg-white/10 text-white text-sm px-3 py-1 rounded-full">French Cuisine</span>
+                                                          <span class="bg-white/10 text-white text-sm px-3 py-1 rounded-full">Chocolate</span>
+                          <span class="bg-white/10 text-white text-sm px-3 py-1 rounded-full">Vegan Options</span>
+                          </div>
+                          
+                          <div class="grid grid-cols-3 gap-3 mb-5">
+                              <div class="bg-white/10 p-4 rounded-lg text-center">
+                                  <div class="text-2xl font-bold text-[#FF6B35] mb-1">24</div>
+                                  <div class="text-sm text-gray-400">Events Hosted</div>
+                              </div>
+                              <div class="bg-white/10 p-4 rounded-lg text-center">
+                                  <div class="text-2xl font-bold text-[#FF6B35] mb-1">1.2K</div>
+                                  <div class="text-sm text-gray-400">Students</div>
+                              </div>
+                              <div class="bg-white/10 p-4 rounded-lg text-center">
+                                  <div class="text-2xl font-bold text-[#FF6B35] mb-1">8</div>
+                                  <div class="text-sm text-gray-400">Years on Platform</div>
+                              </div>
+                          </div>
+                          
+                          <div class="flex gap-3">
+                              <button class="flex-1 bg-[#FF6B35] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#e05a2b] transition-all flex items-center                           justify-center gap-2">
+                                  <i class="fas fa-calendar-check"></i> View All Events
+                              </button>
+                              <button class="bg-white/10 text-white w-10 h-10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-all">
+                                  <i class="fas fa-share-alt"></i>
+                              </button>
+                          </div>
+                          </div>
+                          </div>
+                          </div>
+                          </div>
+                          
+                          <div class="bg-gradient-to-r from-[#FF6B35]/20 via-[#FF6B35]/10 to-transparent rounded-2xl shadow-xl p-8 mb-12 relative overflow-hidden">
+                          <div class="absolute top-0 right-0 w-48 h-48 bg-[#FF6B35]/10 rounded-full -translate-y-1/4 translate-x-1/4 animate-pulse-slow"></div>
+                          <div class="absolute bottom-0 left-0 w-64 h-64 bg-[#FF6B35]/10 rounded-full translate-y-1/4 -translate-x-1/4 animate-pulse-slow"></div>
+                          
+                          <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                              <div class="md:w-1/2">
+                                  <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Stay Updated <span class="text-[#FF6B35]">with Food Events</span></h2>
+                                  <p class="text-gray-300 mb-6">Subscribe to our newsletter and never miss another food event. Get personalized recommendations based                           on your taste preferences and location.</p>
+                                  
+                                  <div class="flex flex-col sm:flex-row gap-3 max-w-md">
+                                      <input type="email" placeholder="Your email address" class="flex-1 bg-white/10 border border-white/20 text-white px-4 py-3                           rounded-lg focus:outline-none focus:border-[#FF6B35] placeholder-gray-400">
+                                      <button class="bg-[#FF6B35] text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-[#FF6B35] transition-all                           shadow-lg whitespace-nowrap">
+                                          Subscribe Now
+                                      </button>
+                                  </div>
+                                  
+                                  <div class="mt-4 text-sm text-gray-400">
+                                      <div class="flex items-start gap-2">
+                                          <i class="fas fa-check-circle text-[#FF6B35] mt-1"></i>
+                                          <span>No spam, only delicious content. You can unsubscribe anytime.</span>
+                                      </div>
+                                  </div>
+                              </div>
+                              
+                              <div class="md:w-1/2 flex justify-center">
+                                  <div class="relative w-60 h-60">
+                                      <div class="absolute inset-0 bg-[#FF6B35]/20 rounded-full animate-pulse-slow"></div>
+                                      <img src="/api/placeholder/240/240" alt="Newsletter Illustration" class="absolute top-1/2 left-1/2 transform -translate-x-1/2                           -translate-y-1/2 w-48 h-48 object-cover rounded-full border-4 border-[#FF6B35]/30 animate-float">
+                                      <div class="absolute -top-4 -right-4 bg-[#002140] text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg                           animate-float" style="animation-delay: 0.5s">
+                                          <i class="fas fa-bell text-2xl"></i>
+                                      </div>
+                                      <div class="absolute -bottom-2 -left-6 bg-[#002140] text-white w-14 h-14 rounded-full flex items-center justify-center                           shadow-lg animate-float" style="animation-delay: 1s">
+                                          <i class="fas fa-utensils text-xl"></i>
+                                      </div>
+                                      <div class="absolute bottom-12 -right-8 bg-[#002140] text-white w-12 h-12 rounded-full flex items-center justify-center                           shadow-lg animate-float" style="animation-delay: 1.5s">
+                                          <i class="fas fa-map-marker-alt text-lg"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          </div>
+                          
+                          <footer class="bg-gradient-to-r from-black via-black/60 to-transparent] rounded-2xl shadow-xl p-6 mb-8 text-white">
+                              <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                                  <div>
+                                      <div class="flex items-center gap-2 mb-4">
+                                          <span class="font-bold text-xl">Taste<span class="text-[#FF6B35]">'</span>nTalk</span>
+                                      </div>
+                                      <p class="text-white text-opacity-80 text-sm mb-4">Connect with food lovers around the world. Share recipes, join events, and                           discover new culinary experiences.</p>
+                                      <div class="flex gap-3">
+                                          <a href="#" class="w-9 h-9 rounded-full bg-white bg-opacity-10 flex items-center justify-center hover:bg-[#FF6B35]                           transition-colors">
+                                              <i class="fab fa-facebook-f"></i>
+                                          </a>
+                                          <a href="#" class="w-9 h-9 rounded-full bg-white bg-opacity-10 flex items-center justify-center hover:bg-[#FF6B35]                           transition-colors">
+                                              <i class="fab fa-twitter"></i>
+                                          </a>
+                                          <a href="#" class="w-9 h-9 rounded-full bg-white bg-opacity-10 flex items-center justify-center hover:bg-[#FF6B35]                           transition-colors">
+                                              <i class="fab fa-instagram"></i>
+                                          </a>
+                                          <a href="#" class="w-9 h-9 rounded-full bg-white bg-opacity-10 flex items-center justify-center hover:bg-[#FF6B35]                           transition-colors">
+                                              <i class="fab fa-pinterest"></i>
+                                          </a>
+                                      </div>
+                                  </div>
+                                  
+                                  <div>
+                                      <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                                      <ul class="space-y-2 text-white text-opacity-80">
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Home</a></li>
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Food Groups</a></li>
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Events</a></li>
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Recipes</a></li>
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">About Us</a></li>
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Contact</a></li>
+                                      </ul>
+                                  </div>
+                                  
+                                  <div>
+                                      <h4 class="font-semibold text-lg mb-4">Popular Categories</h4>
+                                      <ul class="space-y-2 text-white text-opacity-80">
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Vegetarian</a></li>
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Baking</a></li>
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">International Cuisine</a></li>
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Desserts</a></li>
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Healthy Eating</a></li>
+                                          <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Seafood</a></li>
+                                      </ul>
+                                  </div>
+                          
+                                  <div >
+                                      <h4 class="text-lg font-bold text-white mb-4">Download Our App</h4>
+                                      <p class="text-gray-400 mb-4">Get the full experience on your mobile device</p>
+                                      <div class="flex gap-3">
+                                          <a href="#" class="bg-white/10 hover:bg-white/20 transition-all p-2 rounded-lg flex items-center gap-3">
+                                              <i class="fab fa-apple text-2xl text-white"></i>
+                                              <div>
+                                                  <div class="text-xs text-gray-400">Download on the</div>
+                                                  <div class="text-white font-semibold">App Store</div>
+                                              </div>
+                                          </a>
+                                          <a href="#" class="bg-white/10 hover:bg-white/20 transition-all p-2 rounded-lg flex items-center gap-3">
+                                              <i class="fab fa-google-play text-2xl text-white"></i>
+                                              <div>
+                                                  <div class="text-xs text-gray-400">Get it on</div>
+                                                  <div class="text-white font-semibold">Google Play</div>
+                                              </div>
+                                          </a>
+                                      </div>
+                                  </div>
+                              </div>
+                              
+                              <div class="border-t border-white border-opacity-20 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
+                                  <p class="text-white text-opacity-70 text-sm mb-4 md:mb-0">© 2025 <a href="#"><span class="text-[#ff6b35]">Taste'n Talk</span></a>.                           All rights reserved.</p>
+                                  <div class="flex gap-6 text-white text-opacity-70 text-sm">
+                                      <a href="#" class="hover:text-[#FF6B35] transition-colors">Privacy Policy</a>
+                                      <a href="#" class="hover:text-[#FF6B35] transition-colors">Terms of Service</a>
+                                      <a href="#" class="hover:text-[#FF6B35] transition-colors">Cookie Policy</a>
+                                  </div>
+                              </div>
+                          </footer>
+                          </div>
+
+</body>
+</html>
