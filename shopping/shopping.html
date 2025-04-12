@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasty Mart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#002140] min-h-screen font-serif">
+    <div class="container mx-auto px-4 py-8">    
+        <div class="bg-[#002140] rounded-lg mb-8 overflow-hidden text-white">
+            <div class="flex flex-wrap justify-between bg-gradient-to-r from-black/40 via-black/25 to-transparent">
+                <div class="flex">
+                    <div class="cursor-pointer py-3 px-6 font-semibold hover:bg-white hover:text-[#ff4d4d] active:bg-white active:text-[#ff4d4d] flex items-center gap-2 transition">
+                        <i class="fas fa-th-large"></i> ALL INGREDIENTS
+                    </div>
+                    <div class="cursor-pointer py-3 px-6 font-semibold flex items-center gap-2 hover:bg-white hover:text-[#ff4d4d] active:bg-white active:text-[#ff4d4d] transition">
+                        <i class="fas fa-home"></i> HOME
+                    </div>
+                    <div class="cursor-pointer py-3 px-6 font-semibold flex items-center gap-2 hover:bg-white hover:text-[#ff4d4d] active:bg-white active:text-[#ff4d4d] transition">
+                        <i class="fas fa-store"></i> SHOP
+                    </div>
+                    <div class="cursor-pointer py-3 px-6 font-semibold flex items-center gap-2 hover:bg-white hover:text-[#ff4d4d] active:bg-white active:text-[#ff4d4d] transition lg:flex">
+                        <i class="fas fa-seedling"></i> SPICES & HERBS
+                    </div>
+                    <div class="cursor-pointer py-3 px-6 font-semibold flex items-center gap-2 hover:bg-white hover:text-[#ff4d4d] active:bg-white active:text-[#ff4d4d] transition md:flex">
+                        <i class="fas fa-tag"></i> DEALS
+                    </div>
+                </div>
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        placeholder="Search for ingredients..." 
+                        class="w-full py-2 px-4 rounded-full text-[#002140] border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#002140] focus:border-transparent"
+                    >
+                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#002140]">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <div class="w-12 h-12 bg-gray-light rounded-full flex items-center justify-center hover:bg-white hover:text-[#ff4d4d] active:bg-white active:text-[#ff4d4d] transition duration-300 cursor-pointer">
+                            <i class="fas fa-shopping-cart text-lg"></i>
+                        </div>
+                        <div class="absolute -top-1 -right-1 bg-secondary text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">3</div>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500">TOTAL PRICE</p>
+                        <p class="font-bold">$89.99</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="relative bg-gradient-to-r from-[#002140] to-green-400 rounded-xl overflow-hidden mb-12">
+            <div class="absolute -top-4 -left-4 transform rotate-12 bg-yellow-500 text-white w-32 h-10 flex items-center justify-center font-bold shadow-lg">
+                JUST ARRIVED
+            </div>
+            
+            <div class="flex flex-col md:flex-row">
+                <div class="p-8 md:p-12 md:w-1/2">
+                    <div class="inline-block px-3 py-1 bg-white bg-opacity-20 rounded-full text-white text-sm mb-6">Premium Quality Cooking Ingredients</div>
+                    <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight mb-6">Fresh, Raw Ingredients For Your Kitchen</h1>
+                    <p class="text-white text-opacity-90 mb-8">Discover our wide selection of high-quality raw ingredients sourced.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-[#ff4d4d] text-white hover:bg-white hover:text-[#ff4d4d] transition px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-1">SHOP NOW</a>
+                        <a href="#" class="bg-white bg-opacity-20 hover:bg-opacity-30 transition px-6 py-3 rounded-full text-white flex items-center">
+                            <i class="fas fa-play-circle mr-2"></i> OUR SOURCES
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 relative">
+                    <img src="/api/placeholder/600/400" alt="Fresh Ingredients" class="object-cover h-full w-full md:absolute right-0 bottom-0">
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-12">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-white">Shop By Category</h2>
+                <div class="w-20 h-1 bg-[#002140] mx-auto mt-3"></div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div class="bg-gradient-to-r from-white/80 via-white/60 to-white/20 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition group">
+                    <div class="h-40 overflow-hidden">
+                        <img src="/api/placeholder/300/200" alt="Fresh Produce" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                    </div>
+                    <div class="p-4 text-center bg-[#002140]-dark text-[#002140] font-semibold">FRESH PRODUCE</div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-white/80 via-white/60 to-white/20 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition group">
+                    <div class="h-40 overflow-hidden">
+                        <img src="/api/placeholder/300/200" alt="Spices & Herbs" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                    </div>
+                    <div class="p-4 text-center bg-[#002140]-dark text-[#002140] font-semibold">SPICES & HERBS</div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-white/80 via-white/60 to-white/20 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition group">
+                    <div class="h-40 overflow-hidden">
+                        <img src="/api/placeholder/300/200" alt="Oils & Vinegars" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                    </div>
+                    <div class="p-4 text-center bg-[#002140]-dark text-[#002140] font-semibold">OILS & VINEGARS</div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-white/80 via-white/60 to-white/20 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition group">
+                    <div class="h-40 overflow-hidden">
+                        <img src="/api/placeholder/300/200" alt="Grains & Legumes" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                    </div>
+                    <div class="p-4 text-center bg-[#002140]-dark text-[#002140] font-semibold">GRAINS & LEGUMES</div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-white/80 via-white/60 to-white/20 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition group">
+                    <div class="h-40 overflow-hidden">
+                        <img src="/api/placeholder/300/200" alt="Specialty Items" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                    </div>
+                    <div class="p-4 text-center bg-[#002140]-dark text-[#002140] font-semibold">SPECIALTY ITEMS</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-12">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-white">Featured Ingredients</h2>
+                <div class="w-20 h-1 bg-[#002140] mx-auto mt-3"></div>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Explore our handpicked selection of the finest cooking ingredients that will elevate your culinary creations.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition group">
+                    <div class="relative">
+                        <span class="absolute top-4 left-4 bg-secondary text-white text-xs font-bold px-2 py-1 rounded z-10">SEASONAL</span>
+                        <span class="absolute top-4 right-4 bg-[#002140] text-white text-xs font-bold px-2 py-1 rounded z-10">-15%</span>
+                        <div class="h-56 overflow-hidden">
+                            <img src="/api/placeholder/400/320" alt="Saffron Threads" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        </div>
+                        <div class="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#ff4d4d] text-white hover:bg-white hover:text-[#ff4d4d] transition px-4 py-2 rounded-full font-semibold transform translate-y-4 group-hover:translate-y-0  duration-300">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="text-xs text-[#002140] font-semibold mb-1">Premium Spices</div>
+                        <h3 class="font-bold text-gray-800 mb-2 group-hover:text-[#002140] transition">Spanish Saffron Threads</h3>
+                        <div class="flex items-center mb-2">
+                            <div class="text-yellow-400 flex mr-1">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">(32 Reviews)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-gray-400 line-through text-sm mr-1">$42.00</span>
+                                <span class="font-bold text-[#002140]">$36.00</span>
+                                <span class="text-xs text-gray-500">/ 1g</span>
+                            </div>
+                            <button class="bg-white text-[#ff4d4d] hover:bg-[#ff4d4d] hover:text-white border border-[#ff4d4d] rounded-full transition px-3 py-2 flex items-center gap-1 text-sm">
+                                <i class="fas fa-cart-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition group">
+                    <div class="relative">
+                        <span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded z-10">IMPORTED</span>
+                        <div class="h-56 overflow-hidden">
+                            <img src="/api/placeholder/400/320" alt="Extra Virgin Olive Oil" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        </div>
+                        <div class="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#ff4d4d] text-white hover:bg-white hover:text-[#ff4d4d] transition px-4 py-2 rounded-full font-semibold transform translate-y-4 group-hover:translate-y-0 duration-300">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="text-xs text-[#002140] font-semibold mb-1">Culinary Oils</div>
+                        <h3 class="font-bold text-gray-800 mb-2 group-hover:text-[#002140] transition">Extra Virgin Olive Oil</h3>
+                        <div class="flex items-center mb-2">
+                            <div class="text-yellow-400 flex mr-1">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">(16 Reviews)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-gray-400 line-through text-sm mr-1">$38.00</span>
+                                <span class="font-bold text-[#002140]">$30.00</span>
+                                <span class="text-xs text-gray-500">/ 500ml</span>
+                            </div>
+                            <button class="bg-white text-[#ff4d4d] hover:bg-[#ff4d4d] hover:text-white border border-[#ff4d4d] rounded-full transition px-3 py-2 flex items-center gap-1 text-sm">
+                                <i class="fas fa-cart-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <a href="#" class="inline-block border-2 border-[#002140] text-[#002140] hover:bg-[#002140] hover:text-white transition px-6 py-3 rounded-full font-bold">View All Ingredients</a>
+            </div>
+
+            <footer class="bg-gradient-to-r from-black via-black/60 to-transparent] rounded-2xl shadow-xl p-6 mb-8 text-white">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="font-bold text-xl">Taste<span class="text-[#FF6B35]">'</span>nTalk</span>
+                        </div>
+                        <p class="text-white text-opacity-80 text-sm mb-4">Connect with food lovers around the world. Share recipes, join events, and                           discover new culinary experiences.</p>
+                        <div class="flex gap-3">
+                            <a href="#" class="w-9 h-9 rounded-full bg-white bg-opacity-10 flex items-center justify-center hover:bg-[#FF6B35]                           transition-colors">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="w-9 h-9 rounded-full bg-white bg-opacity-10 flex items-center justify-center hover:bg-[#FF6B35]                           transition-colors">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="w-9 h-9 rounded-full bg-white bg-opacity-10 flex items-center justify-center hover:bg-[#FF6B35]                           transition-colors">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="w-9 h-9 rounded-full bg-white bg-opacity-10 flex items-center justify-center hover:bg-[#FF6B35]                           transition-colors">
+                                <i class="fab fa-pinterest"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                        <ul class="space-y-2 text-white text-opacity-80">
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Home</a></li>
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Food Groups</a></li>
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Events</a></li>
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Recipes</a></li>
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">About Us</a></li>
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold text-lg mb-4">Popular Categories</h4>
+                        <ul class="space-y-2 text-white text-opacity-80">
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Vegetarian</a></li>
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Baking</a></li>
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">International Cuisine</a></li>
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Desserts</a></li>
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Healthy Eating</a></li>
+                            <li><a href="#" class="hover:text-[#FF6B35] transition-colors">Seafood</a></li>
+                        </ul>
+                    </div>
+            
+                    <div >
+                        <h4 class="text-lg font-bold text-white mb-4">Download Our App</h4>
+                        <p class="text-gray-400 mb-4">Get the full experience on your mobile device</p>
+                        <div class="flex gap-3">
+                            <a href="#" class="bg-white/10 hover:bg-white/20 transition-all p-2 rounded-lg flex items-center gap-3">
+                                <i class="fab fa-apple text-2xl text-white"></i>
+                                <div>
+                                    <div class="text-xs text-gray-400">Download on the</div>
+                                    <div class="text-white font-semibold">App Store</div>
+                                </div>
+                            </a>
+                            <a href="#" class="bg-white/10 hover:bg-white/20 transition-all p-2 rounded-lg flex items-center gap-3">
+                                <i class="fab fa-google-play text-2xl text-white"></i>
+                                <div>
+                                    <div class="text-xs text-gray-400">Get it on</div>
+                                    <div class="text-white font-semibold">Google Play</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-t border-white border-opacity-20 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-white text-opacity-70 text-sm mb-4 md:mb-0">© 2025 <a href="#"><span class="text-[#ff6b35]">Taste'n Talk</span></a>.                           All rights reserved.</p>
+                    <div class="flex gap-6 text-white text-opacity-70 text-sm">
+                        <a href="#" class="hover:text-[#FF6B35] transition-colors">Privacy Policy</a>
+                        <a href="#" class="hover:text-[#FF6B35] transition-colors">Terms of Service</a>
+                        <a href="#" class="hover:text-[#FF6B35] transition-colors">Cookie Policy</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+</body>
+</html>
