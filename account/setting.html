@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Taste'n Talk</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#002140] font-sans">
+    <div class="bg-gradient-to-r from-black to-[#003a6c] text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl md:text-3xl font-bold">Settings</h1>
+                <button class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full font-medium transition-colors flex items-center gap-2">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div class="lg:col-span-1">
+                <div class="bg-gradient-to-r from-black via-black/25 to-transparent rounded-xl shadow-md overflow-hidden sticky top-4">
+                    <div class="bg-gradient-to-r from-black to-[#003a6c] text-white px-6 py-4">
+                        <h2 class="text-xl font-bold">Settings Menu</h2>
+                    </div>
+                    <div class="p-2">
+                        <nav class="space-y-1">
+                            <a href="#account" class="block px-4 py-3 rounded-lg bg-[#ff4d4d] text-white font-medium">
+                                <i class="fas fa-user-circle mr-3"></i> Account Settings
+                            </a>
+                            <a href="#profile" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors">
+                                <i class="fas fa-id-card mr-3"></i> Profile Information
+                            </a>
+                            <a href="#privacy" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors">
+                                <i class="fas fa-shield-alt mr-3"></i> Privacy & Security
+                            </a>
+                            <a href="#notifications" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors">
+                                <i class="fas fa-bell mr-3"></i> Notifications
+                            </a>
+                            <a href="#billing" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors">
+                                <i class="fas fa-credit-card mr-3"></i> Billing & Subscription
+                            </a>
+                            <a href="#preferences" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors">
+                                <i class="fas fa-sliders-h mr-3"></i> Preferences
+                            </a>
+                            <a href="#integrations" class="block px-4 py-3 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors">
+                                <i class="fas fa-link mr-3"></i> Integrations
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-3 space-y-8">
+                <div id="account" class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="px-6 py-4 bg-gray-50 border-b">
+                        <h3 class="text-lg font-bold text-gray-800">Account Settings</h3>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                                    Username
+                                </label>
+                                <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" value="johndoe">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                                    Email Address
+                                </label>
+                                <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" value="john.doe@example.com">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold text-gray-700 mb-3">Change Password</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="current-password">
+                                        Current Password
+                                    </label>
+                                    <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="current-password" type="password">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-password">
+                                        New Password
+                                    </label>
+                                    <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-password" type="password">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="confirm-password">
+                                        Confirm New Password
+                                    </label>
+                                    <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="confirm-password" type="password">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold text-gray-700 mb-3">Account Status</h4>
+                            <div class="flex items-center bg-blue-50 p-4 rounded-lg">
+                                <i class="fas fa-gem text-blue-500 text-2xl mr-4"></i>
+                                <div>
+                                    <p class="font-medium text-gray-800">Premium Member</p>
+                                    <p class="text-gray-600 text-sm">Your premium membership is active until April 15, 2026</p>
+                                </div>
+                                <a href="#" class="ml-auto text-blue-600 hover:text-blue-800 font-medium text-sm">Manage Subscription</a>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t pt-6">
+                            <h4 class="font-bold text-gray-700 mb-3 text-red-600">Danger Zone</h4>
+                            <div class="flex flex-col md:flex-row md:items-center justify-between bg-red-50 p-4 rounded-lg">
+                                <div>
+                                    <p class="font-medium text-gray-800">Deactivate Account</p>
+                                    <p class="text-gray-600 text-sm">Temporarily disable your account</p>
+                                </div>
+                                <button class="mt-3 md:mt-0 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded transition-colors">
+                                    Deactivate
+                                </button>
+                            </div>
+                            <div class="flex flex-col md:flex-row md:items-center justify-between bg-red-50 p-4 rounded-lg mt-4">
+                                <div>
+                                    <p class="font-medium text-gray-800">Delete Account</p>
+                                    <p class="text-gray-600 text-sm">Permanently delete your account and all data</p>
+                                </div>
+                                <button class="mt-3 md:mt-0 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded transition-colors">
+                                    Delete Account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="privacy" class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="px-6 py-4 bg-gray-50 border-b">
+                        <h3 class="text-lg font-bold text-gray-800">Privacy & Security</h3>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div>
+                            <h4 class="font-bold text-gray-700 mb-3">Privacy Settings</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium text-gray-800">Profile Visibility</p>
+                                        <p class="text-gray-600 text-sm">Control who can view your profile</p>
+                                    </div>
+                                    <select class="border rounded-lg py-2 px-4 text-gray-700">
+                                        <option>Public</option>
+                                        <option>Friends Only</option>
+                                        <option>Private</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium text-gray-800">Show Email Address</p>
+                                        <p class="text-gray-600 text-sm">Allow others to see your email</p>
+                                    </div>
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" value="" class="sr-only peer">
+                                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium text-gray-800">Activity Status</p>
+                                        <p class="text-gray-600 text-sm">Show when you're active on the platform</p>
+                                    </div>
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" value="" class="sr-only peer" checked>
+                                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t pt-6">
+                            <h4 class="font-bold text-gray-700 mb-3">Security</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium text-gray-800">Two-Factor Authentication</p>
+                                        <p class="text-gray-600 text-sm">Add an extra layer of security to your account</p>
+                                    </div>
+                                    <button class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded transition-colors">
+                                        Enable
+                                    </button>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium text-gray-800">Login History</p>
+                                        <p class="text-gray-600 text-sm">View your recent login sessions</p>
+                                    </div>
+                                    <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded transition-colors">
+                                        View History
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="notifications" class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="px-6 py-4 bg-gray-50 border-b">
+                        <h3 class="text-lg font-bold text-gray-800">Notifications</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-bold text-gray-700 mb-3">Email Notifications</h4>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-medium text-gray-800">New Followers</p>
+                                            <p class="text-gray-600 text-sm">Get notified when someone follows you</p>
+                                        </div>
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" value="" class="sr-only peer" checked>
+                                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-medium text-gray-800">Comments & Replies</p>
+                                            <p class="text-gray-600 text-sm">Get notified about comments on your posts</p>
+                                        </div>
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" value="" class="sr-only peer" checked>
+                                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-medium text-gray-800">Newsletter</p>
+                                            <p class="text-gray-600 text-sm">Weekly digest of top recipes and articles</p>
+                                        </div>
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" value="" class="sr-only peer">
+                                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t pt-6">
+                                <h4 class="font-bold text-gray-700 mb-3">Push Notifications</h4>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-medium text-gray-800">Direct Messages</p>
+                                            <p class="text-gray-600 text-sm">Get notified when you receive a message</p>
+                                        </div>
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" value="" class="sr-only peer" checked>
+                                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-medium text-gray-800">Likes & Reactions</p>
+                                            <p class="text-gray-600 text-sm">Get notified when someone likes your content</p>
+                                        </div>
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" value="" class="sr-only peer">
+                                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="bg-gradient-to-r from-black to-[#003a6c] text-white py-8 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-2xl font-bold mb-2">Taste'n Talk</h2>
+                    <p class="text-gray-300">Connect with food lovers worldwide</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-white hover:text-[#ff4d4d] transition-colors">
+                        <i class="fab fa-facebook-f text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-[#ff4d4d] transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-[#ff4d4d] transition-colors">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-[#ff4d4d] transition-colors">
+                        <i class="fab fa-youtube text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-[#ff4d4d] transition-colors">
+                        <i class="fab fa-pinterest text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-white/20 mt-8 pt-8 text-center text-gray-300 text-sm">
+                <p>&copy; 2025 Taste'n Talk. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    document.querySelectorAll('nav a').forEach(link => {
+                        link.classList.remove('bg-[#ff4d4d]', 'text-white');
+                        link.classList.add('text-gray-300');
+                    });
+                    
+                    this.classList.remove('text-gray-300');
+                    this.classList.add('bg-[#ff4d4d]', 'text-white');
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            const saveChangesBtn = document.querySelector('button:contains("Save Changes")');
+            if (saveChangesBtn) {
+                saveChangesBtn.addEventListener('click', function() {
+                    alert('Settings saved successfully!');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
